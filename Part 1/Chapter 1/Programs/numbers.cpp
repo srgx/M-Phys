@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -12,27 +13,23 @@ string notc(string);
 
 int main(){
 
-  vecstr resultv = numberToBase(69,2);
+  assert(numberToBase(69,2) == vecstr({ "1", "0", "0", "0", "1", "0", "1" }));
+  assert(numberToBase(134,8) == vecstr({ "2", "0", "6" }));
+  assert(numberToBase(399,16) == vecstr({ "1", "8", "15" }));
 
-  for(const auto & value : resultv){
-    cout << value << ' ';
-  }
+  assert(baseToValue(vecstr({ "1", "1", "0", "0", "0", "0" }),2) == 48);
+  assert(baseToValue(vecstr({ "1", "0", "0", "4" }),8) == 516);
+  assert(baseToValue(vecstr({ "11", "12", "12" }),16) == 3020);
 
-  cout << '\n';
-
-  vecstr str1 { "1", "0", "0", "0", "1", "0", "1" };
-  int resultn = baseToValue(str1,2);
-  cout << resultn << '\n';
-
-  vecstr str2 { "1", "0", "1" };
-
-  vecstr sm = addBinary(str1,str2);
-
-  for(const auto & value : sm){
-    cout << value << ' ';
-  }
-
-  cout << '\n';
+  assert(addBinary(vecstr({ "1", "0", "1", "0", "1", "0", "1", "0" }),
+                   vecstr({ "1", "1", "0", "0", "1", "1", "0", "0" })) ==
+                   vecstr({ "1", "0", "1", "1", "1", "0", "1", "1", "0" }));
+  assert(addBinary(vecstr({ "1", "0", "0", "0" }),
+                   vecstr({ "1", "1", "1", "0", "1", "0", "0" })) ==
+                   vecstr({ "1", "1", "1", "1", "1", "0", "0" }));
+  assert(addBinary(vecstr({ "1", "1", "1", "0", "1", "0", "0" }),
+                   vecstr({ "1", "0", "0", "0" })) ==
+                   vecstr({ "1", "1", "1", "1", "1", "0", "0" }));
 
 }
 
@@ -60,16 +57,16 @@ int baseToValue(vecstr str,int base){
 }
 
 vecstr addBinary(vecstr a,vecstr b){
-  int asize = a.size(); int bsize = b.size(); int diff = abs(asize-bsize);
+  int diff = abs(int(a.size()-b.size()));
 
-  if(asize>bsize){
+  if(a.size()>b.size()){
     b.insert(b.begin(),diff,"0");
-  }else if(bsize>asize){
+  }else if(b.size()>a.size()){
     a.insert(a.begin(),diff,"0");
   }
 
   vecstr output; string carryD = "0";
-  for(int i = asize - 1; i >= 0; i--){
+  for(int i = a.size() - 1; i >= 0; i--){
     string k1 = a.at(i); string k2 = b.at(i);
     string writeD;
     if(k1==k2){
