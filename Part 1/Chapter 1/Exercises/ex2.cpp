@@ -1,6 +1,8 @@
 #include <iostream>
 #include <array>
 
+// g++ ex2.cpp
+
 using std::array;
 
 int main(){

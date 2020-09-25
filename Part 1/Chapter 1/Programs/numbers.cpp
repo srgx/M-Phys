@@ -1,6 +1,8 @@
 #include <cassert>
 #include "functions.h"
 
+// g++ numbers.cpp functions.cpp
+
 int main(){
 
   assert(numberToBase(69,2) == vecstr({ "1", "0", "0", "0", "1", "0", "1" }));

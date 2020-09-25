@@ -1,6 +1,8 @@
 #include <cassert>
 #include "../Programs/functions.h"
 
+// g++ ex1.cpp ../Programs/functions.cpp
+
 int main(){
 
   assert(convertBase(vecstr({ "1", "0", "0", "0", "1", "0", "1" }), 2, 16) ==
