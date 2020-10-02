@@ -4,16 +4,17 @@
 #include <string>
 #include <vector>
 
-using std::vector;
 using std::string;
 using std::to_string;
 
-typedef vector<string> vecstr;
+typedef std::vector<string> vecstr;
+typedef std::vector<int> vecin;
 
 vecstr numberToBase(int number,int base);
 int baseToValue(vecstr str,int base);
-vecstr addBinary(vecstr a,vecstr b);
-string notc(string str);
+int baseToValue(vecin vec,int base);
+vecin addBinary(vecin a,vecin b);
+int notc(int n);
 vecstr convertBase(vecstr,int,int);
 
 #endif
