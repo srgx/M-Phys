@@ -29,19 +29,43 @@ int baseToValue(vecstr str,int base){
   }
 }
 
-vecin addBinary(vecin a,vecin b){
+void align(vecin & a, vecin & b){
   int diff = abs(int(a.size()-b.size()));
-
   if(a.size()>b.size()){
     b.insert(b.begin(),diff,0);
   }else if(b.size()>a.size()){
     a.insert(a.begin(),diff,0);
   }
+}
+
+vecin subBinary(vecin a,vecin b){
+
+  align(a,b);
 
   vecin output; int carryD = 0;
   for(int i = a.size() - 1; i >= 0; i--){
-    int k1 = a.at(i); int k2 = b.at(i);
-    int writeD;
+    int k1 = a.at(i); int k2 = b.at(i); int writeD;
+    if(k1 == k2){
+      writeD = carryD;
+    }else{
+      writeD = notc(carryD);
+      if(k1 == carryD){ carryD = notc(carryD); }
+    }
+
+    output.insert(output.begin(),writeD);
+  }
+
+  return output;
+
+}
+
+vecin addBinary(vecin a,vecin b){
+
+  align(a,b);
+
+  vecin output; int carryD = 0;
+  for(int i = a.size() - 1; i >= 0; i--){
+    int k1 = a.at(i); int k2 = b.at(i); int writeD;
     if(k1==k2){
       writeD = carryD; carryD = k1;
     }else{
