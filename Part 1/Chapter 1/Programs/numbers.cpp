@@ -1,6 +1,5 @@
 #include <cassert>
 #include "functions.h"
-#include <iostream>
 
 // g++ numbers.cpp functions.cpp
 
