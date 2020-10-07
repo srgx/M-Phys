@@ -147,3 +147,8 @@ rootres mthRoot(float n,float m){
   }
   return result;
 }
+
+float multiplyLog(float a, float b){
+  auto n = log(a) + log(b);
+  return exp(n);
+}

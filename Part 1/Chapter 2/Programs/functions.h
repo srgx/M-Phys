@@ -29,5 +29,6 @@ array<int,2> positionInGrid(int squareNumber, int numCols);
 float monthlyPayment(float initialAmount,float annualInterest, int years);
 float debtAfterMonths(float initialAmount, float annualInterest, float perMonth, float months);
 rootres mthRoot(float n,float m);
+float multiplyLog(float a, float b);
 
 #endif
