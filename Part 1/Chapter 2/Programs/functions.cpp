@@ -133,6 +133,10 @@ float debtAfterMonths(float initialAmount, float annualInterest, float perMonth,
   return (initialAmount * Ipm) - perMonth * Rt;
 }
 
+float compoundInterest(float initialAmount, float interestRate, int years){
+  return initialAmount * (pow(1+(interestRate/100),years));
+}
+
 rootres mthRoot(float n,float m){
   rootres result { 0, false };
   if(n<0){
@@ -151,4 +155,16 @@ rootres mthRoot(float n,float m){
 float multiplyLog(float a, float b){
   auto n = log(a) + log(b);
   return exp(n);
+}
+
+float calculateMarkerPosition(float textPosition, float textHeight, float windowHeight){
+  return textPosition / textHeight * windowHeight;
+}
+
+float calculateTextPosition(float markerPosition, float textHeight, float windowHeight){
+  return markerPosition / windowHeight * textHeight;
+}
+
+float calculateMarkerHeight(float textHeight, float windowHeight){
+  return pow(windowHeight,2) / textHeight;
 }
