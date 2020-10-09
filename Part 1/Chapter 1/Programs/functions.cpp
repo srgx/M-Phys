@@ -1,4 +1,5 @@
 #include "functions.h"
+#include <algorithm>
 
 vecstr numberToBase(int number,int base){
   if(number < base){
@@ -91,6 +92,40 @@ int notc(int n){
 }
 
 vecstr convertBase(vecstr str,int base1,int base2){
-  int number = baseToValue(str,base1);
-  return numberToBase(number,base2);
+
+  vecstr result;
+
+  if(2==base1&&16==base2){
+
+    // Create 4 bit groups
+    while(str.size()%4!=0){ str.insert(str.begin(),"0"); }
+
+    // Convert every 4 bits to hex value
+    for(int i=0;i<str.size();i+=4){
+      fbits currentBins; std::copy(str.begin()+i,str.begin()+i+4, currentBins.begin());
+      result.push_back(binToHex(currentBins,CONVERSION_TABLE));
+    }
+
+  }else if(16==base1&&2==base2){
+    for(const auto & hx : str){
+      fbits currentD = hexToBin(hx,CONVERSION_TABLE);
+      result.insert(result.end(),currentD.begin(),currentD.end());
+    }
+  }else{
+    result = numberToBase(baseToValue(str,base1),base2);
+  }
+
+  return result;
+}
+
+fbits hexToBin(const string & str,const conv & table){
+  for(auto it = table.begin(); it<table.end();it++){
+    if(it->first==str){ return it->second; }
+  }
+}
+
+string binToHex(const fbits & fb, const conv & table){
+  for(auto it = table.begin(); it<table.end();it++){
+    if(it->second==fb){ return it->first; }
+  }
 }
