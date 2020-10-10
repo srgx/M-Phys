@@ -1,4 +1,4 @@
-#include "functions.h"
+#include "numbers_functions.h"
 #include <algorithm>
 
 vecstr numberToBase(int number,int base){

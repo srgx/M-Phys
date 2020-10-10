@@ -1,7 +1,7 @@
 #include <cassert>
-#include "../Programs/functions.h"
+#include "../Programs/arithmetic_functions.h"
 
-// g++ ex2.cpp ../Programs/functions.cpp
+// g++ ex2.cpp ../Programs/arithmetic_functions.cpp
 
 int main(){
 

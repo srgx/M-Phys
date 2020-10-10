@@ -1,9 +1,8 @@
 #include <cassert>
 #include <cmath>
-#include "functions.h"
-#include <iostream>
+#include "arithmetic_functions.h"
 
-// g++ arithmetic.cpp functions.cpp
+// g++ arithmetic.cpp arithmetic_functions.cpp
 
 int main(){
 
@@ -74,7 +73,7 @@ int main(){
   const float INTEREST = 5;
 
   // Debts
-  assert(abs(monthlyPayment(AMOUNT,INTEREST,10) - MONTHLY)<1e-7);
+  assert(std::abs(monthlyPayment(AMOUNT,INTEREST,10) - MONTHLY)<0.01);
   assert(debtAfterMonths(AMOUNT,INTEREST,MONTHLY,0)>0);
   assert(debtAfterMonths(AMOUNT,INTEREST,MONTHLY,50)>0);
   assert(debtAfterMonths(AMOUNT,INTEREST,MONTHLY,119)>0);

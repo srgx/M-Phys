@@ -1,5 +1,5 @@
-#ifndef FUNCTIONS__H__
-#define FUNCTIONS__H__
+#ifndef NUMBERS_FUNCTIONS__H__
+#define NUMBERS_FUNCTIONS__H__
 
 #include <string>
 #include <vector>

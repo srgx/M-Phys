@@ -1,11 +1,11 @@
 #include <iostream>
 #include <cassert>
-#include "../Programs/functions.h"
+#include "../Programs/arithmetic_functions.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Time.hpp>
 
-// g++ -c ex3.cpp ../Programs/functions.cpp
+// g++ -c ex3.cpp ../Programs/arithmetic_functions.cpp
 // g++ ex3.o functions.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
 
 void processInput(sf::RenderWindow & wnd);

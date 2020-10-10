@@ -1,6 +1,6 @@
 #include <cmath>
 #include <vector>
-#include "functions.h"
+#include "arithmetic_functions.h"
 
 fraction addFractions(fraction f1, fraction f2){
 

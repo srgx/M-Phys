@@ -2,9 +2,9 @@
 #include <array>
 #include <algorithm>
 #include <cassert>
-#include "../Programs/functions.h"
+#include "../Programs/numbers_functions.h"
 
-// g++ ex2.cpp ../Programs/functions.cpp
+// g++ ex2.cpp ../Programs/numbers_functions.cpp
 
 const int S = 32;
 

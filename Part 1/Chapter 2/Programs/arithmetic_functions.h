@@ -1,5 +1,5 @@
-#ifndef FUNCTIONS__H__
-#define FUNCTIONS__H__
+#ifndef ARITHMETIC_FUNCTIONS__H__
+#define ARITHMETIC_FUNCTIONS__H__
 
 #include <vector>
 #include <array>
