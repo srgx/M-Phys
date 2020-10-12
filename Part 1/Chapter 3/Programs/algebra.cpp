@@ -1,6 +1,7 @@
 #include "algebra_functions.h"
 #include <cassert>
 #include <algorithm>
+#include <iostream>
 
 using std::any_of;
 
@@ -42,5 +43,25 @@ int main(){
   assert(any_of(re.begin(),re.end(),compare(0)));
   assert(any_of(re.begin(),re.end(),compare(6)));
   assert(any_of(re.begin(),re.end(),compare(-5)));
+
+  // -------------------------------------------------
+
+  // redux 1, 0, -2 | 0.4, 1, 3.2
+  // solution -2, 4
+
+  // dzielenie 2 5 16 / 5
+  // dzielenie 2.2 0 -4.4 / 2.2
+
+  auto eqs = std::vector<vecflt>({
+    vecflt({3, 2, 2}),
+    vecflt({2, 5, 16})
+  });
+
+  auto abc = solveSimultaneous(eqs);
+
+
+  for(const auto & v : abc){
+    std::cout << v << ", ";
+  }
 
 }

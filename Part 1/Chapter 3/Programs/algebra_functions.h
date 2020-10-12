@@ -11,5 +11,6 @@ struct compare{
 };
 
 vecflt solveCubic(float a, float b, float c, float d);
+vecflt solveSimultaneous(std::vector<vecflt> & equations);
 
 #endif
