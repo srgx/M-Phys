@@ -41,8 +41,33 @@ void align(vecin & a, vecin & b){
   }
 }
 
-vecin divBinary(const vecin & dividend, const vecin & divisor){
-  // ...
+int getBinValue(vecin vec){
+  return baseToValue(vec,2);
+}
+
+vecin divBinary(const vecin & dividend,const vecin & divisor){
+
+  vecin result; const int divisorValue = getBinValue(divisor);
+  vecin currentSubNumber({ dividend.at(0) });
+  int subNumberValue = getBinValue(currentSubNumber);
+
+  for(int index = 1;index < dividend.size();index++){
+
+    if(divisorValue > subNumberValue){
+      result.push_back(0);
+    }else{
+      result.push_back(1);
+      currentSubNumber = subBinary(currentSubNumber,divisor);
+    }
+
+    currentSubNumber.push_back(dividend.at(index));
+    subNumberValue = getBinValue(currentSubNumber);
+
+  }
+
+  result.push_back(divisorValue<=subNumberValue ? 1 : 0);
+
+  return result;
 }
 
 vecin mulBinary(const vecin & a,const vecin & b){
