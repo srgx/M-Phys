@@ -1,5 +1,7 @@
 #include "numbers_functions.h"
 #include <algorithm>
+#include <cassert>
+#include <iostream>
 
 vecstr numberToBase(int number,int base){
   if(number < base){
@@ -39,6 +41,30 @@ void align(vecin & a, vecin & b){
   }
 }
 
+vecin divBinary(const vecin & dividend, const vecin & divisor){
+  // ...
+}
+
+vecin mulBinary(const vecin & a,const vecin & b){
+  std::vector<vecin> products;
+  for(int i=a.size()-1;i>=0;i--){
+    vecin product;
+    if(a.at(i)){
+      product = b; int padding = a.size()-1-i;
+      product.insert(product.end(),padding,0);
+    }else{
+      product = vecin({ 0 });
+    }
+    products.push_back(product);
+  }
+
+  vecin result = { 0 };
+  for(const auto & p : products){
+    result = addBinary(result,p);
+  }
+  return result;
+}
+
 vecin subBinary(vecin a,vecin b){
 
   align(a,b);
@@ -60,7 +86,7 @@ vecin subBinary(vecin a,vecin b){
 
 }
 
-vecin addBinary(vecin a,vecin b){
+vecin addBinary(vecin a, vecin b){
 
   align(a,b);
 
@@ -128,4 +154,69 @@ string binToHex(const fbits & fb, const conv & table){
   for(auto it = table.begin(); it<table.end();it++){
     if(it->second==fb){ return it->first; }
   }
+}
+
+int getExponentValue(const iefloat & arr){
+  return baseToValue(getRawExponent(arr),2) - 127;
+}
+
+vecin getRawExponent(const iefloat & arr){
+  vecin e(8);
+  for(int i=0;i<8;i++){ e.at(i) = arr.at(i+1); }
+  return e;
+}
+
+vecin getMantissa(const iefloat & arr){
+
+  int lastDigitIndex = arr.size()-1;
+  while(lastDigitIndex>8 && arr.at(lastDigitIndex)==0){
+    lastDigitIndex--;
+  }
+
+  vecin mantissa(lastDigitIndex - 7);
+
+  // If exponent is not 0 leading 1 is implicit
+  mantissa.at(0) = 1;
+  for(int i=1;i<mantissa.size();i++){
+    mantissa.at(i) = arr.at(i+8);
+  }
+
+  return mantissa;
+}
+
+iefloat addFloats(const iefloat & first, const iefloat & second){
+
+  int firstExponent = getExponentValue(first);
+  int secondExponent = getExponentValue(second);
+
+  vecin exponent = getRawExponent(firstExponent>secondExponent ? first : second);
+  assert(exponent.size() == 8);
+
+  vecin firstMantissa = getMantissa(first);
+  vecin secondMantissa = getMantissa(second);
+
+  int diff = abs(firstExponent-secondExponent);
+
+  // Shift to make exponents equal
+  if(firstExponent>secondExponent){
+    secondMantissa.insert(secondMantissa.end(),diff,0);
+  }else if(firstExponent<secondExponent){
+    firstMantissa.insert(firstMantissa.end(),diff,0);
+  }
+
+  vecin resultMantissa = addBinary(firstMantissa,secondMantissa);
+
+  // Initialize vector with zeros
+  vecin sum(S,0);
+
+  // Set exponent
+  std::copy(exponent.begin(),exponent.end(),sum.begin()+1);
+
+  // Set mantissa
+  std::copy(resultMantissa.begin()+1,resultMantissa.end(),sum.begin()+9);
+
+  iefloat result;
+  std::copy(sum.begin(),sum.end(),result.begin());
+
+  return result;
 }

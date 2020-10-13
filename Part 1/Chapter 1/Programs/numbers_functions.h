@@ -9,11 +9,13 @@ using std::string;
 using std::to_string;
 using std::make_pair;
 
+const int S = 32;
 const int HEX_SIZE = 4;
 typedef std::vector<string> vecstr;
 typedef std::vector<int> vecin;
 typedef std::array<string,HEX_SIZE> fbits;
 typedef std::array<std::pair<string,fbits>,16> conv;
+typedef std::array<int,S> iefloat;
 
 const conv CONVERSION_TABLE =
   { make_pair("0", fbits({ "0", "0", "0", "0" })),
@@ -36,12 +38,21 @@ const conv CONVERSION_TABLE =
 vecstr numberToBase(int number,int base);
 int baseToValue(vecstr str,int base);
 int baseToValue(vecin vec,int base);
-vecin addBinary(vecin a,vecin b);
-vecin subBinary(vecin a,vecin b);
+vecin addBinary(vecin a, vecin b);
+vecin subBinary(vecin a, vecin b);
+vecin mulBinary(const vecin & a, const vecin & b);
+vecin divBinary(const vecin & dividend, const vecin & divisor);
 void align(vecin & a, vecin & b);
 int notc(int n);
 vecstr convertBase(vecstr,int,int);
 fbits hexToBin(const string & str, const conv & table);
 string binToHex(const fbits & fb, const conv & table);
+
+
+
+int getExponentValue(const iefloat & arr);
+vecin getRawExponent(const iefloat & arr);
+vecin getMantissa(const iefloat & arr);
+iefloat addFloats(const iefloat & first, const iefloat & second);
 
 #endif
