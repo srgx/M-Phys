@@ -48,31 +48,22 @@ vecflt solveCubic(float a, float b, float c, float d){
 
 vecflt solveSimultaneous(std::vector<vecflt> & equations){
   std::vector<vecflt> redux; const int n = equations.size();
-  float solution = true;
 
-
-  vecflt rty;
+  vecflt output(n);
 
   for(int i=n-1;i>=0;i--){
     vecflt row;
     for(int j=i;j>=0;j--){
       if(equations.at(j).at(i)!=0){
-        row = equations.at(j);
-        break;
+        row = equations.at(j); break;
       }
     }
 
     if(row.empty()){
-      solution = false;
-      break;
+      std::cout << "No unique solution"; return output;
     }else{
+
       float divisor = row.at(i);
-
-      // for(const auto & z : row){
-      //   std::cout << z << ", ";
-      // }
-
-      // std::cout << "------------\n";
 
       equations.erase(std::remove(equations.begin(), equations.end(), row), equations.end());
       for(int j=0;j<row.size();j++){ row.at(j) /= divisor; }
@@ -92,31 +83,15 @@ vecflt solveSimultaneous(std::vector<vecflt> & equations){
     }
   }
 
-  // for(const auto & rx : redux){
-  //   for(const auto & v : rx){
-  //     std::cout << v << ", ";
-  //   }
-  //   std::cout << "\n---------\n";
-  // }
-
-  if(!solution){
-    std::cout << "No unique solution";
-    return rty;
-  }else{
-    vecflt output(n);
-    for(int i=0;i<n;i++){
-      float sum = 0; int j = 0;
-      while(j<i){
-        sum = redux.at(i).at(j) * output.at(j) + sum;
-        j++;
-      }
-      output.at(i) = redux.at(i).at(n) - sum;
+  for(int i=0;i<n;i++){
+    float sum = 0; int j = 0;
+    while(j<i){
+      sum = redux.at(i).at(j) * output.at(j) + sum;
+      j++;
     }
-    //std::cout << "Super";
-    return output;
+    output.at(i) = redux.at(i).at(n) - sum;
   }
 
-
-
+  return output;
 
 }

@@ -44,24 +44,43 @@ int main(){
   assert(any_of(re.begin(),re.end(),compare(6)));
   assert(any_of(re.begin(),re.end(),compare(-5)));
 
-  // -------------------------------------------------
+  // ----------------------------------------------------------------------
 
-  // redux 1, 0, -2 | 0.4, 1, 3.2
-  // solution -2, 4
-
-  // dzielenie 2 5 16 / 5
-  // dzielenie 2.2 0 -4.4 / 2.2
-
-  auto eqs = std::vector<vecflt>({
+  // 3x + 2y = 2
+  // 2x + 5y = 16
+  auto sim1 = std::vector<vecflt>({
     vecflt({3, 2, 2}),
     vecflt({2, 5, 16})
   });
 
-  auto abc = solveSimultaneous(eqs);
+  // 3x + 10y = 2
+  // 6x + 6y = 14
+  auto sim2 = std::vector<vecflt>({
+    vecflt({3, 10, 2}),
+    vecflt({5, 6, 14})
+  });
 
+  // 1x + 3y = 10
+  // 5x + -2y = -1
+  auto sim3 = std::vector<vecflt>({
+    vecflt({1, 3, 10}),
+    vecflt({5, -2, -1})
+  });
 
-  for(const auto & v : abc){
-    std::cout << v << ", ";
-  }
+  auto simres = solveSimultaneous(sim1);
+  assert(simres.size()==2);
+  assert(any_of(simres.begin(),simres.end(),compare(-2)));
+  assert(any_of(simres.begin(),simres.end(),compare(4)));
+
+  simres = solveSimultaneous(sim2);
+  assert(simres.size()==2);
+  assert(any_of(simres.begin(),simres.end(),compare(4)));
+  assert(any_of(simres.begin(),simres.end(),compare(-1)));
+
+  simres = solveSimultaneous(sim3);
+  assert(simres.size()==2);
+  assert(any_of(simres.begin(),simres.end(),compare(1)));
+  assert(any_of(simres.begin(),simres.end(),compare(3)));
+
 
 }
