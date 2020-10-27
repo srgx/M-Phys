@@ -19,26 +19,39 @@ point rotatePoint(const point & pnt, const point & around, float angle);
 float square(float x);
 float degToRad(float deg);
 float radToDeg(float rad);
+float mytan2(float y,float x);
 
 // g++ ex2.cpp
 
 int main(){
 
-  triangle tr;
-  tr.at(0) = make_pair(4,5);
-  tr.at(1) = make_pair(20,25);
-  tr.at(2) = make_pair(30,6);
+  // triangle tr;
+  // tr.at(0) = make_pair(-4,14);
+  // tr.at(1) = make_pair(2,2);
+  // tr.at(2) = make_pair(-10,2);
+  //
+  // point target = make_pair(20,6);
+  //
+  // triangle newTriangle = rotateFollow(tr,target);
+  //
+  // // (4,6)
+  // assert(std::abs(newTriangle.at(0).first - 4)<1e-5);
+  // assert(std::abs(newTriangle.at(0).second - 6)<1e-5);
+  //
+  // // (-8,12)
+  // assert(std::abs(newTriangle.at(1).first - -8)<1e-5);
+  // assert(std::abs(newTriangle.at(1).second - 0)<1e-5);
 
-  const point CENTER = make_pair(18,12);
-  const point TARGET = make_pair(50,40);
 
-  rotateFollow(tr,TARGET);
-
+  // Rotate left
+  auto result = rotatePoint(make_pair(4,4),make_pair(8,4),degToRad(90));
+  assert(std::abs(result.first-8)<1e-5);
+  assert(std::abs(result.second-0)<1e-5);
 
   // Rotate right
-  auto result = rotatePoint(make_pair(5,0),make_pair(0,0),degToRad(-90));
-  assert(std::abs(result.first - 0)<1e-5);
-  assert(std::abs(result.second - -5)<1e-5);
+  result = rotatePoint(make_pair(4,4),make_pair(8,4),degToRad(-90));
+  assert(std::abs(result.first-8)<1e-5);
+  assert(std::abs(result.second-8)<1e-5);
 
   // Rotate left
   result = rotatePoint(make_pair(5,0),make_pair(0,0),degToRad(90));
@@ -55,6 +68,12 @@ int main(){
   assert(std::abs(result.first - -4)<1e-5);
   assert(std::abs(result.second - 10)<1e-5);
 
+
+  // point pnt = make_pair(2,2);
+  // point around = make_pair(-4,6);
+  // float angl = degToRad(90);
+  // point newp = rotatePoint(pnt,around,angl);
+  // cout << newp.first << ", " << newp.second << endl;
 
 }
 
@@ -88,32 +107,28 @@ float calculateAngle(const mvector & a, const mvector & b){
 triangle rotateFollow(const triangle & vertices,const point & target){
 
   // Find centrum of a triangle
-  point centrum = triangleCenter(vertices);
+  const point centrum = triangleCenter(vertices);
+
+  //cout << "Center: " << centrum.first << ", " << centrum.second << endl;
 
   mvector centerToFront = createVector(centrum,vertices.at(0));
   mvector centerToTarget = createVector(centrum,target);
 
   const float angle = calculateAngle(centerToFront,centerToTarget);
 
+  //cout << "Angle: " << angle << endl;
+
   triangle result;
   for(int i=0;i<3;i++){
+    //cout << "Stare: " << vertices.at(i).first << ", " << vertices.at(i).second << endl;
     result.at(i) = rotatePoint(vertices.at(i),centrum,angle);
+    //cout << "Nowe: " << result.at(i).first << ", " << result.at(i).second << endl;
   }
 
+  // cout << result.at(0).first << endl;
+  // cout << result.at(0).second << endl;
+
   return result;
-
-  // cout << "X: " << center.first << ", ";
-  // cout << "Y: " << center.second << endl;
-
-  // Calculate distance from center to front vertex
-  //float centerToFrontLength = calculateDistance(center,vertices.at(0));
-
-  // Calculate position of front vertex
-  // point newFrontPosition = pointBetween(center,target,centerToFrontLength);
-  // cout << newFrontPosition.first << ", " << newFrontPosition.second << endl;
-
-  // Rotate remaining 2 vertices and return new triangle
-  // ...
 
 }
 
@@ -137,6 +152,8 @@ point rotatePoint(const point & pnt, const point & around, float angle){
   float s = around.first; float t = around.second;
   float tX = x - s; float tY = y - t; // Translate point
 
+  const float atanVal = std::abs(atan2(tY,tX));
+
   float newX = sqrt(square(tX)+square(tY)) * cos(angle-atan2(tY,tX)) + s;
   float newY = sqrt(square(tX)+square(tY)) * sin(angle-atan2(tY,tX)) + t;
 
@@ -154,4 +171,22 @@ float degToRad(float deg){
 
 float radToDeg(float rad){
   return rad * 57.2957795;
+}
+
+float mytan2(float y,float x){
+  float deg = 1;
+  if(x==0&&y<0){
+    deg = 90;
+  }else if(x==0&&y>=0){
+    deg = -90;
+  }else if(y==0&&x<0){
+    deg = 0;
+  }else if(y==0&&x>=0){
+    deg = -180;
+  }else if(deg==1){
+    return atan(y/x);
+  }else{
+    //return degToRad(deg);
+    return deg * M_PI / 180;
+  }
 }
