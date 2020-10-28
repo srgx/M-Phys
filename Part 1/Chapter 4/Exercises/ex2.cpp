@@ -16,7 +16,7 @@ float magnitude(const mvector & vec);
 mvector createVector(const point & a, const point & b);
 point triangleCenter(const triangle & vertices);
 point rotatePoint(const point & pnt, const point & around, float angle);
-float square(float x);
+float sqr(float x);
 float degToRad(float deg);
 float radToDeg(float rad);
 float mytan2(float y,float x);
@@ -25,22 +25,26 @@ float mytan2(float y,float x);
 
 int main(){
 
-  // triangle tr;
-  // tr.at(0) = make_pair(-4,14);
-  // tr.at(1) = make_pair(2,2);
-  // tr.at(2) = make_pair(-10,2);
-  //
-  // point target = make_pair(20,6);
-  //
-  // triangle newTriangle = rotateFollow(tr,target);
-  //
-  // // (4,6)
-  // assert(std::abs(newTriangle.at(0).first - 4)<1e-5);
-  // assert(std::abs(newTriangle.at(0).second - 6)<1e-5);
-  //
-  // // (-8,12)
-  // assert(std::abs(newTriangle.at(1).first - -8)<1e-5);
-  // assert(std::abs(newTriangle.at(1).second - 0)<1e-5);
+  triangle tr;
+  tr.at(0) = make_pair(-4,14);
+  tr.at(1) = make_pair(2,2);
+  tr.at(2) = make_pair(-10,2);
+  
+  point target = make_pair(20,6);
+  
+  triangle newTriangle = rotateFollow(tr,target);
+  
+  // (4,6)
+  assert(std::abs(newTriangle.at(0).first - 4)<1e-5);
+  assert(std::abs(newTriangle.at(0).second - 6)<1e-5);
+  
+  // (-8,0)
+  assert(std::abs(newTriangle.at(1).first - -8)<1e-5);
+  assert(std::abs(newTriangle.at(1).second - 0)<1e-5);
+  
+  // (-8,12)
+  assert(std::abs(newTriangle.at(2).first - -8)<1e-5);
+  assert(std::abs(newTriangle.at(2).second - 12)<1e-5);
 
 
   // Rotate left
@@ -57,6 +61,11 @@ int main(){
   result = rotatePoint(make_pair(5,0),make_pair(0,0),degToRad(90));
   assert(std::abs(result.first - 0)<1e-5);
   assert(std::abs(result.second - 5)<1e-5);
+  
+  // Rotate right
+  result = rotatePoint(make_pair(5,0),make_pair(0,0),degToRad(-90));
+  assert(std::abs(result.first - 0)<1e-5);
+  assert(std::abs(result.second - -5)<1e-5);
 
   // Rotate left
   result = rotatePoint(make_pair(-12,2),make_pair(-4,2),degToRad(90));
@@ -67,14 +76,12 @@ int main(){
   result = rotatePoint(make_pair(-12,2),make_pair(-4,2),degToRad(-90));
   assert(std::abs(result.first - -4)<1e-5);
   assert(std::abs(result.second - 10)<1e-5);
-
-
-  // point pnt = make_pair(2,2);
-  // point around = make_pair(-4,6);
-  // float angl = degToRad(90);
-  // point newp = rotatePoint(pnt,around,angl);
-  // cout << newp.first << ", " << newp.second << endl;
-
+  
+  // Rotate left
+  result = rotatePoint(make_pair(4,3),make_pair(0,0),degToRad(90));
+  assert(std::abs(result.first - -3)<1e-5);
+  assert(std::abs(result.second - 4)<1e-5);
+  
 }
 
 point pointBetween(const point & a,const point & b, float distance){
@@ -99,7 +106,7 @@ float calculateAngle(const mvector & a, const mvector & b){
   if(m1==0||m2==0||m3==0){
     return 0;
   }else{
-    return acos((square(m1)+square(m2)-square(m3))/(2*m1*m2));
+    return acos((sqr(m1)+sqr(m2)-sqr(m3))/(2*m1*m2));
   }
 
 }
@@ -109,31 +116,22 @@ triangle rotateFollow(const triangle & vertices,const point & target){
   // Find centrum of a triangle
   const point centrum = triangleCenter(vertices);
 
-  //cout << "Center: " << centrum.first << ", " << centrum.second << endl;
-
   mvector centerToFront = createVector(centrum,vertices.at(0));
   mvector centerToTarget = createVector(centrum,target);
 
   const float angle = calculateAngle(centerToFront,centerToTarget);
 
-  //cout << "Angle: " << angle << endl;
-
   triangle result;
   for(int i=0;i<3;i++){
-    //cout << "Stare: " << vertices.at(i).first << ", " << vertices.at(i).second << endl;
-    result.at(i) = rotatePoint(vertices.at(i),centrum,angle);
-    //cout << "Nowe: " << result.at(i).first << ", " << result.at(i).second << endl;
+    result.at(i) = rotatePoint(vertices.at(i),centrum,-angle);
   }
-
-  // cout << result.at(0).first << endl;
-  // cout << result.at(0).second << endl;
 
   return result;
 
 }
 
 float magnitude(const mvector & vec){
-  return sqrt(square(vec.first) + square(vec.second));
+  return sqrt(sqr(vec.first) + sqr(vec.second));
 }
 
 mvector createVector(const point & a, const point & b){
@@ -152,16 +150,14 @@ point rotatePoint(const point & pnt, const point & around, float angle){
   float s = around.first; float t = around.second;
   float tX = x - s; float tY = y - t; // Translate point
 
-  const float atanVal = std::abs(atan2(tY,tX));
-
-  float newX = sqrt(square(tX)+square(tY)) * cos(angle-atan2(tY,tX)) + s;
-  float newY = sqrt(square(tX)+square(tY)) * sin(angle-atan2(tY,tX)) + t;
+  float newX = sqrt(sqr(tX)+sqr(tY)) * cos(-angle-atan2(tY,tX)) + s;
+  float newY = sqrt(sqr(tX)+sqr(tY)) * sin(angle-atan2(tY,tX)) + t;
 
   return make_pair(newX,newY);
 
 }
 
-float square(float x){
+float sqr(float x){
   return pow(x,2);
 }
 
@@ -186,7 +182,6 @@ float mytan2(float y,float x){
   }else if(deg==1){
     return atan(y/x);
   }else{
-    //return degToRad(deg);
-    return deg * M_PI / 180;
+    return degToRad(deg);
   }
 }
