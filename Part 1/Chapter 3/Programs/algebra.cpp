@@ -1,7 +1,6 @@
 #include "algebra_functions.h"
 #include <cassert>
 #include <algorithm>
-#include <iostream>
 
 using std::any_of;
 

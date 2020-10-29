@@ -4,9 +4,6 @@
 #include <vector>
 #include <array>
 
-using std::vector;
-using std::array;
-
 struct fraction{
   int numerator;
   int denominator;
@@ -18,14 +15,14 @@ struct rootres{
 };
 
 fraction addFractions(fraction f1, fraction f2);
-vector<int> listOfPrimes(int m);
-vector<int> primeFactors(int n);
+std::vector<int> listOfPrimes(int m);
+std::vector<int> primeFactors(int n);
 int gcd(int n, int m);
 int lcm(int n, int m);
 int strictModulo(int n, int m);
-array<int,2> naiveClock(int oldHours, int oldMinutes, int addHours, int addMinutes);
-array<int,2> cleverClock(int oldHours, int oldMinutes, int addHours, int addMinutes);
-array<int,2> positionInGrid(int squareNumber, int numCols);
+std::array<int,2> naiveClock(int oldHours, int oldMinutes, int addHours, int addMinutes);
+std::array<int,2> cleverClock(int oldHours, int oldMinutes, int addHours, int addMinutes);
+std::array<int,2> positionInGrid(int squareNumber, int numCols);
 float monthlyPayment(float initialAmount,float annualInterest, int years);
 float debtAfterMonths(float initialAmount, float annualInterest, float perMonth, float months);
 float compoundInterest(float initialAmount, float interestRate, int years);

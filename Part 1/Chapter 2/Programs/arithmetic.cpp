@@ -4,6 +4,9 @@
 
 // g++ arithmetic.cpp arithmetic_functions.cpp
 
+using std::vector;
+using std::array;
+
 int main(){
 
   // Add fractions

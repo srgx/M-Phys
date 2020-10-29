@@ -1,6 +1,7 @@
 #ifndef ALGEBRA_FUNCTIONS__H__
 #define ALGEBRA_FUNCTIONS__H__
 #include <vector>
+#include <string>
 
 typedef std::vector<float> vecflt;
 
@@ -12,5 +13,10 @@ struct compare{
 
 vecflt solveCubic(float a, float b, float c, float d);
 vecflt solveSimultaneous(std::vector<vecflt> & equations);
+int substitute(const std::string & str,int valX);
+bool allDigits(const std::string & str);
+std::string getSubexpFrom(const std::string & str,int index);
+bool isExp(const std::string & str);
+bool isParExp(const std::string & str);
 
 #endif

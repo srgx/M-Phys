@@ -1,17 +1,8 @@
-#include <iostream>
+#include "../Programs/algebra_functions.h"
 #include <cassert>
-#include <cmath>
+#include <iostream>
 
-using std::string;
-using std::cout;
-using std::endl;
-
-int substitute(const string & str,int valX);
-bool allDigits(const string & str);
-string getSubexpFrom(const string & str,int index);
-bool isExp(const string & str);
-
-// g++ ex1.cpp
+// g++ ex1.cpp ../Programs/algebra_functions.cpp ../../Chapter\ 2/Programs/arithmetic_functions.cpp
 
 int main(){
 
@@ -34,96 +25,11 @@ int main(){
   assert(substitute("5x-10-2-x",6)==12);
   assert(substitute("56-4x+20",2)==68);
 
-}
+  //assert(substitute("4-2(x-5)",7)==0);
+  //std::cout << substitute("4-2(x-5)+1",7) << std::endl;
+  //std::cout << getSubexpFrom("4-2((x-5))+1",2) << std::endl;
 
+  assert(isParExp("(4+6)"));
+  assert(isParExp("5(7-2)"));
 
-int substitute(const string & str,int valX){
-
-  // Number or X expression
-  if(allDigits(str)){
-    return stoi(str);
-  }else if(isExp(str)){
-    if(1==str.length()){
-      return valX;
-    }else{
-      return stoi(str.substr(0,str.length()-1)) * valX;
-    }
-  }
-
-  int i = 0; float acc; bool accInitialized = false;
-
-  // Number not found
-  while(i<str.length()){
-
-    if('+'==str.at(i)){
-
-      // cout << "Znaleziono plus at " << i << endl;
-
-      if(!accInitialized){
-        acc = substitute(str.substr(0,i),valX);
-        accInitialized = true;
-      }
-
-      string right = getSubexpFrom(str,i+1);
-      float val = substitute(right,valX);
-      // cout << "Dodaje " << acc << " + " << val << endl;
-      acc += val;
-
-    }else if('-'==str.at(i)){
-
-      // cout << "Znaleziono minus at " << i << endl;
-
-      if(!accInitialized){
-        acc = substitute(str.substr(0,i),valX);
-        accInitialized = true;
-      }
-
-      string right = getSubexpFrom(str,i+1);
-      float val = substitute(right,valX);
-      // cout << "Odejmuje " << acc << " - " << val << endl;
-      acc -= val;
-
-    }
-
-    // else if('/'==str.at(i)){
-    //   int left = substitute(str.substr(0,i),valX);
-    //   int right = substitute(str.substr(i+1),valX);
-    //   return left / right;
-    // }else if('^'==str.at(i)){
-    //   int left = substitute(str.substr(0,i),valX);
-    //   int right = substitute(str.substr(i+1),valX);
-    //   return pow(left,right);
-    // }
-
-    i++;
-  }
-
-  return acc;
-
-}
-
-bool allDigits(const string & str){
-  for(auto i=str.begin();i!=str.end();i++){
-    if(!std::isdigit(*i)){
-      return false;
-    }
-  }
-  return true;
-}
-
-string getSubexpFrom(const string & str,int from){
-  int i; int counter = 0;
-  for(i=from;i<str.length();i++){
-    char s = str.at(i);
-    if('+'==s||'-'==s){
-      break;
-    }
-  }
-
-  return str.substr(from,i-from);
-}
-
-bool isExp(const string & str){
-  return (str.length()==1&&str.at(0)=='x')||
-         (str.back()=='x'&&allDigits(str.substr(0,str.length()-1)));
 }

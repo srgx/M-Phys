@@ -2,6 +2,9 @@
 #include <vector>
 #include "arithmetic_functions.h"
 
+using std::vector;
+using std::array;
+
 fraction addFractions(fraction f1, fraction f2){
 
   int num1 = f1.numerator; int den1 = f1.denominator;
