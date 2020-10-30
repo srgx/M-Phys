@@ -3,12 +3,14 @@
 #include <cassert>
 #include <iostream>
 
+using std::string;
+
 vecstr numberToBase(int number,int base){
   if(number < base){
-    return vecstr(1,to_string(number));
+    return vecstr(1,std::to_string(number));
   }else{
     int remainder = number % base;
-    string output = to_string(remainder);
+    string output = std::to_string(remainder);
     int reduced = (number - remainder) / base;
     vecstr rest = numberToBase(reduced,base);
     rest.push_back(output);
@@ -18,7 +20,7 @@ vecstr numberToBase(int number,int base){
 
 int baseToValue(vecin vec,int base){
   vecstr v(vec.size());
-  for(int i=0;i<v.size();i++){ v.at(i) = to_string(vec.at(i)); }
+  for(int i=0;i<v.size();i++){ v.at(i) = std::to_string(vec.at(i)); }
   return baseToValue(v,base);
 }
 
@@ -209,6 +211,44 @@ vecin getMantissa(const iefloat & arr){
   return mantissa;
 }
 
+iefloat subFloats(const iefloat & first, const iefloat & second){
+
+  // Get exponent values
+  int firstExponent = getExponentValue(first);
+  int secondExponent = getExponentValue(second);
+
+  // Larger exponent is result exponent
+  vecin exponent = getRawExponent(firstExponent>secondExponent ? first : second);
+  assert(exponent.size() == 8);
+
+  vecin firstMantissa = getMantissa(first);
+  vecin secondMantissa = getMantissa(second);
+
+  int diff = abs(firstExponent-secondExponent);
+
+  // Shift to make exponents equal
+  if(firstExponent>secondExponent){
+    secondMantissa.insert(secondMantissa.end(),diff,0);
+  }else if(firstExponent<secondExponent){
+    firstMantissa.insert(firstMantissa.end(),diff,0);
+  }
+
+  vecin resultMantissa = subBinary(firstMantissa,secondMantissa);
+
+  // Initialize number with zeros
+  iefloat result;
+  for(int i=0;i<result.size();i++){ result.at(i) = 0; }
+
+  // Set exponent
+  std::copy(exponent.begin(),exponent.end(),result.begin()+1);
+
+  // Set mantissa
+  std::copy(resultMantissa.begin()+1,resultMantissa.end(),result.begin()+9);
+
+  return result;
+}
+
+
 iefloat addFloats(const iefloat & first, const iefloat & second){
 
   int firstExponent = getExponentValue(first);
@@ -231,17 +271,15 @@ iefloat addFloats(const iefloat & first, const iefloat & second){
 
   vecin resultMantissa = addBinary(firstMantissa,secondMantissa);
 
-  // Initialize vector with zeros
-  vecin sum(S,0);
+  // Initialize number with zeros
+  iefloat result;
+  for(int i=0;i<result.size();i++){ result.at(i) = 0; }
 
   // Set exponent
-  std::copy(exponent.begin(),exponent.end(),sum.begin()+1);
+  std::copy(exponent.begin(),exponent.end(),result.begin()+1);
 
   // Set mantissa
-  std::copy(resultMantissa.begin()+1,resultMantissa.end(),sum.begin()+9);
-
-  iefloat result;
-  std::copy(sum.begin(),sum.end(),result.begin());
+  std::copy(resultMantissa.begin()+1,resultMantissa.end(),result.begin()+9);
 
   return result;
 }

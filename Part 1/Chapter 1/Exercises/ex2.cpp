@@ -6,8 +6,6 @@
 
 // g++ ex2.cpp ../Programs/numbers_functions.cpp
 
-
-
 int main(){
 
 
@@ -57,17 +55,19 @@ int main(){
 
   // -----------------------------------------------------------------------
 
+  // 35.75
   iefloat first
     { 0,
       1, 0, 0, 0, 0, 1, 0, 0,
       0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
+  // 20.5
   iefloat second
     { 0,
       1, 0, 0, 0, 0, 0, 1, 1,
       0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-
+  // 56.25
   iefloat firstSecondSum
     { 0,
       1, 0, 0, 0, 0, 1, 0, 0,
@@ -77,5 +77,9 @@ int main(){
   iefloat sum = addFloats(first,second);
   assert(sum == addFloats(second,first));
   assert(sum == firstSecondSum);
+
+  iefloat diff = subFloats(firstSecondSum,second);
+  assert(diff == first);
+
 
 }
