@@ -18,6 +18,18 @@ vecstr numberToBase(int number,int base){
   }
 }
 
+vecin numberToBinary(int number){
+  vecin result;
+  vecstr ve = numberToBase(number,2);
+  for(const auto & v : ve){
+    result.push_back(stoi(v));
+  }
+
+  return result;
+}
+
+
+
 int baseToValue(vecin vec,int base){
   vecstr v(vec.size());
   for(int i=0;i<v.size();i++){ v.at(i) = std::to_string(vec.at(i)); }
@@ -211,6 +223,55 @@ vecin getMantissa(const iefloat & arr){
   return mantissa;
 }
 
+iefloat mulFloats(const iefloat & first, const iefloat & second){
+
+  int firstExponent = getExponentValue(first);
+  int secondExponent = getExponentValue(second);
+
+  vecin exponent =
+    addBinary(getRawExponent(firstExponent>secondExponent ? first : second),
+              numberToBinary(firstExponent<secondExponent ? firstExponent : secondExponent));
+
+  assert(exponent.size() == 8);
+
+  vecin firstMantissa = getMantissa(first);
+  vecin secondMantissa = getMantissa(second);
+
+  int diff = abs(firstExponent-secondExponent);
+
+
+  // Shift to make exponents equal
+  if(firstExponent>secondExponent){
+    secondMantissa.insert(secondMantissa.end(),diff,0);
+  }else if(firstExponent<secondExponent){
+    firstMantissa.insert(firstMantissa.end(),diff,0);
+  }
+
+  vecin resultMantissa = mulBinary(firstMantissa,secondMantissa);
+
+
+  // Normalize mantissa and exponent
+  int shift = 1;
+  // while(resultMantissa.at(shift-1)!=1){ shift++; }
+  // //exponent = mulBinary(exponent,vecin({1,0}));
+  // for(const auto & v : exponent){ std::cout << v << "|"; }
+  // std::cout << std::endl;
+  // std::cout << "Shift: " << shift << std::endl;
+
+
+  // Initialize number with zeros
+  iefloat result;
+  for(int i=0;i<result.size();i++){ result.at(i) = 0; }
+
+  // Set exponent
+  std::copy(exponent.begin(),exponent.end(),result.begin()+1);
+
+  // Set mantissa
+  std::copy(resultMantissa.begin()+shift,resultMantissa.end(),result.begin()+9);
+
+  return result;
+}
+
 iefloat subFloats(const iefloat & first, const iefloat & second){
 
   // Get exponent values
@@ -235,6 +296,11 @@ iefloat subFloats(const iefloat & first, const iefloat & second){
 
   vecin resultMantissa = subBinary(firstMantissa,secondMantissa);
 
+  // Normalize mantissa and exponent
+  int shift = 1;
+  while(resultMantissa.at(shift-1)!=1){ shift++; }
+  exponent = subBinary(exponent,numberToBinary(shift-1));
+
   // Initialize number with zeros
   iefloat result;
   for(int i=0;i<result.size();i++){ result.at(i) = 0; }
@@ -243,7 +309,7 @@ iefloat subFloats(const iefloat & first, const iefloat & second){
   std::copy(exponent.begin(),exponent.end(),result.begin()+1);
 
   // Set mantissa
-  std::copy(resultMantissa.begin()+1,resultMantissa.end(),result.begin()+9);
+  std::copy(resultMantissa.begin()+shift,resultMantissa.end(),result.begin()+9);
 
   return result;
 }
@@ -271,6 +337,11 @@ iefloat addFloats(const iefloat & first, const iefloat & second){
 
   vecin resultMantissa = addBinary(firstMantissa,secondMantissa);
 
+  // Normalize mantissa and exponent
+  int shift = 1;
+  while(resultMantissa.at(shift-1)!=1){ shift++; }
+  exponent = subBinary(exponent,numberToBinary(shift-1));
+
   // Initialize number with zeros
   iefloat result;
   for(int i=0;i<result.size();i++){ result.at(i) = 0; }
@@ -279,7 +350,7 @@ iefloat addFloats(const iefloat & first, const iefloat & second){
   std::copy(exponent.begin(),exponent.end(),result.begin()+1);
 
   // Set mantissa
-  std::copy(resultMantissa.begin()+1,resultMantissa.end(),result.begin()+9);
+  std::copy(resultMantissa.begin()+shift,resultMantissa.end(),result.begin()+9);
 
   return result;
 }

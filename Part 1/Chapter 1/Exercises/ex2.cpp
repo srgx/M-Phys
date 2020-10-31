@@ -73,13 +73,46 @@ int main(){
       1, 0, 0, 0, 0, 1, 0, 0,
       1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
+  // 732.875
+  iefloat firstSecondProd
+    { 0,
+      1, 0, 0, 0, 1, 0, 0, 0,
+      0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+
+  // 30.75
+  iefloat arr12sum
+    { 0,
+      1, 0, 0, 0, 0, 0, 1, 1,
+      1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+
+  // -----------------------------------------------------------------------
+
+  // Addition
 
   iefloat sum = addFloats(first,second);
-  assert(sum == addFloats(second,first));
   assert(sum == firstSecondSum);
+  assert(sum == addFloats(second,first));
+
+  sum = addFloats(arr1,arr2);
+  assert(sum == arr12sum);
+  assert(sum == addFloats(arr2,arr1));
+
+
+  // Subtraction
 
   iefloat diff = subFloats(firstSecondSum,second);
   assert(diff == first);
 
+  diff = subFloats(firstSecondSum,first);
+  assert(diff == second);
 
+  // Multiplication
+
+  iefloat prod = mulFloats(first,second);
+  assert(prod==firstSecondProd);
+
+
+  std::cout << "Exit\n";
 }

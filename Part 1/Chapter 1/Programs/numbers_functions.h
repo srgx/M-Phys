@@ -32,6 +32,7 @@ const conv CONVERSION_TABLE =
     std::make_pair("15", fbits({ "1", "1", "1", "1" })) };
 
 vecstr numberToBase(int number,int base);
+vecin numberToBinary(int number);
 int baseToValue(vecstr str,int base);
 int baseToValue(vecin vec,int base);
 int getBinValue(vecin vec);
@@ -49,5 +50,6 @@ vecin getRawExponent(const iefloat & arr);
 vecin getMantissa(const iefloat & arr);
 iefloat addFloats(const iefloat & first, const iefloat & second);
 iefloat subFloats(const iefloat & first, const iefloat & second);
+iefloat mulFloats(const iefloat & first, const iefloat & second);
 
 #endif
