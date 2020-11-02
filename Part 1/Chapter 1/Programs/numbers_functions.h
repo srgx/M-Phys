@@ -13,6 +13,8 @@ typedef std::array<std::string,HEX_SIZE> fbits;
 typedef std::array<std::pair<std::string,fbits>,16> conv;
 typedef std::array<int,S> iefloat;
 
+const int ZERO_EXP = -127;
+
 const conv CONVERSION_TABLE =
   { std::make_pair("0", fbits({ "0", "0", "0", "0" })),
     std::make_pair("1", fbits({ "0", "0", "0", "1" })),
@@ -51,5 +53,7 @@ vecin getMantissa(const iefloat & arr);
 iefloat addFloats(const iefloat & first, const iefloat & second);
 iefloat subFloats(const iefloat & first, const iefloat & second);
 iefloat mulFloats(const iefloat & first, const iefloat & second);
+iefloat divFloats(const iefloat & first, const iefloat & second);
+iefloat zeroFloat();
 
 #endif

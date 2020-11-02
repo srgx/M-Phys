@@ -86,6 +86,18 @@ int main(){
       1, 0, 0, 0, 0, 0, 1, 1,
       1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
+  // -30.75
+  iefloat minusArr12sum
+    { 1,
+      1, 0, 0, 0, 0, 0, 1, 1,
+      1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+  // 212.625
+  iefloat arr12prod
+    { 0,
+      1, 0, 0, 0, 0, 1, 1, 0,
+      1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
 
   // -----------------------------------------------------------------------
 
@@ -99,6 +111,10 @@ int main(){
   assert(sum == arr12sum);
   assert(sum == addFloats(arr2,arr1));
 
+  // 0 Addition
+  sum = addFloats(arr1,arr5);
+  assert(sum == arr1);
+  assert(sum == addFloats(arr5,arr1));
 
   // Subtraction
 
@@ -108,10 +124,56 @@ int main(){
   diff = subFloats(firstSecondSum,first);
   assert(diff == second);
 
+  // X - 0 Subtraction
+  diff = subFloats(firstSecondSum,arr5);
+  assert(diff == firstSecondSum);
+
+  // 0 - X Subtraction
+  diff = subFloats(arr5,arr12sum);
+  assert(diff == minusArr12sum);
+
+  // X - X Subtraction
+  diff = subFloats(arr2,arr2);
+  assert(diff == arr5);
+
   // Multiplication
 
   iefloat prod = mulFloats(first,second);
   assert(prod==firstSecondProd);
+
+  prod = mulFloats(second,first);
+  assert(prod==firstSecondProd);
+
+  prod = mulFloats(arr2,arr1);
+  assert(prod==arr12prod);
+
+  prod = mulFloats(arr1,arr2);
+  assert(prod==arr12prod);
+
+  // 0 * X Multiplication
+  prod = mulFloats(arr5,arr1);
+  assert(prod==arr5);
+
+  // X * 0 Multiplication
+  prod = mulFloats(arr1,arr5);
+  assert(prod==arr5);
+
+  // Division
+
+  // iefloat quot = divFloats(firstSecondProd,first);
+  // // assert(quot==second);
+  //
+  // for(const auto & v : second){
+  //   std::cout << v << "|";
+  // }
+  //
+  // std::cout << std::endl;
+  //
+  // for(const auto & v : quot){
+  //   std::cout << v << "|";
+  // }
+  //
+  // std::cout << std::endl;
 
 
   std::cout << "Exit\n";
