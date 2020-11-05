@@ -79,12 +79,23 @@ int main(){
       1, 0, 0, 0, 1, 0, 0, 0,
       0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-
   // 30.75
   iefloat arr12sum
     { 0,
       1, 0, 0, 0, 0, 0, 1, 1,
       1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+  // -9.75
+  iefloat arr12diff
+    { 1,
+      1, 0, 0, 0, 0, 0, 1, 0,
+      0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+  // -59.7
+  iefloat arr14sum
+    { 1,
+      1, 0, 0, 0, 0, 1, 0, 0,
+      1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1 };
 
   // -30.75
   iefloat minusArr12sum
@@ -116,25 +127,58 @@ int main(){
   assert(sum == arr1);
   assert(sum == addFloats(arr5,arr1));
 
+  // Add negative number
+  // sum = addFloats(arr1,arr4);
+  //
+  // for(const auto & v : arr14sum){
+  //   std::cout << v << "|";
+  // }
+  //
+  // std::cout << std::endl;
+  //
+  // for(const auto & v : sum){
+  //   std::cout << v << "|";
+  // }
+  //
+  // std::cout << std::endl;
+  //
+  //
+  // assert(sum == arr14sum);
+
   // Subtraction
 
   iefloat diff = subFloats(firstSecondSum,second);
-  assert(diff == first);
+  assert(diff==first);
 
   diff = subFloats(firstSecondSum,first);
   assert(diff == second);
 
-  // X - 0 Subtraction
-  diff = subFloats(firstSecondSum,arr5);
-  assert(diff == firstSecondSum);
+  // diff = subFloats(arr1,arr2); // ????
+  // // assert(diff == arr12diff); // ????
+  //
+  // for(const auto & v : arr12diff){
+  //   std::cout << v << "|";
+  // }
+  //
+  // std::cout << std::endl;
+  //
+  // for(const auto & v : diff){
+  //   std::cout << v << "|";
+  // }
+  //
+  // std::cout << std::endl;
 
-  // 0 - X Subtraction
-  diff = subFloats(arr5,arr12sum);
-  assert(diff == minusArr12sum);
-
-  // X - X Subtraction
-  diff = subFloats(arr2,arr2);
-  assert(diff == arr5);
+  // // X - 0 Subtraction
+  // diff = subFloats(firstSecondSum,arr5);
+  // assert(diff == firstSecondSum);
+  //
+  // // 0 - X Subtraction
+  // diff = subFloats(arr5,arr12sum);
+  // assert(diff == minusArr12sum);
+  //
+  // // X - X Subtraction
+  // diff = subFloats(arr2,arr2);
+  // assert(diff == arr5);
 
   // Multiplication
 

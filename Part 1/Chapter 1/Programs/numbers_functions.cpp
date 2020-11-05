@@ -1,6 +1,7 @@
 #include "numbers_functions.h"
 #include <algorithm>
 #include <iostream>
+#include <cassert>
 
 using std::string;
 
@@ -94,16 +95,43 @@ vecin mulBinary(const vecin & a,const vecin & b){
     products.push_back(product);
   }
 
-  vecin result = { 0 };
+  vecin output = { 0 };
   for(const auto & p : products){
-    result = addBinary(result,p);
+    output = addBinary(output,p);
   }
-  return result;
+
+  // Remove leading zeros
+  while(output.at(0)==0&&output.size()>1){ output.erase(output.begin()); }
+
+  return output;
+}
+
+int compBin(const vecin & a, const vecin & b){
+
+  assert(a.size()==b.size());
+
+  for(int i=0;i<a.size();i++){
+    if(a.at(i)>b.at(i)){
+      return 0; // First Larger
+    }else if(a.at(i)<b.at(i)){
+      return 1; // Second Larger
+    }
+  }
+
+  return 2; // Equal
 }
 
 vecin subBinary(vecin a,vecin b){
 
-  align(a,b);
+  align(a,b); int comp = compBin(a,b);
+
+  if(comp==1){
+    // Change subtraction order
+    vecin temp = a; a = b; b = temp;
+  }else if(comp==2){
+    // Numbers are equal
+    return vecin({ 0 });
+  }
 
   vecin output; int carryD = 0;
   for(int i = a.size() - 1; i >= 0; i--){
@@ -117,6 +145,9 @@ vecin subBinary(vecin a,vecin b){
 
     output.insert(output.begin(),writeD);
   }
+
+  // Remove leading zeros
+  while(output.at(0)==0&&output.size()>1){ output.erase(output.begin()); }
 
   return output;
 
@@ -176,6 +207,9 @@ vecstr convertBase(vecstr str,int base1,int base2){
   }else{
     result = numberToBase(baseToValue(str,base1),base2);
   }
+
+  // Remove leading zeros
+  while(result.at(0)=="0"){ result.erase(result.begin()); }
 
   return result;
 }
@@ -299,18 +333,16 @@ iefloat mulFloats(const iefloat & first, const iefloat & second){
 
 iefloat subFloats(const iefloat & first, const iefloat & second){
 
-
   if(first==second){ return zeroFloat(); }
 
   // Get exponent values
   int firstExponent = getExponentValue(first);
   int secondExponent = getExponentValue(second);
 
-
-  if(firstExponent==ZERO_EXP){
+  if(first==zeroFloat()){
     iefloat result = second;
     result.at(0)=1; return result;
-  }else if(secondExponent==ZERO_EXP){
+  }else if(second==zeroFloat()){
     return first;
   }
 
@@ -329,12 +361,24 @@ iefloat subFloats(const iefloat & first, const iefloat & second){
     firstMantissa.insert(firstMantissa.end(),diff,0);
   }
 
+  int fms = firstMantissa.size();
+  int sms = secondMantissa.size();
+
+  int resultSize = fms > sms ? fms : sms;
+
   vecin resultMantissa = subBinary(firstMantissa,secondMantissa);
+
+  int sizeDiff = resultSize - resultMantissa.size();
+
+  resultMantissa.insert(resultMantissa.begin(),sizeDiff,0);
 
   // Normalize mantissa and exponent
   int shift = 1;
   while(resultMantissa.at(shift-1)!=1){ shift++; }
   exponent = subBinary(exponent,numberToBinary(shift-1));
+
+  assert(exponent.size()==8);
+
 
   // Initialize number with zeros
   iefloat result = zeroFloat();

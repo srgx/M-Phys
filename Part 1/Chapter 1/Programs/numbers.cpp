@@ -31,22 +31,28 @@ int main(){
 
 
   assert(subBinary(vecin({ 1, 0, 0, 0, 1, 0, 1 }),
-                   vecin({ 0, 0, 0, 1, 1, 0, 0 })) ==
-                   vecin({ 0, 1, 1, 1, 0, 0, 1 }));
+                   vecin({ 1, 1, 0, 0 })) ==
+                   vecin({ 1, 1, 1, 0, 0, 1 }));
   assert(subBinary(vecin({ 1, 1, 1, 1, 1, 0, 1, 0 }),
                    vecin({ 1, 1, 0, 0, 1, 1, 0, 0 })) ==
-                   vecin({ 0, 0, 1, 0, 1, 1, 1, 0 }));
+                   vecin({ 1, 0, 1, 1, 1, 0 }));
   assert(subBinary(vecin({ 1, 0, 0, 0, 0, 1, 1, 1, 1, 1 }),
                    vecin({ 1, 1, 0, 1, 1, 1 })) ==
-                   vecin({ 0, 1, 1, 1, 1, 0, 1, 0, 0, 0 }));
+                   vecin({ 1, 1, 1, 1, 0, 1, 0, 0, 0 }));
 
+
+  // Negative result
+  assert(subBinary(vecin({ 1, 1, 1, 1 }),
+                   vecin({ 1, 0, 1, 0, 0 })) ==
+                   vecin({ 1, 0, 1 }));
+                   
 
   assert(mulBinary(vecin({ 0 }),
                    vecin({ 1, 1, 1 })) ==
                    vecin({ 0 }));
   assert(mulBinary(vecin({ 1, 1, 1 }),
                    vecin({ 0 })) ==
-                   vecin({ 0, 0, 0 }));
+                   vecin({ 0 }));
   assert(mulBinary(vecin({ 1, 0, 1 }),
                    vecin({ 1, 1 })) ==
                    vecin({ 1, 1, 1, 1 }));
