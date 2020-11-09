@@ -55,5 +55,6 @@ iefloat subFloats(const iefloat & first, const iefloat & second);
 iefloat mulFloats(const iefloat & first, const iefloat & second);
 iefloat divFloats(const iefloat & first, const iefloat & second);
 iefloat zeroFloat();
+iefloat negateFloat(iefloat n);
 
 #endif

@@ -110,6 +110,9 @@ int main(){
       1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 
+  iefloat zero = zeroFloat();
+
+
   // -----------------------------------------------------------------------
 
   // Addition
@@ -147,38 +150,64 @@ int main(){
 
   // Subtraction
 
-  iefloat diff = subFloats(firstSecondSum,second);
-  assert(diff==first);
+  // First Positive
 
-  diff = subFloats(firstSecondSum,first);
-  assert(diff == second);
+    // 56.25 - 20.5 = 35.75
+    iefloat diff = subFloats(firstSecondSum,second);
+    assert(diff==first);
 
-  // diff = subFloats(arr1,arr2); // ????
-  // // assert(diff == arr12diff); // ????
-  //
-  // for(const auto & v : arr12diff){
-  //   std::cout << v << "|";
-  // }
-  //
-  // std::cout << std::endl;
-  //
-  // for(const auto & v : diff){
-  //   std::cout << v << "|";
-  // }
-  //
-  // std::cout << std::endl;
+    // 56.25 - 35.75 = 20.5
+    diff = subFloats(firstSecondSum,first);
+    assert(diff == second);
 
-  // // X - 0 Subtraction
-  // diff = subFloats(firstSecondSum,arr5);
-  // assert(diff == firstSecondSum);
-  //
-  // // 0 - X Subtraction
-  // diff = subFloats(arr5,arr12sum);
-  // assert(diff == minusArr12sum);
-  //
-  // // X - X Subtraction
-  // diff = subFloats(arr2,arr2);
-  // assert(diff == arr5);
+    // 10.5 - 20.25 = (-9.75)
+    diff = subFloats(arr1,arr2);
+    assert(diff == arr12diff);
+
+    // 10.5 - (-20.25) = 30.75
+    diff = subFloats(arr1,negateFloat(arr2));
+    assert(diff == arr12sum);
+
+    // 10.5 - 10.5 = 0
+    diff = subFloats(arr1,arr1);
+    assert(diff == arr5);
+
+    // 10.5 - 0 = 10.5
+    diff = subFloats(arr1,arr5);
+    assert(diff == arr1);
+
+  // First Negative
+
+    // (-70.2) - (-70.2) = 0
+    diff = subFloats(arr4,arr4);
+    assert(diff == arr5);
+
+    // (-10.5) - 20.25 = -30.75
+    diff = subFloats(negateFloat(arr1),arr2);
+    assert(diff == negateFloat(arr12sum));
+
+    // (-10.5) - (-20.25) = 30.75
+    diff = subFloats(negateFloat(arr1),negateFloat(arr2));
+    assert(diff == negateFloat(arr12diff));
+
+    // (-10.5) - 0 = (-10.5)
+    diff = subFloats(negateFloat(arr1),arr5);
+    assert(diff == negateFloat(arr1));
+
+  // First Zero
+
+    // 0 - 10.5 = (-10.5)
+    diff = subFloats(arr5,arr1);
+    assert(diff == negateFloat(arr1));
+
+    // 0 - (-10.5) = 10.5
+    diff = subFloats(arr5,negateFloat(arr1));
+    assert(diff == arr1);
+
+    // 0 - 0 = 0
+    diff = subFloats(arr5,arr5);
+    assert(diff == arr5);
+
 
   // Multiplication
 
