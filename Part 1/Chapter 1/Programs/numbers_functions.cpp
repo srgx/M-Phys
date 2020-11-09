@@ -377,9 +377,6 @@ iefloat subFloats(const iefloat & first, const iefloat & second){
     firstMantissa.insert(firstMantissa.end(),diff,0);
   }
 
-  int fms = firstMantissa.size(); int sms = secondMantissa.size();
-  int resultSize = fms > sms ? fms : sms;
-
   vecin resultMantissa; int fSign = first.at(0); int sSign = second.at(0);
 
   if(!(1==fSign&&1==sSign||0==fSign&&0==sSign)){
@@ -390,13 +387,12 @@ iefloat subFloats(const iefloat & first, const iefloat & second){
     resultMantissa = subBinary(firstMantissa,secondMantissa);
   }
 
+  int fms = firstMantissa.size(); int sms = secondMantissa.size();
+  int resultSize = fms > sms ? fms : sms;
   int sizeDiff = resultSize - resultMantissa.size();
-  resultMantissa.insert(resultMantissa.begin(),sizeDiff,0);
 
   // Normalize exponent
-  int shift = 1;
-  while(resultMantissa.at(shift-1)!=1){ shift++; }
-  exponent = subBinary(exponent,numberToBinary(shift-1));
+  exponent = subBinary(exponent,numberToBinary(sizeDiff));
 
   assert(exponent.size()==8);
 
@@ -406,8 +402,8 @@ iefloat subFloats(const iefloat & first, const iefloat & second){
   // Set exponent
   std::copy(exponent.begin(),exponent.end(),result.begin()+1);
 
-  // Set mantissa(shift from normalized exponent)
-  std::copy(resultMantissa.begin()+shift,resultMantissa.end(),result.begin()+9);
+  // Set mantissa
+  std::copy(resultMantissa.begin()+1,resultMantissa.end(),result.begin()+9);
 
   // Compare numbers
   align(firstMantissa,secondMantissa);
@@ -433,15 +429,18 @@ iefloat subFloats(const iefloat & first, const iefloat & second){
 
 iefloat addFloats(const iefloat & first, const iefloat & second){
 
-  int firstExponent = getExponentValue(first);
-  int secondExponent = getExponentValue(second);
 
-  if(firstExponent==ZERO_EXP){
+  if(first==zeroFloat()){
     return second;
-  }else if(secondExponent==ZERO_EXP){
+  }else if(second==zeroFloat()){
     return first;
   }
 
+  // Get exponent values
+  int firstExponent = getExponentValue(first);
+  int secondExponent = getExponentValue(second);
+
+  // Larger exponent is result exponent
   vecin exponent = getRawExponent(firstExponent>secondExponent ? first : second);
 
   vecin firstMantissa = getMantissa(first);
@@ -456,12 +455,24 @@ iefloat addFloats(const iefloat & first, const iefloat & second){
     firstMantissa.insert(firstMantissa.end(),diff,0);
   }
 
-  vecin resultMantissa = addBinary(firstMantissa,secondMantissa);
+  vecin resultMantissa; int fSign = first.at(0); int sSign = second.at(0);
 
-  // Normalize mantissa and exponent
-  int shift = 1;
-  while(resultMantissa.at(shift-1)!=1){ shift++; }
-  exponent = subBinary(exponent,numberToBinary(shift-1));
+  if(!(1==fSign&&1==sSign||0==fSign&&0==sSign)){
+    // Opposite Signs
+    resultMantissa = subBinary(firstMantissa,secondMantissa);
+  }else{
+    // Same Signs
+    resultMantissa = addBinary(firstMantissa,secondMantissa);
+  }
+
+  int fms = firstMantissa.size(); int sms = secondMantissa.size();
+  int resultSize = fms > sms ? fms : sms;
+  int sizeDiff = resultSize - resultMantissa.size();
+
+  // Normalize exponent
+  exponent = subBinary(exponent,numberToBinary(sizeDiff));
+
+  //assert(exponent.size()==8);
 
   // Initialize number with zeros
   iefloat result = zeroFloat();
@@ -470,7 +481,25 @@ iefloat addFloats(const iefloat & first, const iefloat & second){
   std::copy(exponent.begin(),exponent.end(),result.begin()+1);
 
   // Set mantissa
-  std::copy(resultMantissa.begin()+shift,resultMantissa.end(),result.begin()+9);
+  std::copy(resultMantissa.begin()+1,resultMantissa.end(),result.begin()+9);
+
+  // Compare numbers
+  align(firstMantissa,secondMantissa);
+  int comp = compBin(firstMantissa,secondMantissa);
+
+  // First number is positive
+  if(0==fSign){
+
+    // Positive result if secondMantissa<=firstMantissa or second sign is positive
+    result.at(0) = ((0==comp||2==comp) || 0==sSign) ? 0 : 1;
+
+  // First number is negative
+  }else{
+
+    // Positive result if secondMantissa>=firstMantissa and second sign is positive
+    result.at(0) = ((1==comp||2==comp) && 0==sSign) ? 0 : 1;
+
+  }
 
   return result;
 }

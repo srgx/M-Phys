@@ -117,36 +117,59 @@ int main(){
 
   // Addition
 
-  iefloat sum = addFloats(first,second);
-  assert(sum == firstSecondSum);
-  assert(sum == addFloats(second,first));
+  // First Positive
 
-  sum = addFloats(arr1,arr2);
-  assert(sum == arr12sum);
-  assert(sum == addFloats(arr2,arr1));
+    // 35.75 + 20.5 = 56.25
+    iefloat sum = addFloats(first,second);
+    assert(sum == firstSecondSum);
+    assert(sum == addFloats(second,first));
 
-  // 0 Addition
-  sum = addFloats(arr1,arr5);
-  assert(sum == arr1);
-  assert(sum == addFloats(arr5,arr1));
+    // 10.5 + 20.25 = 30.75
+    sum = addFloats(arr1,arr2);
+    assert(sum == arr12sum);
 
-  // Add negative number
-  // sum = addFloats(arr1,arr4);
-  //
-  // for(const auto & v : arr14sum){
-  //   std::cout << v << "|";
-  // }
-  //
-  // std::cout << std::endl;
-  //
-  // for(const auto & v : sum){
-  //   std::cout << v << "|";
-  // }
-  //
-  // std::cout << std::endl;
-  //
-  //
-  // assert(sum == arr14sum);
+    // 10.5 + (-20.25) = -9.75
+    sum = addFloats(arr1,negateFloat(arr2));
+    assert(sum == arr12diff);
+
+    // 10.5 + 0 = 10.5
+    sum = addFloats(arr1,arr5);
+    assert(sum == arr1);
+
+    // 20.25 + (-10.5) = 9.75
+    sum = addFloats(arr2,negateFloat(arr1));
+    assert(sum == negateFloat(arr12diff));
+
+
+  // First Negative
+
+    // (-10.5) + 20.25 = 9.75
+    sum = addFloats(negateFloat(arr1),arr2);
+    assert(sum == negateFloat(arr12diff));
+
+    // (-20.25) + 10.5 = (-9.75)
+    sum = addFloats(negateFloat(arr2),arr1);
+    assert(sum == arr12diff);
+
+    // (-10.5) + 0 = (-10.5)
+    sum = addFloats(negateFloat(arr1),arr5);
+    assert(sum == negateFloat(arr1));
+
+
+  // First Zero
+
+    // 0 + 10.5 = 10.5
+    sum = addFloats(arr5,arr1);
+    assert(sum == arr1);
+
+    // 0 + (-10.5) = (-10.5)
+    sum = addFloats(arr5,negateFloat(arr1));
+    assert(sum == negateFloat(arr1));
+
+    // 0 + 0 = 0
+    sum = addFloats(arr5,arr5);
+    assert(sum == arr5);
+
 
   // Subtraction
 
