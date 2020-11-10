@@ -13,7 +13,10 @@ typedef std::array<std::string,HEX_SIZE> fbits;
 typedef std::array<std::pair<std::string,fbits>,16> conv;
 typedef std::array<int,S> iefloat;
 
-const int ZERO_EXP = -127;
+const iefloat ZERO_F =
+{ 0,
+  0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 const conv CONVERSION_TABLE =
   { std::make_pair("0", fbits({ "0", "0", "0", "0" })),
@@ -43,6 +46,7 @@ vecin subBinary(vecin a, vecin b);
 vecin mulBinary(const vecin & a, const vecin & b);
 vecin divBinary(const vecin & dividend,const vecin & divisor);
 void align(vecin & a, vecin & b);
+int alignComp(vecin & a, vecin & b);
 int notc(int n);
 vecstr convertBase(vecstr,int,int);
 fbits hexToBin(const std::string & str, const conv & table);
@@ -54,7 +58,8 @@ iefloat addFloats(const iefloat & first, const iefloat & second);
 iefloat subFloats(const iefloat & first, const iefloat & second);
 iefloat mulFloats(const iefloat & first, const iefloat & second);
 iefloat divFloats(const iefloat & first, const iefloat & second);
-iefloat zeroFloat();
 iefloat negateFloat(iefloat n);
+vecin shiftMantissae(const iefloat & first, const iefloat & second, vecin & firstMantissa,vecin & secondMantissa);
+vecin normalizeExponent(const vecin & exponent, const vecin & firstMantissa, const vecin & secondMantissa, const vecin & resultMantissa);
 
 #endif

@@ -123,7 +123,7 @@ int compBin(const vecin & a, const vecin & b){
 
 vecin subBinary(vecin a,vecin b){
 
-  align(a,b); int comp = compBin(a,b);
+  int comp = alignComp(a,b);
 
   if(comp==1){
     // Change subtraction order
@@ -290,7 +290,7 @@ iefloat divFloats(const iefloat & first, const iefloat & second){
   int shift = 1;
 
   // Initialize number with zeros
-  iefloat result = zeroFloat();
+  iefloat result = ZERO_F;
 
   // Set exponent
   std::copy(exponent.begin(),exponent.end(),result.begin()+1);
@@ -306,7 +306,7 @@ iefloat mulFloats(const iefloat & first, const iefloat & second){
   int firstExponent = getExponentValue(first);
   int secondExponent = getExponentValue(second);
 
-  if(firstExponent==ZERO_EXP||secondExponent==ZERO_EXP){ return zeroFloat(); }
+  if(first==ZERO_F||second==ZERO_F){ return ZERO_F; }
 
   vecin exponent =
     addBinary(getRawExponent(firstExponent>secondExponent ? first : second),
@@ -343,61 +343,41 @@ iefloat mulFloats(const iefloat & first, const iefloat & second){
 
 iefloat subFloats(const iefloat & first, const iefloat & second){
 
-
   // Numbers are equal
   if(first==second){
-    return zeroFloat();
+    return ZERO_F;
 
   // First number is zero
-  }else if(first==zeroFloat()){
+  }else if(first==ZERO_F){
     iefloat result = second; result.at(0) = notc(second.at(0));
     return result;
 
   // Second number is zero
-  }else if(second==zeroFloat()){
+  }else if(second==ZERO_F){
     return first;
   }
 
-  // Get exponent values
-  int firstExponent = getExponentValue(first);
-  int secondExponent = getExponentValue(second);
-
-  // Larger exponent is result exponent
-  vecin exponent = getRawExponent(firstExponent>secondExponent ? first : second);
-
+  // Get mantissae
   vecin firstMantissa = getMantissa(first);
   vecin secondMantissa = getMantissa(second);
 
-  int diff = abs(firstExponent-secondExponent);
+  // Result exponent
+  vecin exponent =
+    shiftMantissae(first,second,firstMantissa,secondMantissa);
 
-  // Shift to make exponents equal
-  if(firstExponent>secondExponent){
-    secondMantissa.insert(secondMantissa.end(),diff,0);
-  }else if(firstExponent<secondExponent){
-    firstMantissa.insert(firstMantissa.end(),diff,0);
-  }
+  int fSign = first.at(0); int sSign = second.at(0);
 
-  vecin resultMantissa; int fSign = first.at(0); int sSign = second.at(0);
-
-  if(!(1==fSign&&1==sSign||0==fSign&&0==sSign)){
-    // Opposite Signs
-    resultMantissa = addBinary(firstMantissa,secondMantissa);
-  }else{
-    // Same Signs
-    resultMantissa = subBinary(firstMantissa,secondMantissa);
-  }
-
-  int fms = firstMantissa.size(); int sms = secondMantissa.size();
-  int resultSize = fms > sms ? fms : sms;
-  int sizeDiff = resultSize - resultMantissa.size();
+  vecin resultMantissa =
+    (1==fSign&&1==sSign||0==fSign&&0==sSign) ?
+      subBinary(firstMantissa,secondMantissa) : // Same signs
+      addBinary(firstMantissa,secondMantissa); // Opposite signs
 
   // Normalize exponent
-  exponent = subBinary(exponent,numberToBinary(sizeDiff));
-
-  assert(exponent.size()==8);
+  exponent =
+    normalizeExponent(exponent, firstMantissa, secondMantissa,resultMantissa);
 
   // Initialize number with zeros
-  iefloat result = zeroFloat();
+  iefloat result = ZERO_F;
 
   // Set exponent
   std::copy(exponent.begin(),exponent.end(),result.begin()+1);
@@ -406,22 +386,21 @@ iefloat subFloats(const iefloat & first, const iefloat & second){
   std::copy(resultMantissa.begin()+1,resultMantissa.end(),result.begin()+9);
 
   // Compare numbers
-  align(firstMantissa,secondMantissa);
-  int comp = compBin(firstMantissa,secondMantissa);
+  int comp = alignComp(firstMantissa,secondMantissa);
 
-  // First number is positive
-  if(0==fSign){
 
-    // Positive result if secondMantissa<=firstMantissa or second sign is negative
-    result.at(0) = ((0==comp||2==comp) || 1==sSign) ? 0 : 1;
+  // Set sign
 
-  // First number is negative
-  }else{
+  result.at(0) =
+    0 == fSign ?
 
-    // Positive result if secondMantissa>=firstMantissa and second sign is negative
-    result.at(0) = ((1==comp||2==comp) && 1==sSign) ? 0 : 1;
+      // First number is positive
+      // Positive result if secondMantissa<=firstMantissa or second sign is negative
+      (((0==comp||2==comp) || 1==sSign) ? 0 : 1) :
 
-  }
+      // First number is negative
+      // Positive result if secondMantissa>=firstMantissa and second sign is negative
+      (((1==comp||2==comp) && 1==sSign) ? 0 : 1);
 
   return result;
 }
@@ -429,53 +408,33 @@ iefloat subFloats(const iefloat & first, const iefloat & second){
 
 iefloat addFloats(const iefloat & first, const iefloat & second){
 
-
-  if(first==zeroFloat()){
+  if(first==ZERO_F){
     return second;
-  }else if(second==zeroFloat()){
+  }else if(second==ZERO_F){
     return first;
   }
 
-  // Get exponent values
-  int firstExponent = getExponentValue(first);
-  int secondExponent = getExponentValue(second);
-
-  // Larger exponent is result exponent
-  vecin exponent = getRawExponent(firstExponent>secondExponent ? first : second);
-
+  // Get mantissae
   vecin firstMantissa = getMantissa(first);
   vecin secondMantissa = getMantissa(second);
 
-  int diff = abs(firstExponent-secondExponent);
+  // Result exponent
+  vecin exponent =
+    shiftMantissae(first,second,firstMantissa,secondMantissa);
 
-  // Shift to make exponents equal
-  if(firstExponent>secondExponent){
-    secondMantissa.insert(secondMantissa.end(),diff,0);
-  }else if(firstExponent<secondExponent){
-    firstMantissa.insert(firstMantissa.end(),diff,0);
-  }
+  int fSign = first.at(0); int sSign = second.at(0);
 
-  vecin resultMantissa; int fSign = first.at(0); int sSign = second.at(0);
-
-  if(!(1==fSign&&1==sSign||0==fSign&&0==sSign)){
-    // Opposite Signs
-    resultMantissa = subBinary(firstMantissa,secondMantissa);
-  }else{
-    // Same Signs
-    resultMantissa = addBinary(firstMantissa,secondMantissa);
-  }
-
-  int fms = firstMantissa.size(); int sms = secondMantissa.size();
-  int resultSize = fms > sms ? fms : sms;
-  int sizeDiff = resultSize - resultMantissa.size();
+  vecin resultMantissa =
+    (1==fSign&&1==sSign||0==fSign&&0==sSign) ?
+      addBinary(firstMantissa,secondMantissa) : // Same signs
+      subBinary(firstMantissa,secondMantissa); // Opposite signs
 
   // Normalize exponent
-  exponent = subBinary(exponent,numberToBinary(sizeDiff));
-
-  //assert(exponent.size()==8);
+  exponent =
+    normalizeExponent(exponent, firstMantissa, secondMantissa,resultMantissa);
 
   // Initialize number with zeros
-  iefloat result = zeroFloat();
+  iefloat result = ZERO_F;
 
   // Set exponent
   std::copy(exponent.begin(),exponent.end(),result.begin()+1);
@@ -484,31 +443,59 @@ iefloat addFloats(const iefloat & first, const iefloat & second){
   std::copy(resultMantissa.begin()+1,resultMantissa.end(),result.begin()+9);
 
   // Compare numbers
-  align(firstMantissa,secondMantissa);
-  int comp = compBin(firstMantissa,secondMantissa);
+  int comp = alignComp(firstMantissa,secondMantissa);
 
-  // First number is positive
-  if(0==fSign){
+  // Set sign
 
-    // Positive result if secondMantissa<=firstMantissa or second sign is positive
-    result.at(0) = ((0==comp||2==comp) || 0==sSign) ? 0 : 1;
+  result.at(0) =
+    0 == fSign ?
 
-  // First number is negative
-  }else{
+      // First number is positive
+      // Positive result if secondMantissa<=firstMantissa or second sign is positive
+      (((0==comp||2==comp) || 0==sSign) ? 0 : 1) :
 
-    // Positive result if secondMantissa>=firstMantissa and second sign is positive
-    result.at(0) = ((1==comp||2==comp) && 0==sSign) ? 0 : 1;
-
-  }
+      // First number is negative
+      // Positive result if secondMantissa>=firstMantissa and second sign is positive
+      (((1==comp||2==comp) && 0==sSign) ? 0 : 1);
 
   return result;
 }
 
-iefloat zeroFloat(){
-  iefloat zero; for(int i=0;i<zero.size();i++){ zero.at(i) = 0; } return zero;
+iefloat negateFloat(iefloat n){
+  n.at(0) = notc(n.at(0)); return n;
 }
 
-iefloat negateFloat(iefloat n){
-  n.at(0) = notc(n.at(0));
-  return n;
+vecin shiftMantissae(const iefloat & first, const iefloat & second,vecin & firstMantissa,vecin & secondMantissa){
+
+  int firstExponent = getExponentValue(first);
+  int secondExponent = getExponentValue(second);
+
+  // Result exponent
+  vecin exponent; int diff = std::abs(firstExponent-secondExponent);
+
+  // Shift to make exponents equal. Larger exponent is result exponent
+  if(firstExponent>=secondExponent){
+    secondMantissa.insert(secondMantissa.end(),diff,0);
+    exponent = getRawExponent(first);
+  }else if(firstExponent<secondExponent){
+    firstMantissa.insert(firstMantissa.end(),diff,0);
+    exponent = getRawExponent(second);
+  }
+
+  return exponent;
+
+}
+
+vecin normalizeExponent(const vecin & exponent, const vecin & firstMantissa, const vecin & secondMantissa, const vecin & resultMantissa){
+
+  int fms = firstMantissa.size(); int sms = secondMantissa.size();
+  int resultSize = fms > sms ? fms : sms;
+  int sizeDiff = resultSize - resultMantissa.size();
+
+  return subBinary(exponent,numberToBinary(sizeDiff));
+
+}
+
+int alignComp(vecin & a, vecin & b){
+  align(a,b); return compBin(a,b);
 }
