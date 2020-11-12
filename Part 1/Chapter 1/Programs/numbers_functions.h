@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <array>
+#include <iostream>
 
 const int S = 32;
 const int HEX_SIZE = 4;
@@ -61,5 +62,13 @@ iefloat divFloats(const iefloat & first, const iefloat & second);
 iefloat negateFloat(iefloat n);
 vecin shiftMantissae(const iefloat & first, const iefloat & second, vecin & firstMantissa,vecin & secondMantissa);
 vecin normalizeExponent(const vecin & exponent, const vecin & firstMantissa, const vecin & secondMantissa, const vecin & resultMantissa);
+
+template<typename T>
+void showVals(const T & vals){
+  for(const auto & v : vals){
+    std::cout << v << "|";
+  }
+  std::cout << std::endl;
+}
 
 #endif

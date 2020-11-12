@@ -303,19 +303,24 @@ iefloat divFloats(const iefloat & first, const iefloat & second){
 
 iefloat mulFloats(const iefloat & first, const iefloat & second){
 
-  int firstExponent = getExponentValue(first);
-  int secondExponent = getExponentValue(second);
-
   if(first==ZERO_F||second==ZERO_F){ return ZERO_F; }
 
-  vecin exponent =
-    addBinary(getRawExponent(firstExponent>secondExponent ? first : second),
-              numberToBinary(firstExponent<secondExponent ? firstExponent : secondExponent));
+  vecin exponent = addBinary(getRawExponent(first),
+                             getRawExponent(second));
 
+  const vecin bias = vecin({ 1, 1, 1, 1, 1, 1, 1 }); // 127
+  exponent = subBinary(exponent,bias);
+
+  // Get mantissae
   vecin firstMantissa = getMantissa(first);
   vecin secondMantissa = getMantissa(second);
 
-  int diff = abs(firstExponent-secondExponent);
+  int firstExponent = getExponentValue(first);
+  int secondExponent = getExponentValue(second);
+
+  int diff = std::abs(firstExponent-secondExponent);
+
+  //assert(diff==1);
 
   // Shift to make exponents equal
   if(firstExponent>secondExponent){
@@ -329,14 +334,18 @@ iefloat mulFloats(const iefloat & first, const iefloat & second){
   int shift = 1;
 
   // Initialize number with zeros
-  iefloat result;
-  for(int i=0;i<result.size();i++){ result.at(i) = 0; }
+  iefloat result = ZERO_F;
 
   // Set exponent
   std::copy(exponent.begin(),exponent.end(),result.begin()+1);
 
   // Set mantissa
   std::copy(resultMantissa.begin()+shift,resultMantissa.end(),result.begin()+9);
+
+  int fSign = first.at(0); int sSign = second.at(0);
+
+  // Set sign
+  result.at(0) = fSign==1&&sSign==1 || fSign==0&&sSign==0 ? 0 : 1;
 
   return result;
 }
@@ -414,13 +423,31 @@ iefloat addFloats(const iefloat & first, const iefloat & second){
     return first;
   }
 
+  std::cout << "First\n";
+  showVals(first);
+  std::cout << "Second\n";
+  showVals(second);
+
+
   // Get mantissae
   vecin firstMantissa = getMantissa(first);
   vecin secondMantissa = getMantissa(second);
 
+  std::cout << "First Mantissa\n";
+  showVals(firstMantissa);
+  std::cout << "Second Mantissa\n";
+  showVals(secondMantissa);
+
+
   // Result exponent
   vecin exponent =
     shiftMantissae(first,second,firstMantissa,secondMantissa);
+
+
+  std::cout << "First Mantissa\n";
+  showVals(firstMantissa);
+  std::cout << "Second Mantissa\n";
+  showVals(secondMantissa);
 
   int fSign = first.at(0); int sSign = second.at(0);
 
@@ -472,6 +499,8 @@ vecin shiftMantissae(const iefloat & first, const iefloat & second,vecin & first
 
   // Result exponent
   vecin exponent; int diff = std::abs(firstExponent-secondExponent);
+
+  std::cout << "Diff: " << diff << std::endl;
 
   // Shift to make exponents equal. Larger exponent is result exponent
   if(firstExponent>=secondExponent){

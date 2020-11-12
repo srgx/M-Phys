@@ -110,6 +110,27 @@ int main(){
       1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 
+  // 412515.5
+  iefloat largeFloat
+    { 0,
+      1, 0, 0, 1, 0, 0, 0, 1,
+      1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0 };
+
+
+  // 4331412.75
+  iefloat largeProduct
+    { 0,
+      1, 0, 0, 1, 0, 1, 0, 1,
+      0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0 };
+
+
+  // 412535.75
+  iefloat largeSum
+    { 0,
+      1, 0, 0, 1, 0, 0, 0, 1,
+      1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0 };
+
+
   // -----------------------------------------------------------------------
 
   // Addition
@@ -136,6 +157,18 @@ int main(){
     // 20.25 + (-10.5) = 9.75
     sum = addFloats(arr2,negateFloat(arr1));
     assert(sum == negateFloat(arr12diff));
+
+    // paper
+    // 20.25 + 412515.5 = 412535.75
+    sum = addFloats(arr2,largeFloat);
+    //assert(sum == largeSum);
+
+    std::cout << "Current result\n";
+    showVals(sum);
+    std::cout << "Valid result\n";
+    showVals(largeSum);
+
+    // return 0;
 
 
   // First Negative
@@ -231,25 +264,60 @@ int main(){
 
   // Multiplication
 
-  iefloat prod = mulFloats(first,second);
-  assert(prod==firstSecondProd);
+  // First Positive
 
-  prod = mulFloats(second,first);
-  assert(prod==firstSecondProd);
+    // 35.75 * 20.5 = 732.875
+    iefloat prod = mulFloats(first,second);
+    assert(prod==firstSecondProd);
 
-  prod = mulFloats(arr2,arr1);
-  assert(prod==arr12prod);
+    // 20.5 * 35.75 = 732.875
+    prod = mulFloats(second,first);
+    assert(prod==firstSecondProd);
 
-  prod = mulFloats(arr1,arr2);
-  assert(prod==arr12prod);
+    // 10.5 * 20.25 = 212.625
+    prod = mulFloats(arr1,arr2);
+    assert(prod==arr12prod);
 
-  // 0 * X Multiplication
-  prod = mulFloats(arr5,arr1);
-  assert(prod==arr5);
+    // 20.25 * 10.5 = 212.625
+    prod = mulFloats(arr2,arr1);
+    assert(prod==arr12prod);
 
-  // X * 0 Multiplication
-  prod = mulFloats(arr1,arr5);
-  assert(prod==arr5);
+    // 20.25 * 0 = 0
+    prod = mulFloats(arr2,arr5);
+    assert(prod==arr5);
+
+    // 10.5 * (-20.25) = -212.625
+    prod = mulFloats(arr1,negateFloat(arr2));
+    assert(prod==negateFloat(arr12prod));
+
+    // 10.5 * 412515.5 = 4331412.75
+    // prod = mulFloats(arr1,largeFloat);
+    // assert(prod==largeProduct);
+
+  // First Negative
+
+    // (-10.5) * 20.25 = -212.625
+    prod = mulFloats(negateFloat(arr1),arr2);
+    assert(prod==negateFloat(arr12prod));
+
+    // (-10.5) * (-20.25) = 212.625
+    prod = mulFloats(negateFloat(arr1),negateFloat(arr2));
+    assert(prod==arr12prod);
+
+  // First Zero
+
+    // 0 * 10.5 = 0
+    prod = mulFloats(arr5,arr1);
+    assert(prod==arr5);
+
+    // 0 * (-10.5) = 0
+    prod = mulFloats(arr5,negateFloat(arr1));
+    assert(prod==arr5);
+
+    // 0 * 0 = 0
+    prod = mulFloats(arr5,arr5);
+    assert(prod==arr5);
+
 
   // Division
 
