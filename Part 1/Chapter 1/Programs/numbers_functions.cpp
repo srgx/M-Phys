@@ -44,15 +44,6 @@ int baseToValue(vecstr str,int base){
   }
 }
 
-void align(vecin & a, vecin & b){
-  int diff = abs(int(a.size()-b.size()));
-  if(a.size()>b.size()){
-    b.insert(b.begin(),diff,0);
-  }else if(b.size()>a.size()){
-    a.insert(a.begin(),diff,0);
-  }
-}
-
 int getBinValue(vecin vec){
   return baseToValue(vec,2);
 }
@@ -423,31 +414,29 @@ iefloat addFloats(const iefloat & first, const iefloat & second){
     return first;
   }
 
-  std::cout << "First\n";
-  showVals(first);
-  std::cout << "Second\n";
-  showVals(second);
-
+  int firstExponent = getExponentValue(first);
+  int secondExponent = getExponentValue(second);
 
   // Get mantissae
   vecin firstMantissa = getMantissa(first);
   vecin secondMantissa = getMantissa(second);
 
-  std::cout << "First Mantissa\n";
-  showVals(firstMantissa);
-  std::cout << "Second Mantissa\n";
-  showVals(secondMantissa);
+  vecin exponent;
 
+  int diff = std::abs(firstExponent-secondExponent);
 
-  // Result exponent
-  vecin exponent =
-    shiftMantissae(first,second,firstMantissa,secondMantissa);
+  // Add zeros at the beginning of mantissa to make exponents equal
+  // Larger exponent is result exponent
+  if(firstExponent>=secondExponent){
+    secondMantissa.insert(secondMantissa.begin(),diff,0);
+    exponent = getRawExponent(first);
+  }else{
+    firstMantissa.insert(firstMantissa.begin(),diff,0);
+    exponent = getRawExponent(second);
+  }
 
-
-  std::cout << "First Mantissa\n";
-  showVals(firstMantissa);
-  std::cout << "Second Mantissa\n";
-  showVals(secondMantissa);
+  // Align mantissae at the end before addition
+  alignEnd(firstMantissa,secondMantissa);
 
   int fSign = first.at(0); int sSign = second.at(0);
 
@@ -500,8 +489,6 @@ vecin shiftMantissae(const iefloat & first, const iefloat & second,vecin & first
   // Result exponent
   vecin exponent; int diff = std::abs(firstExponent-secondExponent);
 
-  std::cout << "Diff: " << diff << std::endl;
-
   // Shift to make exponents equal. Larger exponent is result exponent
   if(firstExponent>=secondExponent){
     secondMantissa.insert(secondMantissa.end(),diff,0);
@@ -527,4 +514,25 @@ vecin normalizeExponent(const vecin & exponent, const vecin & firstMantissa, con
 
 int alignComp(vecin & a, vecin & b){
   align(a,b); return compBin(a,b);
+}
+
+// Add zeros at the beginning
+void align(vecin & a, vecin & b){
+  int diff = abs(int(a.size()-b.size()));
+  if(a.size()>b.size()){
+    b.insert(b.begin(),diff,0);
+  }else if(b.size()>a.size()){
+    a.insert(a.begin(),diff,0);
+  }
+}
+
+
+// Add zeros at the end
+void alignEnd(vecin & a, vecin & b){
+  int diff = abs(int(a.size()-b.size()));
+  if(a.size()>b.size()){
+    b.insert(b.end(),diff,0);
+  }else if(b.size()>a.size()){
+    a.insert(a.end(),diff,0);
+  }
 }

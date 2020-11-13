@@ -47,6 +47,7 @@ vecin subBinary(vecin a, vecin b);
 vecin mulBinary(const vecin & a, const vecin & b);
 vecin divBinary(const vecin & dividend,const vecin & divisor);
 void align(vecin & a, vecin & b);
+void alignEnd(vecin & a, vecin & b);
 int alignComp(vecin & a, vecin & b);
 int notc(int n);
 vecstr convertBase(vecstr,int,int);

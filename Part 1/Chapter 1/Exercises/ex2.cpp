@@ -158,18 +158,9 @@ int main(){
     sum = addFloats(arr2,negateFloat(arr1));
     assert(sum == negateFloat(arr12diff));
 
-    // paper
     // 20.25 + 412515.5 = 412535.75
     sum = addFloats(arr2,largeFloat);
-    //assert(sum == largeSum);
-
-    std::cout << "Current result\n";
-    showVals(sum);
-    std::cout << "Valid result\n";
-    showVals(largeSum);
-
-    // return 0;
-
+    assert(sum == largeSum);
 
   // First Negative
 
