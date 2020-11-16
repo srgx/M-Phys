@@ -257,7 +257,7 @@ iefloat divFloats(const iefloat & first, const iefloat & second){
   vecin firstMantissa = getMantissa(first);
   vecin secondMantissa = getMantissa(second);
 
-  int diff = abs(firstExponent-secondExponent);
+  int diff = std::abs(firstExponent-secondExponent);
 
   // Shift to make exponents equal
   if(firstExponent>secondExponent){  // assert(sum == firstSecondSum);
@@ -295,48 +295,33 @@ iefloat divFloats(const iefloat & first, const iefloat & second){
 iefloat mulFloats(const iefloat & first, const iefloat & second){
 
   if(first==ZERO_F||second==ZERO_F){ return ZERO_F; }
-
+  
+  // Calculate exponent
   vecin exponent = addBinary(getRawExponent(first),
                              getRawExponent(second));
-
   const vecin bias = vecin({ 1, 1, 1, 1, 1, 1, 1 }); // 127
   exponent = subBinary(exponent,bias);
-
+    
   // Get mantissae
   vecin firstMantissa = getMantissa(first);
   vecin secondMantissa = getMantissa(second);
 
-  int firstExponent = getExponentValue(first);
-  int secondExponent = getExponentValue(second);
-
-  int diff = std::abs(firstExponent-secondExponent);
-
-  //assert(diff==1);
-
-  // Shift to make exponents equal
-  if(firstExponent>secondExponent){
-    secondMantissa.insert(secondMantissa.end(),diff,0);
-  }else if(firstExponent<secondExponent){
-    firstMantissa.insert(firstMantissa.end(),diff,0);
-  }
-
   vecin resultMantissa = mulBinary(firstMantissa,secondMantissa);
-
-  int shift = 1;
 
   // Initialize number with zeros
   iefloat result = ZERO_F;
-
+  
   // Set exponent
   std::copy(exponent.begin(),exponent.end(),result.begin()+1);
 
   // Set mantissa
-  std::copy(resultMantissa.begin()+shift,resultMantissa.end(),result.begin()+9);
+  std::copy(resultMantissa.begin()+1,resultMantissa.end(),result.begin()+9);
 
   int fSign = first.at(0); int sSign = second.at(0);
 
   // Set sign
   result.at(0) = fSign==1&&sSign==1 || fSign==0&&sSign==0 ? 0 : 1;
+  
 
   return result;
 }
@@ -361,9 +346,36 @@ iefloat subFloats(const iefloat & first, const iefloat & second){
   vecin firstMantissa = getMantissa(first);
   vecin secondMantissa = getMantissa(second);
 
-  // Result exponent
-  vecin exponent =
-    shiftMantissae(first,second,firstMantissa,secondMantissa);
+  int firstExponent = getExponentValue(first);
+  int secondExponent = getExponentValue(second);
+
+  // Difference between exponents(shift)
+  int diff = std::abs(firstExponent-secondExponent);
+  
+  int firstMantissaLength = firstMantissa.size();
+  int secondMantissaLength = secondMantissa.size();
+  
+  
+  vecin exponent;
+  
+  // "Add" zeros at the beginning of mantissa to make exponents equal(shift mantissae)
+  // Larger exponent is result exponent
+  if(firstExponent>secondExponent){
+    secondMantissaLength += diff;
+    exponent = getRawExponent(first);
+  }else{
+    firstMantissaLength += diff;
+    exponent = getRawExponent(second);
+  }
+  
+  diff = std::abs(firstMantissaLength-secondMantissaLength);
+  
+  // Add zeros at the end
+  if(firstMantissaLength>secondMantissaLength){
+    secondMantissa.insert(secondMantissa.end(),diff,0);
+  }else if(firstMantissaLength<secondMantissaLength){
+    firstMantissa.insert(firstMantissa.end(),diff,0);
+  }
 
   int fSign = first.at(0); int sSign = second.at(0);
 
@@ -423,21 +435,31 @@ iefloat addFloats(const iefloat & first, const iefloat & second){
 
   vecin exponent;
 
+  // Difference between exponents(shift)
   int diff = std::abs(firstExponent-secondExponent);
+  
+  int firstMantissaLength = firstMantissa.size();
+  int secondMantissaLength = secondMantissa.size();
 
-  // Add zeros at the beginning of mantissa to make exponents equal
+  // "Add" zeros at the beginning of mantissa to make exponents equal(shift mantissae)
   // Larger exponent is result exponent
-  if(firstExponent>=secondExponent){
-    secondMantissa.insert(secondMantissa.begin(),diff,0);
+  if(firstExponent>secondExponent){
+    secondMantissaLength += diff;
     exponent = getRawExponent(first);
   }else{
-    firstMantissa.insert(firstMantissa.begin(),diff,0);
+    firstMantissaLength += diff;
     exponent = getRawExponent(second);
   }
-
-  // Align mantissae at the end before addition
-  alignEnd(firstMantissa,secondMantissa);
-
+  
+  diff = std::abs(firstMantissaLength-secondMantissaLength);
+  
+  // Add zeros at the end
+  if(firstMantissaLength>secondMantissaLength){
+    secondMantissa.insert(secondMantissa.end(),diff,0);
+  }else if(firstMantissaLength<secondMantissaLength){
+    firstMantissa.insert(firstMantissa.end(),diff,0);
+  }
+  
   int fSign = first.at(0); int sSign = second.at(0);
 
   vecin resultMantissa =
@@ -481,32 +503,12 @@ iefloat negateFloat(iefloat n){
   n.at(0) = notc(n.at(0)); return n;
 }
 
-vecin shiftMantissae(const iefloat & first, const iefloat & second,vecin & firstMantissa,vecin & secondMantissa){
-
-  int firstExponent = getExponentValue(first);
-  int secondExponent = getExponentValue(second);
-
-  // Result exponent
-  vecin exponent; int diff = std::abs(firstExponent-secondExponent);
-
-  // Shift to make exponents equal. Larger exponent is result exponent
-  if(firstExponent>=secondExponent){
-    secondMantissa.insert(secondMantissa.end(),diff,0);
-    exponent = getRawExponent(first);
-  }else if(firstExponent<secondExponent){
-    firstMantissa.insert(firstMantissa.end(),diff,0);
-    exponent = getRawExponent(second);
-  }
-
-  return exponent;
-
-}
 
 vecin normalizeExponent(const vecin & exponent, const vecin & firstMantissa, const vecin & secondMantissa, const vecin & resultMantissa){
 
-  int fms = firstMantissa.size(); int sms = secondMantissa.size();
-  int resultSize = fms > sms ? fms : sms;
-  int sizeDiff = resultSize - resultMantissa.size();
+  const int fms = firstMantissa.size(); const int sms = secondMantissa.size();
+  const int resultSize = fms > sms ? fms : sms;
+  const int sizeDiff = resultSize - resultMantissa.size();
 
   return subBinary(exponent,numberToBinary(sizeDiff));
 
@@ -518,7 +520,7 @@ int alignComp(vecin & a, vecin & b){
 
 // Add zeros at the beginning
 void align(vecin & a, vecin & b){
-  int diff = abs(int(a.size()-b.size()));
+  int diff = std::abs(int(a.size()-b.size()));
   if(a.size()>b.size()){
     b.insert(b.begin(),diff,0);
   }else if(b.size()>a.size()){
@@ -526,13 +528,3 @@ void align(vecin & a, vecin & b){
   }
 }
 
-
-// Add zeros at the end
-void alignEnd(vecin & a, vecin & b){
-  int diff = abs(int(a.size()-b.size()));
-  if(a.size()>b.size()){
-    b.insert(b.end(),diff,0);
-  }else if(b.size()>a.size()){
-    a.insert(a.end(),diff,0);
-  }
-}

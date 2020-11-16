@@ -47,7 +47,6 @@ vecin subBinary(vecin a, vecin b);
 vecin mulBinary(const vecin & a, const vecin & b);
 vecin divBinary(const vecin & dividend,const vecin & divisor);
 void align(vecin & a, vecin & b);
-void alignEnd(vecin & a, vecin & b);
 int alignComp(vecin & a, vecin & b);
 int notc(int n);
 vecstr convertBase(vecstr,int,int);
@@ -61,7 +60,6 @@ iefloat subFloats(const iefloat & first, const iefloat & second);
 iefloat mulFloats(const iefloat & first, const iefloat & second);
 iefloat divFloats(const iefloat & first, const iefloat & second);
 iefloat negateFloat(iefloat n);
-vecin shiftMantissae(const iefloat & first, const iefloat & second, vecin & firstMantissa,vecin & secondMantissa);
 vecin normalizeExponent(const vecin & exponent, const vecin & firstMantissa, const vecin & secondMantissa, const vecin & resultMantissa);
 
 template<typename T>
