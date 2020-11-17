@@ -18,6 +18,8 @@ const iefloat ZERO_F =
 { 0,
   0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+  
+const vecin bias = vecin({ 1, 1, 1, 1, 1, 1, 1 }); // 127
 
 const conv CONVERSION_TABLE =
   { std::make_pair("0", fbits({ "0", "0", "0", "0" })),
@@ -61,6 +63,7 @@ iefloat mulFloats(const iefloat & first, const iefloat & second);
 iefloat divFloats(const iefloat & first, const iefloat & second);
 iefloat negateFloat(iefloat n);
 vecin normalizeExponent(const vecin & exponent, const vecin & firstMantissa, const vecin & secondMantissa, const vecin & resultMantissa);
+void removeZeros(vecin & number);
 
 template<typename T>
 void showVals(const T & vals){

@@ -69,7 +69,9 @@ vecin divBinary(const vecin & dividend,const vecin & divisor){
   }
 
   result.push_back(divisorValue<=subNumberValue ? 1 : 0);
-
+  
+  removeZeros(result);
+  
   return result;
 }
 
@@ -91,8 +93,7 @@ vecin mulBinary(const vecin & a,const vecin & b){
     output = addBinary(output,p);
   }
 
-  // Remove leading zeros
-  while(output.at(0)==0&&output.size()>1){ output.erase(output.begin()); }
+  removeZeros(output);
 
   return output;
 }
@@ -137,8 +138,7 @@ vecin subBinary(vecin a,vecin b){
     output.insert(output.begin(),writeD);
   }
 
-  // Remove leading zeros
-  while(output.at(0)==0&&output.size()>1){ output.erase(output.begin()); }
+  removeZeros(output);
 
   return output;
 
@@ -246,40 +246,25 @@ vecin getMantissa(const iefloat & arr){
 }
 
 iefloat divFloats(const iefloat & first, const iefloat & second){
+  
+  if(first==ZERO_F||second==ZERO_F){ return ZERO_F; }
+  
+  // Add bias before subtraction to avoid negative values
+  vecin biasedFirst = addBinary(getRawExponent(first),bias); // + 127
 
-  int firstExponent = getExponentValue(first);
-  int secondExponent = getExponentValue(second);
-
-  vecin exponent =
-    addBinary(getRawExponent(firstExponent>secondExponent ? first : second),
-              numberToBinary(firstExponent<secondExponent ? firstExponent : secondExponent));
-
+  // Calculate exponent
+  vecin exponent = subBinary(biasedFirst,getRawExponent(second));
+  
+  // Fill exponent with zeros
+  exponent.insert(exponent.begin(),8-exponent.size(),0);
+  
+  
+  // Get mantissae
   vecin firstMantissa = getMantissa(first);
   vecin secondMantissa = getMantissa(second);
-
-  int diff = std::abs(firstExponent-secondExponent);
-
-  // Shift to make exponents equal
-  if(firstExponent>secondExponent){  // assert(sum == firstSecondSum);
-  // assert(sum == addFloats(second,first));
-  //
-  // sum = addFloats(arr1,arr2);
-  // assert(sum == arr12sum);
-  // assert(sum == addFloats(arr2,arr1));
-  //
-  // // 0 Addition
-  // sum = addFloats(arr1,arr5);
-  // assert(sum == arr1);
-  // assert(sum == addFloats(arr5,arr1));
-    secondMantissa.insert(secondMantissa.end(),diff,0);
-  }else if(firstExponent<secondExponent){
-    firstMantissa.insert(firstMantissa.end(),diff,0);
-  }
-
+  
   vecin resultMantissa = divBinary(firstMantissa,secondMantissa);
-
-  int shift = 1;
-
+  
   // Initialize number with zeros
   iefloat result = ZERO_F;
 
@@ -287,7 +272,12 @@ iefloat divFloats(const iefloat & first, const iefloat & second){
   std::copy(exponent.begin(),exponent.end(),result.begin()+1);
 
   // Set mantissa
-  std::copy(resultMantissa.begin()+shift,resultMantissa.end(),result.begin()+9);
+  std::copy(resultMantissa.begin()+1,resultMantissa.end(),result.begin()+9);
+  
+  int fSign = first.at(0); int sSign = second.at(0);
+
+  // Set sign
+  result.at(0) = fSign==1&&sSign==1 || fSign==0&&sSign==0 ? 0 : 1;
 
   return result;
 }
@@ -299,15 +289,14 @@ iefloat mulFloats(const iefloat & first, const iefloat & second){
   // Calculate exponent
   vecin exponent = addBinary(getRawExponent(first),
                              getRawExponent(second));
-  const vecin bias = vecin({ 1, 1, 1, 1, 1, 1, 1 }); // 127
-  exponent = subBinary(exponent,bias);
+  exponent = subBinary(exponent,bias); // - 127
     
   // Get mantissae
   vecin firstMantissa = getMantissa(first);
   vecin secondMantissa = getMantissa(second);
 
   vecin resultMantissa = mulBinary(firstMantissa,secondMantissa);
-
+  
   // Initialize number with zeros
   iefloat result = ZERO_F;
   
@@ -507,9 +496,14 @@ iefloat negateFloat(iefloat n){
 vecin normalizeExponent(const vecin & exponent, const vecin & firstMantissa, const vecin & secondMantissa, const vecin & resultMantissa){
 
   const int fms = firstMantissa.size(); const int sms = secondMantissa.size();
+  
+  // Find size of larger factor
   const int resultSize = fms > sms ? fms : sms;
+  
+  // Calculate how many zeros are at the beginning
   const int sizeDiff = resultSize - resultMantissa.size();
 
+  // Set exponent according to number of zeros
   return subBinary(exponent,numberToBinary(sizeDiff));
 
 }
@@ -528,3 +522,8 @@ void align(vecin & a, vecin & b){
   }
 }
 
+
+void removeZeros(vecin & number){
+  // Remove leading zeros
+  while(number.at(0)==0&&number.size()>1){ number.erase(number.begin()); }
+}
