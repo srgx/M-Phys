@@ -60,26 +60,45 @@ int main(){
   });
 
   // 1x + 3y = 10
-  // 5x + -2y = -1
+  // 5x - 2y = -1
   auto sim3 = std::vector<vecflt>({
     vecflt({1, 3, 10}),
     vecflt({5, -2, -1})
   });
 
+
+  // 6x - 3y = 3
+  // 2x - y = 4
+  auto sim4 = std::vector<vecflt>({
+    vecflt({6, -3, 3}),
+    vecflt({2, -1, 4})
+  });
+
+  vecflt answer;
+
   auto simres = solveSimultaneous(sim1);
-  assert(simres.size()==2);
-  assert(any_of(simres.begin(),simres.end(),compare(-2)));
-  assert(any_of(simres.begin(),simres.end(),compare(4)));
+  assert(simres.success);
+  answer = simres.answer;
+  assert(answer.size()==2);
+  assert(any_of(answer.begin(),answer.end(),compare(-2)));
+  assert(any_of(answer.begin(),answer.end(),compare(4)));
 
   simres = solveSimultaneous(sim2);
-  assert(simres.size()==2);
-  assert(any_of(simres.begin(),simres.end(),compare(4)));
-  assert(any_of(simres.begin(),simres.end(),compare(-1)));
+  assert(simres.success);
+  answer = simres.answer;
+  assert(answer.size()==2);
+  assert(any_of(answer.begin(),answer.end(),compare(4)));
+  assert(any_of(answer.begin(),answer.end(),compare(-1)));
 
   simres = solveSimultaneous(sim3);
-  assert(simres.size()==2);
-  assert(any_of(simres.begin(),simres.end(),compare(1)));
-  assert(any_of(simres.begin(),simres.end(),compare(3)));
+  assert(simres.success);
+  answer = simres.answer;
+  assert(answer.size()==2);
+  assert(any_of(answer.begin(),answer.end(),compare(1)));
+  assert(any_of(answer.begin(),answer.end(),compare(3)));
 
+  // Equation with no solution
+  simres = solveSimultaneous(sim4);
+  assert(!simres.success);
 
 }

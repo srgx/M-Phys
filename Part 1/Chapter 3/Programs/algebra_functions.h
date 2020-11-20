@@ -11,8 +11,13 @@ struct compare{
   bool operator()(const float & i);
 };
 
+struct eqResult{
+  bool success;
+  vecflt answer;
+};
+
 vecflt solveCubic(float a, float b, float c, float d);
-vecflt solveSimultaneous(std::vector<vecflt> & equations);
+eqResult solveSimultaneous(std::vector<vecflt> & equations);
 int substitute(const std::string & str,int valX);
 bool allDigits(const std::string & str);
 std::string getSubexpFrom(const std::string & str,int index);

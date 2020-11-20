@@ -156,9 +156,10 @@ vecflt solveCubic(float a, float b, float c, float d){
   return ret;
 }
 
-vecflt solveSimultaneous(std::vector<vecflt> & equations){
+eqResult solveSimultaneous(std::vector<vecflt> & equations){
   std::vector<vecflt> redux; const int n = equations.size();
 
+  eqResult result({ true });
   vecflt output(n);
 
   for(int i=n-1;i>=0;i--){
@@ -170,11 +171,11 @@ vecflt solveSimultaneous(std::vector<vecflt> & equations){
     }
 
     if(row.empty()){
-      std::cout << "No unique solution"; return output;
+      // No Solution
+      result.success = false; return result;
     }else{
 
       float divisor = row.at(i);
-
       equations.erase(std::remove(equations.begin(), equations.end(), row), equations.end());
       for(int j=0;j<row.size();j++){ row.at(j) /= divisor; }
       redux.insert(redux.begin(),row);
@@ -184,24 +185,29 @@ vecflt solveSimultaneous(std::vector<vecflt> & equations){
         if(equations.at(j).at(i)!=0){
 
           float t = equations.at(j).at(i);
-
           for(int w=0;w<equations.at(j).size();w++){
             equations.at(j).at(w) -= redux.at(0).at(w) * t;
           }
+
         }
       }
     }
   }
 
   for(int i=0;i<n;i++){
-    float sum = 0; int j = 0;
-    while(j<i){
+
+    float sum = 0;
+    for(int j=0;j<i;j++){
       sum = redux.at(i).at(j) * output.at(j) + sum;
-      j++;
     }
+
     output.at(i) = redux.at(i).at(n) - sum;
+    
   }
 
-  return output;
+  // Copy solution to result
+  result.answer = output;
+
+  return result;
 
 }
