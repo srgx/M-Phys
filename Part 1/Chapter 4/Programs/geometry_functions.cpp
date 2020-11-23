@@ -1,5 +1,8 @@
 #include "geometry_functions.h"
 #include <cmath>
+#include <iostream>
+
+using std::cout; using std::endl;
 
 point pointBetween(const point & a,const point & b, float distance){
   float totalDistance = calculateDistance(a,b);
@@ -101,4 +104,56 @@ float mytan2(float y,float x){
   }else{
     return degToRad(deg);
   }
+}
+
+triangleInfo solveTriangle(const triangleInfo & data){
+
+  int sides = countSides(data); int angles = countAngles(data);
+
+  if(3==sides){
+
+    int a = data.at(0); int b = data.at(1); int c = data.at(2);
+    triangleInfo result = data;
+
+    // Calculate angles with sine rule
+    result.at(3) = radToDeg(sineR(a,b,c));
+    result.at(4) = radToDeg(sineR(b,c,a));
+    result.at(5) = radToDeg(sineR(c,a,b));
+
+    cout << result.at(3) << endl;
+    cout << result.at(4) << endl;
+    cout << result.at(5) << endl;
+
+    return result;
+  }
+
+}
+
+int countData(const triangleInfo & data, int from){
+  int count = 0; int end = from + 3; // read 3 elements
+  for(int i=from;i<end;i++){
+    if(data.at(i)>=0){ count++; }
+  }
+  return count;
+}
+
+int countSides(const triangleInfo & data){
+  return countData(data,0);
+}
+
+int countAngles(const triangleInfo & data){
+  return countData(data,3);
+}
+
+float sineR(float a, float b, float c){
+  return acos((pow(b,2)+pow(c,2)-pow(a,2))/(2*b*c));
+}
+
+bool compareAprox(const triangleInfo & a, const triangleInfo & b){
+  for(int i=0;i<a.size();i++){
+    if(std::abs(a.at(i)-b.at(i))>0.01){
+      return false;
+    }
+  }
+  return true;
 }

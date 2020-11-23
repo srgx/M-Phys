@@ -1,19 +1,35 @@
 #include <iostream>
 #include <array>
+#include <cassert>
+#include "../Programs/geometry_functions.h"
 
-typedef std::array<float,6> triangleInfo;
-using std::cout;
-
-triangleInfo solveTriangle(const triangleInfo & data);
+using std::cout; using std::endl;
 
 int main(){
-  triangleInfo trData({1,2,3,4,5,6});
-  solveTriangle(trData);
-}
 
-triangleInfo solveTriangle(const triangleInfo & data){
-  for(const auto & v : data){
-    cout << v << "|";
-  }
-  cout << "\n";
+  // for(const auto & v : result){
+  //   cout << v << "|";
+  // }
+  //
+  // cout << endl;
+
+
+  // 3 sides
+
+  assert(compareAprox(solveTriangle
+        (triangleInfo({ 3, 4, 5, -1, -1, -1 })),
+         triangleInfo({ 3, 4, 5, 36.87, 53.13, 90 })));
+
+  assert(compareAprox(solveTriangle
+        (triangleInfo({ 3, 4, 4, -1, -1, -1 })),
+         triangleInfo({ 3, 4, 4, 44.05, 67.98, 67.98 })));
+
+  assert(compareAprox(solveTriangle
+        (triangleInfo({ 3, 3, 3, -1, -1, -1 })),
+         triangleInfo({ 3, 3, 3, 60, 60, 60 })));
+
+
+  // 2 angles and 1 side
+
+  
 }

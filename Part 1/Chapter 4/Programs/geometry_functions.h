@@ -7,6 +7,9 @@ typedef std::pair<float,float> point;
 typedef std::array<point,3> triangle;
 typedef std::pair<float,float> mvector;
 
+// 3 sides. 3 angles, -1 means no info
+typedef std::array<float,6> triangleInfo;
+
 triangle rotateFollow(const triangle & vertices,const point & target);
 float calculateDistance(const point & a, const point & b);
 point pointBetween(const point & a,const point & b, float distance);
@@ -19,5 +22,12 @@ float sqr(float x);
 float degToRad(float deg);
 float radToDeg(float rad);
 float mytan2(float y,float x);
+
+triangleInfo solveTriangle(const triangleInfo & data);
+int countSides(const triangleInfo & data);
+int countAngles(const triangleInfo & data);
+int countData(const triangleInfo & data,int from);
+float sineR(float a, float b, float c);
+bool compareAprox(const triangleInfo & a, const triangleInfo & b);
 
 #endif
