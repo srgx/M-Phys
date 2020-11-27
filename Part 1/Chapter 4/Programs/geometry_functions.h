@@ -27,7 +27,7 @@ triangleInfo solveTriangle(const triangleInfo & data);
 int countSides(const triangleInfo & data);
 int countAngles(const triangleInfo & data);
 int countData(const triangleInfo & data,int from);
-float sineR(float a, float b, float c);
+float cosineR(float a, float b, float c);
 bool compareAprox(const triangleInfo & a, const triangleInfo & b);
 
 #endif

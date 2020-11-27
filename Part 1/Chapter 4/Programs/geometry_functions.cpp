@@ -110,21 +110,65 @@ triangleInfo solveTriangle(const triangleInfo & data){
 
   int sides = countSides(data); int angles = countAngles(data);
 
+  // 3 sides
   if(3==sides){
+
+    // cout << "FIRST\n";
 
     int a = data.at(0); int b = data.at(1); int c = data.at(2);
     triangleInfo result = data;
 
-    // Calculate angles with sine rule
-    result.at(3) = radToDeg(sineR(a,b,c));
-    result.at(4) = radToDeg(sineR(b,c,a));
-    result.at(5) = radToDeg(sineR(c,a,b));
-
-    cout << result.at(3) << endl;
-    cout << result.at(4) << endl;
-    cout << result.at(5) << endl;
+    // Calculate angles with cosine rule
+    result.at(3) = radToDeg(cosineR(a,b,c));
+    result.at(4) = radToDeg(cosineR(b,c,a));
+    result.at(5) = radToDeg(cosineR(c,a,b));
 
     return result;
+
+  // 2 angles and 1 side
+  }else if(sides>=1&&angles>=2){
+
+    // cout << "SECOND\n";
+
+    triangleInfo result = data;
+
+    // find 3rd angle
+    if(2==angles){
+      float sum = 0;
+
+      // sum of 2 angles
+      for(int i=3;i<6;i++){
+        if(result.at(i)>=0){ sum += result.at(i); }
+      }
+
+      // calculate and set 3rd angle
+      for(int i=3;i<6;i++){
+        if(result.at(i)<0){ result.at(i) = 180 - sum; break; }
+      }
+
+    }
+
+    // 3 angles and at least 1 side are now known
+
+    // Find index of known side
+    int sideIndex = 0;
+    while(result.at(sideIndex)<0){ sideIndex++; }
+
+    // Calculate proportion. Add 3 to sideIndex to find corresponding angle
+    const float proportion =
+      result.at(sideIndex) / sin(degToRad(result.at(sideIndex+3)));
+
+    // Calculate remaining sides from sine rule
+    // a = sin(a) * (c/sin(gamma))
+    for(int i=0;i<3;i++){
+      if(i!=sideIndex){
+        result.at(i) =
+          sin(degToRad(result.at(i+3))) * proportion;
+      }
+    }
+
+    return result;
+
   }
 
 }
@@ -145,13 +189,13 @@ int countAngles(const triangleInfo & data){
   return countData(data,3);
 }
 
-float sineR(float a, float b, float c){
+float cosineR(float a, float b, float c){
   return acos((pow(b,2)+pow(c,2)-pow(a,2))/(2*b*c));
 }
 
 bool compareAprox(const triangleInfo & a, const triangleInfo & b){
   for(int i=0;i<a.size();i++){
-    if(std::abs(a.at(i)-b.at(i))>0.01){
+    if(std::abs(a.at(i)-b.at(i))>0.9){
       return false;
     }
   }
