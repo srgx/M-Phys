@@ -32,5 +32,6 @@ bool compareAprox(const triangleInfo & a, const triangleInfo & b);
 bool hasAngleBetween(const triangleInfo & data);
 bool isRightAngled(const triangleInfo & data);
 float calcSide(float b, float c, float alfa);
+float pythagore(float side, float hypotenuse);
 
 #endif

@@ -110,13 +110,15 @@ triangleInfo solveTriangle(const triangleInfo & data){
 
   int sides = countSides(data); int angles = countAngles(data);
 
+  float a, b, c;
+  a = data.at(0); b = data.at(1); c = data.at(2);
+
+  triangleInfo result = data;
+
   // 3 sides
   if(3==sides){
 
     // cout << "FIRST\n";
-
-    float a = data.at(0); float b = data.at(1); float c = data.at(2);
-    triangleInfo result = data;
 
     // Calculate angles with cosine rule
     result.at(3) = cosineR(a,b,c);
@@ -130,22 +132,20 @@ triangleInfo solveTriangle(const triangleInfo & data){
 
     // cout << "SECOND\n";
 
-    triangleInfo result = data;
-
-    // find 3rd angle
+    // Find 3rd angle
     if(2==angles){
-      float sum = 0;
+      float sum = 0; int angleIndex;
 
       // sum of 2 angles
       for(int i=3;i<6;i++){
-        if(result.at(i)>=0){ sum += result.at(i); }
+        if(result.at(i)>=0){
+          sum += result.at(i);
+        }else{
+          angleIndex = i;
+        }
       }
 
-      // calculate and set 3rd angle
-      for(int i=3;i<6;i++){
-        if(result.at(i)<0){ result.at(i) = 180 - sum; break; }
-      }
-
+      result.at(angleIndex) = 180 - sum;
     }
 
     // 3 angles and at least 1 side are now known
@@ -174,49 +174,91 @@ triangleInfo solveTriangle(const triangleInfo & data){
 
     // cout << "THIRD\n";
 
-    triangleInfo result = data;
-
+    // Find index of known angle
     int angleIndex = 3;
     while(data.at(angleIndex)==-1){ angleIndex++; }
 
+    // Find remaining side
     switch(angleIndex){
 
       case 3:
-
-        // side
-        result.at(0) = calcSide(result.at(1),result.at(2),result.at(angleIndex));
-
-        // angles
-        result.at(4) = cosineR(result.at(1),result.at(2),result.at(0));
-        result.at(5) = cosineR(result.at(2),result.at(0),result.at(1));
-
+        result.at(0) = calcSide(b,c,result.at(angleIndex));
         break;
 
       case 4:
-
-        result.at(1) = calcSide(result.at(0),result.at(2),result.at(angleIndex));
-
-        result.at(3) = cosineR(result.at(0),result.at(1),result.at(2));
-        result.at(5) = cosineR(result.at(2),result.at(0),result.at(1));
-
+        result.at(1) = calcSide(a,c,result.at(angleIndex));
         break;
 
       case 5:
-
-        result.at(2) = calcSide(result.at(0),result.at(1),result.at(angleIndex));
-
-        result.at(3) = cosineR(result.at(0),result.at(1),result.at(2));
-        result.at(4) = cosineR(result.at(1),result.at(2),result.at(0));
-
+        result.at(2) = calcSide(a,b,result.at(angleIndex));
         break;
     }
 
-    return result;
+    // When 3 sides are known call function again
+    return solveTriangle(result);
 
-  // right-angled triangle and 2 sides with different angle
-  // if angle between a and b is 90 sides are a,c or b,c(a,b in previous case for any angle)
-  }else if(isRightAngled){
-    //
+
+  // Right-angled triangle and 2 sides(hypotenuse and 1 side)
+  // If angle between a and b is 90, sides are a-c or b-c (a-b in previous case for any angle)
+  }else if(isRightAngled(data)){
+
+    // cout << "FOURTH\n";
+
+    // Find index of right angle
+    int index = 3;
+    while(data.at(index)!=90){ index++; }
+
+
+    // Find remaining side
+    switch(index){
+
+      // Right angle (2-3)
+      // Check pairs (1-2, 1-3)
+      case 3:
+
+        if(a!=-1){
+          if(b!=-1){
+            result.at(2) = pythagore(b,a);
+          }else if(c!=-1){
+            result.at(1) = pythagore(c,a);
+          }
+        }
+
+        break;
+
+      // Right angle (1-3)
+      // Check pairs (1-2, 2-3)
+      case 4:
+
+        if(b!=-1){
+          if(a!=-1){
+            result.at(2) = pythagore(a,b);
+          }else if(c!=-1){
+            result.at(0) = pythagore(c,b);
+          }
+        }
+
+        break;
+
+      // Right angle (1-2)
+      // Check pairs (1-3, 2-3)
+      case 5:
+
+        if(c!=-1){
+          if(a!=-1){
+            result.at(1) = pythagore(a,c);
+          }else if(b!=-1){
+            result.at(0) = pythagore(b,c);
+          }
+        }
+
+        break;
+
+    }
+
+    // When 3 sides are known call function again
+    return solveTriangle(result);
+
   }
 
 }
@@ -251,17 +293,25 @@ bool compareAprox(const triangleInfo & a, const triangleInfo & b){
 }
 
 bool hasAngleBetween(const triangleInfo & data){
-  float a = data.at(0); float b = data.at(1); float c = data.at(2);
-  float d = data.at(3); float e = data.at(4); float f = data.at(5);
+  float a, b, c, d, e, f;
+  a = data.at(0); b = data.at(1); c = data.at(2);
+  d = data.at(3); e = data.at(4); f = data.at(5);
   return (a!=-1&&b!=-1&&f!=-1)||
          (b!=-1&&c!=-1&&d!=-1)||
          (c!=-1&&a!=-1&&e!=-1);
 }
 
 bool isRightAngled(const triangleInfo & data){
-  return true;
+  for(int i=3;i<6;i++){
+    if(data.at(i)==90){ return true; }
+  }
+  return false;
 }
 
 float calcSide(float b, float c, float alfa){
     return sqrt(pow(b,2) + pow(c,2) - 2 * b * c * cos(degToRad(alfa)));
+}
+
+float pythagore(float side, float hypotenuse){
+  return sqrt(pow(hypotenuse,2)-(pow(side,2)));
 }
