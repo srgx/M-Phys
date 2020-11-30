@@ -52,6 +52,25 @@ int main(){
 
 
   // 2 sides and angle between them
-  // ...
+
+  assert(compareAprox(solveTriangle
+        (triangleInfo({ 13.4, 9.1, -1, -1, -1, 92.3 })),
+         triangleInfo({ 13.4, 9.1, 16.5, 54.1, 33.6, 92.3 })));
+
+  auto tst = solveTriangle(triangleInfo({ 13.4, 9.1, -1, -1, -1, 92.3 }));
+
+  for(const auto & v : tst){
+    cout << v << "|";
+  }
+
+
+  cout << endl;
+
+  // assert(compareAprox(solveTriangle
+  //       (triangleInfo({ 3, -1, 4, -1, 67.98, -1 })),
+  //        triangleInfo({ 3, 4, 4, 44.05, 67.98, 67.98 })));
+
+
+
 
 }

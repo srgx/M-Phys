@@ -159,7 +159,7 @@ triangleInfo solveTriangle(const triangleInfo & data){
       result.at(sideIndex) / sin(degToRad(result.at(sideIndex+3)));
 
     // Calculate remaining sides from sine rule
-    // a = sin(a) * (c/sin(gamma))
+    // a = sin(alfa) * (c/sin(gamma))
     for(int i=0;i<3;i++){
       if(i!=sideIndex){
         result.at(i) =
@@ -169,6 +169,32 @@ triangleInfo solveTriangle(const triangleInfo & data){
 
     return result;
 
+  // 2 sides and angle between them
+  }else if(hasAngleBetween(data)){
+    int angleIndex = 3;
+
+
+    while(data.at(angleIndex)==-1){ angleIndex++; }
+
+    // a^2 = b^2 + c^2 - 2bc * cos(alfa)
+
+    // alfa is angle between b and c
+
+    // from cosine rule
+    // length of 3rd side is sqrt(b^2 + c^2 - 2bc * cos(alfa))
+
+    // 3 sides are now known etc
+
+    switch(angleIndex){
+      case 3:
+        break;
+      case 4:
+        break;
+      case 5:
+        break;
+    }
+  }else if(isRightAngled){
+    //
   }
 
 }
@@ -199,5 +225,17 @@ bool compareAprox(const triangleInfo & a, const triangleInfo & b){
       return false;
     }
   }
+  return true;
+}
+
+bool hasAngleBetween(const triangleInfo & data){
+  float a = data.at(0); float b = data.at(1); float c = data.at(2);
+  float d = data.at(3); float e = data.at(4); float f = data.at(5);
+  return (a!=-1&&b!=-1&&f!=-1)||
+         (b!=-1&&c!=-1&&d!=-1)||
+         (c!=-1&&a!=-1&&e!=-1);
+}
+
+bool isRightAngled(const triangleInfo & data){
   return true;
 }
