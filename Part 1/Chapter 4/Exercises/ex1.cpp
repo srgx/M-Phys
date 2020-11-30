@@ -43,11 +43,11 @@ int main(){
          triangleInfo({ 13.4, 9.1, 16.5, 54.1, 33.6, 92.3 })));
 
   assert(compareAprox(solveTriangle
-        (triangleInfo({ -1, -1, 16.5, -1, 33.6, 92.3 })),
+        (triangleInfo({ 13.4, -1, -1, 54.1, -1, 92.3 })),
          triangleInfo({ 13.4, 9.1, 16.5, 54.1, 33.6, 92.3 })));
 
   assert(compareAprox(solveTriangle
-        (triangleInfo({ 13.4, -1, -1, 54.1, -1, 92.3 })),
+        (triangleInfo({ -1, -1, 16.5, -1, 33.6, 92.3 })),
          triangleInfo({ 13.4, 9.1, 16.5, 54.1, 33.6, 92.3 })));
 
 
@@ -57,20 +57,19 @@ int main(){
         (triangleInfo({ 13.4, 9.1, -1, -1, -1, 92.3 })),
          triangleInfo({ 13.4, 9.1, 16.5, 54.1, 33.6, 92.3 })));
 
-  auto tst = solveTriangle(triangleInfo({ 13.4, 9.1, -1, -1, -1, 92.3 }));
+  assert(compareAprox(solveTriangle
+        (triangleInfo({ 3, -1, 4, -1, 67.98, -1 })),
+         triangleInfo({ 3, 4, 4, 44.05, 67.98, 67.98 })));
 
-  for(const auto & v : tst){
-    cout << v << "|";
-  }
+  assert(compareAprox(solveTriangle
+        (triangleInfo({ -1, 9.1, 16.5, 54.1, -1, -1 })),
+         triangleInfo({ 13.4, 9.1, 16.5, 54.1, 33.6, 92.3 })));
 
+  // right-angled triangle and 2 sides
 
-  cout << endl;
-
-  // assert(compareAprox(solveTriangle
-  //       (triangleInfo({ 3, -1, 4, -1, 67.98, -1 })),
-  //        triangleInfo({ 3, 4, 4, 44.05, 67.98, 67.98 })));
-
-
+  assert(compareAprox(solveTriangle
+        (triangleInfo({ 3, 4, -1, -1, -1, 90 })),
+         triangleInfo({ 3, 4, 5, 36.87, 53.13, 90 })));
 
 
 }

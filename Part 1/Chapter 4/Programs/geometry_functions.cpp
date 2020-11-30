@@ -115,13 +115,13 @@ triangleInfo solveTriangle(const triangleInfo & data){
 
     // cout << "FIRST\n";
 
-    int a = data.at(0); int b = data.at(1); int c = data.at(2);
+    float a = data.at(0); float b = data.at(1); float c = data.at(2);
     triangleInfo result = data;
 
     // Calculate angles with cosine rule
-    result.at(3) = radToDeg(cosineR(a,b,c));
-    result.at(4) = radToDeg(cosineR(b,c,a));
-    result.at(5) = radToDeg(cosineR(c,a,b));
+    result.at(3) = cosineR(a,b,c);
+    result.at(4) = cosineR(b,c,a);
+    result.at(5) = cosineR(c,a,b);
 
     return result;
 
@@ -171,28 +171,50 @@ triangleInfo solveTriangle(const triangleInfo & data){
 
   // 2 sides and angle between them
   }else if(hasAngleBetween(data)){
+
+    // cout << "THIRD\n";
+
+    triangleInfo result = data;
+
     int angleIndex = 3;
-
-
     while(data.at(angleIndex)==-1){ angleIndex++; }
 
-    // a^2 = b^2 + c^2 - 2bc * cos(alfa)
-
-    // alfa is angle between b and c
-
-    // from cosine rule
-    // length of 3rd side is sqrt(b^2 + c^2 - 2bc * cos(alfa))
-
-    // 3 sides are now known etc
-
     switch(angleIndex){
+
       case 3:
+
+        // side
+        result.at(0) = calcSide(result.at(1),result.at(2),result.at(angleIndex));
+
+        // angles
+        result.at(4) = cosineR(result.at(1),result.at(2),result.at(0));
+        result.at(5) = cosineR(result.at(2),result.at(0),result.at(1));
+
         break;
+
       case 4:
+
+        result.at(1) = calcSide(result.at(0),result.at(2),result.at(angleIndex));
+
+        result.at(3) = cosineR(result.at(0),result.at(1),result.at(2));
+        result.at(5) = cosineR(result.at(2),result.at(0),result.at(1));
+
         break;
+
       case 5:
+
+        result.at(2) = calcSide(result.at(0),result.at(1),result.at(angleIndex));
+
+        result.at(3) = cosineR(result.at(0),result.at(1),result.at(2));
+        result.at(4) = cosineR(result.at(1),result.at(2),result.at(0));
+
         break;
     }
+
+    return result;
+
+  // right-angled triangle and 2 sides with different angle
+  // if angle between a and b is 90 sides are a,c or b,c(a,b in previous case for any angle)
   }else if(isRightAngled){
     //
   }
@@ -216,7 +238,7 @@ int countAngles(const triangleInfo & data){
 }
 
 float cosineR(float a, float b, float c){
-  return acos((pow(b,2)+pow(c,2)-pow(a,2))/(2*b*c));
+  return radToDeg(acos((pow(b,2)+pow(c,2)-pow(a,2))/(2*b*c)));
 }
 
 bool compareAprox(const triangleInfo & a, const triangleInfo & b){
@@ -238,4 +260,8 @@ bool hasAngleBetween(const triangleInfo & data){
 
 bool isRightAngled(const triangleInfo & data){
   return true;
+}
+
+float calcSide(float b, float c, float alfa){
+    return sqrt(pow(b,2) + pow(c,2) - 2 * b * c * cos(degToRad(alfa)));
 }
