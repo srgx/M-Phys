@@ -31,15 +31,27 @@ float calculateAngle(const mvector & a, const mvector & b){
 
 }
 
+void showTriangle(const triangle & vertices){
+  for(int i=0;i<3;i++){
+    cout << "(" << vertices.at(i).first << "," << vertices.at(i).second << ")";
+  }
+  cout << '\n';
+}
+
 triangle rotateFollow(const triangle & vertices,const point & target){
 
   // Find centrum of a triangle
   const point centrum = triangleCenter(vertices);
 
+  cout << centrum.first << endl;
+  cout << centrum.second << endl;
+
   mvector centerToFront = createVector(centrum,vertices.at(0));
   mvector centerToTarget = createVector(centrum,target);
 
   const float angle = calculateAngle(centerToFront,centerToTarget);
+
+  cout << "Angle: " << angle << endl;
 
   triangle result;
   for(int i=0;i<3;i++){
@@ -70,8 +82,8 @@ point rotatePoint(const point & pnt, const point & around, float angle){
   float s = around.first; float t = around.second;
   float tX = x - s; float tY = y - t; // Translate point
 
-  float newX = sqrt(sqr(tX)+sqr(tY)) * cos(-angle-atan2(tY,tX)) + s;
-  float newY = sqrt(sqr(tX)+sqr(tY)) * sin(angle-atan2(tY,tX)) + t;
+  float newX = sqrt(sqr(tX)+sqr(tY)) * cos(angle+atan2(tY,tX)) + s;
+  float newY = sqrt(sqr(tX)+sqr(tY)) * sin(angle+atan2(tY,tX)) + t;
 
   return std::make_pair(newX,newY);
 
@@ -280,7 +292,7 @@ int countAngles(const triangleInfo & data){
 }
 
 float cosineR(float a, float b, float c){
-  return radToDeg(acos((pow(b,2)+pow(c,2)-pow(a,2))/(2*b*c)));
+  return radToDeg(acos((sqr(b)+sqr(c)-sqr(a))/(2*b*c)));
 }
 
 bool compareAprox(const triangleInfo & a, const triangleInfo & b){
@@ -309,9 +321,9 @@ bool isRightAngled(const triangleInfo & data){
 }
 
 float calcSide(float b, float c, float alfa){
-    return sqrt(pow(b,2) + pow(c,2) - 2 * b * c * cos(degToRad(alfa)));
+    return sqrt(sqr(b) + sqr(c) - 2 * b * c * cos(degToRad(alfa)));
 }
 
 float pythagore(float side, float hypotenuse){
-  return sqrt(pow(hypotenuse,2)-(pow(side,2)));
+  return sqrt(sqr(hypotenuse)-(sqr(side)));
 }

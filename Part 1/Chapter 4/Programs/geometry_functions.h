@@ -22,6 +22,7 @@ float sqr(float x);
 float degToRad(float deg);
 float radToDeg(float rad);
 float mytan2(float y,float x);
+void showTriangle(const triangle & vertices);
 
 triangleInfo solveTriangle(const triangleInfo & data);
 int countSides(const triangleInfo & data);
