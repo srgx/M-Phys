@@ -111,13 +111,10 @@ int main(){
   tr.at(1) = make_pair(2,2);
   tr.at(2) = make_pair(-10,2);
 
-  showTriangle(tr);
 
+  // Rotate CW 90 around (-4,6)
   point target = make_pair(20,6);
-
   triangle newTriangle = rotateFollow(tr,target);
-
-  showTriangle(newTriangle);
 
   // (4,6)
   assert(std::abs(newTriangle.at(0).first - 4)<D);
@@ -131,18 +128,114 @@ int main(){
   assert(std::abs(newTriangle.at(2).first - -8)<D);
   assert(std::abs(newTriangle.at(2).second - 12)<D);
 
+  // ---------------------------------------------------------------------------
 
-  // Should rotate CCW 45(+0.785398) degrees!
+  // Rotate CCW 45 around (-4,6)
   target = make_pair(-12,14);
   newTriangle = rotateFollow(tr,target);
 
-  showTriangle(newTriangle);
+  // (-9.66,11.66)
+  assert(std::abs(newTriangle.at(0).first - -9.66)<D);
+  assert(std::abs(newTriangle.at(0).second - 11.66)<D);
 
-  // Should rotate CW 45(-0.785398) degrees!
+  // (3.07,7.41)
+  assert(std::abs(newTriangle.at(1).first - 3.07)<D);
+  assert(std::abs(newTriangle.at(1).second - 7.41)<D);
+
+  // (-5.41,-1.07)
+  assert(std::abs(newTriangle.at(2).first - -5.41)<D);
+  assert(std::abs(newTriangle.at(2).second - -1.07)<D);
+
+  // ---------------------------------------------------------------------------
+
+  // Rotate CW 45 around (-4,6)
   target = make_pair(6,16);
   newTriangle = rotateFollow(tr,target);
 
-  showTriangle(newTriangle);
+  // (1.66,11.66)
+  assert(std::abs(newTriangle.at(0).first - 1.66)<D);
+  assert(std::abs(newTriangle.at(0).second - 11.66)<D);
+
+  // (-2.59,-1.07)
+  assert(std::abs(newTriangle.at(1).first - -2.59)<D);
+  assert(std::abs(newTriangle.at(1).second - -1.07)<D);
+
+  // (-11.07,7.41)
+  assert(std::abs(newTriangle.at(2).first - -11.07)<D);
+  assert(std::abs(newTriangle.at(2).second - 7.41)<D);
+
+  // ---------------------------------------------------------------------------
+
+  // Rotate CW 135 around (-4,6)
+  target = make_pair(-2,4);
+  newTriangle = rotateFollow(tr,target);
+
+  // (1.66,0.34)
+  assert(std::abs(newTriangle.at(0).first - 1.66)<D);
+  assert(std::abs(newTriangle.at(0).second - 0.34)<D);
+
+  // (-11.07,4.59)
+  assert(std::abs(newTriangle.at(1).first - -11.07)<D);
+  assert(std::abs(newTriangle.at(1).second - 4.59)<D);
+
+  // (-2.59,13.07)
+  assert(std::abs(newTriangle.at(2).first - -2.59)<D);
+  assert(std::abs(newTriangle.at(2).second - 13.07)<D);
+
+  // ---------------------------------------------------------------------------
+
+  // Rotate CCW 135 around (-4,6)
+  target = make_pair(-12,-2);
+  newTriangle = rotateFollow(tr,target);
+
+  // (-9.66,0.34)
+  assert(std::abs(newTriangle.at(0).first - -9.66)<D);
+  assert(std::abs(newTriangle.at(0).second - 0.34)<D);
+
+  // (-5.41,13.07)
+  assert(std::abs(newTriangle.at(1).first - -5.41)<D);
+  assert(std::abs(newTriangle.at(1).second - 13.07)<D);
+
+  // (3.07,4.59)
+  assert(std::abs(newTriangle.at(2).first - 3.07)<D);
+  assert(std::abs(newTriangle.at(2).second - 4.59)<D);
+
+  // ---------------------------------------------------------------------------
+
+  // Rotate 0 around (-4,6)
+  target = make_pair(-4,20);
+  newTriangle = rotateFollow(tr,target);
+
+  // (-4,14)
+  assert(std::abs(newTriangle.at(0).first - -4)<D);
+  assert(std::abs(newTriangle.at(0).second - 14)<D);
+
+  // (2,2)
+  assert(std::abs(newTriangle.at(1).first - 2)<D);
+  assert(std::abs(newTriangle.at(1).second - 2)<D);
+
+  // (-10,2)
+  assert(std::abs(newTriangle.at(2).first - -10)<D);
+  assert(std::abs(newTriangle.at(2).second - 2)<D);
+
+  // ---------------------------------------------------------------------------
+
+  // Rotate CCW 180 around (-4,6)
+  target = make_pair(-4,-20);
+  newTriangle = rotateFollow(tr,target);
+
+  // (-4,-2)
+  assert(std::abs(newTriangle.at(0).first - -4)<D);
+  assert(std::abs(newTriangle.at(0).second - -2)<D);
+
+  // (-10,10)
+  assert(std::abs(newTriangle.at(1).first - -10)<D);
+  assert(std::abs(newTriangle.at(1).second - 10)<D);
+
+  // (2,10)
+  assert(std::abs(newTriangle.at(2).first - 2)<D);
+  assert(std::abs(newTriangle.at(2).second - 10)<D);
+
 
   cout << "Exit\n";
 

@@ -2,7 +2,7 @@
 #include <cmath>
 #include <iostream>
 
-using std::cout; using std::endl;
+using std::cout;
 
 point pointBetween(const point & a,const point & b, float distance){
   float totalDistance = calculateDistance(a,b);
@@ -26,7 +26,8 @@ float calculateAngle(const mvector & a, const mvector & b){
   if(m1==0||m2==0||m3==0){
     return 0;
   }else{
-    return acos((sqr(m1)+sqr(m2)-sqr(m3))/(2*m1*m2));
+    float result = acos((sqr(m1)+sqr(m2)-sqr(m3))/(2*m1*m2));
+    return a.first < b.first ? -result : result;
   }
 
 }
@@ -43,19 +44,14 @@ triangle rotateFollow(const triangle & vertices,const point & target){
   // Find centrum of a triangle
   const point centrum = triangleCenter(vertices);
 
-  cout << centrum.first << endl;
-  cout << centrum.second << endl;
-
   mvector centerToFront = createVector(centrum,vertices.at(0));
   mvector centerToTarget = createVector(centrum,target);
 
   const float angle = calculateAngle(centerToFront,centerToTarget);
 
-  cout << "Angle: " << angle << endl;
-
   triangle result;
   for(int i=0;i<3;i++){
-    result.at(i) = rotatePoint(vertices.at(i),centrum,-angle);
+    result.at(i) = rotatePoint(vertices.at(i),centrum,angle);
   }
 
   return result;
