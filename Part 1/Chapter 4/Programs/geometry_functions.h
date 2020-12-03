@@ -35,4 +35,10 @@ bool isRightAngled(const triangleInfo & data);
 float calcSide(float b, float c, float alfa);
 float pythagore(float side, float hypotenuse);
 
+triangleInfo solve3Sides(triangleInfo data);
+triangleInfo solve2Angles1Side(triangleInfo data,int angles);
+triangleInfo angleBetween2Sides(triangleInfo data);
+triangleInfo rightAngle2Sides(triangleInfo data);
+float thirdAngle(triangleInfo & data);
+
 #endif
