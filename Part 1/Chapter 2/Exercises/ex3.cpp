@@ -71,47 +71,52 @@ int main(){
   const sf::Time TimePerFrame = sf::seconds(1.f/60.f);
 
   sf::Clock clock;
-	sf::Time timeSinceLastUpdate = sf::Time::Zero;
+  sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
   while(wnd.isOpen()){
 
-		sf::Time dt = clock.restart();
-		timeSinceLastUpdate += dt;
+    sf::Time dt = clock.restart();
+    timeSinceLastUpdate += dt;
 
-		while (timeSinceLastUpdate > TimePerFrame){
+    while (timeSinceLastUpdate > TimePerFrame){
 
-			timeSinceLastUpdate -= TimePerFrame;
+      timeSinceLastUpdate -= TimePerFrame;
 
-			// Process input
+      // Process input
       sf::Event event;
-    	while(wnd.pollEvent(event)){
+      while(wnd.pollEvent(event)){
 
         switch (event.type){
 
-    			case sf::Event::KeyPressed:
-    				if(event.key.code == sf::Keyboard::Left){
-              movingLeft = true;
+          case sf::Event::KeyPressed:
+            
+            if(event.key.code == sf::Keyboard::Left){
+                movingLeft = true;
             }else if(event.key.code == sf::Keyboard::Right){
-              movingRight = true;
+                movingRight = true;
             }else if(event.key.code == sf::Keyboard::Escape){
-              wnd.close();
+                wnd.close();
             }
-    				break;
+            break;
 
-    			case sf::Event::KeyReleased:
+          case sf::Event::KeyReleased:
+            
             if(event.key.code == sf::Keyboard::Left){
               movingLeft = false;
             }else if(event.key.code == sf::Keyboard::Right){
               movingRight = false;
             }
-    				break;
+            
+            break;
 
-    			case sf::Event::Closed:
-    				wnd.close();
-    				break;
-    		}
+          case sf::Event::Closed:
+            
+            wnd.close();
+            break;
+            
+        }
 
-    	}
+      }
 
       // Update sliders and labels
       if(movingRight){
@@ -128,13 +133,13 @@ int main(){
         }
       }
 
-		}
+    }
 
 
     wnd.clear();
 
     // Render sliders
-  	wnd.draw(shape1);
+    wnd.draw(shape1);
     wnd.draw(shape2);
 
     // Render labels
@@ -145,6 +150,6 @@ int main(){
 
     wnd.display();
 
-	}
+  }
 
 }
