@@ -1,6 +1,7 @@
 #include "vectors_functions.h"
 #include <cassert>
 #include <cmath>
+#include <iostream>
 
 typedef std::vector<float> vecf;
 
@@ -79,6 +80,17 @@ int main(){
                                vecf({ 0, 5 })) - M_PI/2)<d);
   assert(std::abs(angleBetween(vecf({ 5, 0 }),
                                vecf({ 5, 5 })) - M_PI/4)<d);
-
+  
+  
+  // determinant is -15
+  std::vector<vecf> mx {
+    { 1, 3, 2 },
+    { -3, -1, -3 },
+    { 2, 3, 1 },
+  };
+  
+  float det = determinant(mx);
+  std::cout << det << std::endl;
+  
 
 }

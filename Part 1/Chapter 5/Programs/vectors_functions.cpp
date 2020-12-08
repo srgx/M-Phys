@@ -1,5 +1,6 @@
 #include "vectors_functions.h"
 #include <cmath>
+#include <iostream>
 
 using std::vector;
 
@@ -67,4 +68,63 @@ vector<float> oppositeVector(const std::vector<float> & vec){
     vctr.push_back(-(*i));
   }
   return vctr;
+}
+
+float determinant(const vector<vector<float>> & array){
+  
+  int size = array.size();
+  
+  if(1==size){
+    
+    return array.at(0).at(0);
+    
+  }else{
+    
+    int mult = 1; float sum = 0;
+    
+    // Loop through first row
+    for(int i=0;i<size;i++){
+      
+      // Value from top row
+      float el = array.at(0).at(i);
+      
+      // New matrix consists of remaining rows
+      // without values at current index (i).
+      vector<vector<float>> newmatrix;
+      for(int j=1;j<size;j++){
+       vector<float> row = array.at(j);
+       row.erase(row.begin()+i);
+       newmatrix.push_back(row);
+      }
+      
+      // Array
+      
+      // A B C
+      // D E F
+      // G H I
+      
+      // New matrix at A
+      // E F
+      // H I
+      
+      // New matrix at B
+      // D F
+      // G I
+      
+      // New matrix at C
+      // D E
+      // G H
+      
+      // Add current value to sum
+      sum += mult*el*determinant(newmatrix);
+      
+      // Change sign in every iteration
+      mult *= -1;
+      
+    }
+    
+    return sum;
+    
+  }
+  
 }

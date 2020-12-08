@@ -9,5 +9,6 @@ float magnitude(const std::vector<float> & vec);
 std::vector<float> norm(const std::vector<float> & vec);
 float angleBetween(const std::vector<float> & v1, const std::vector<float> & v2);
 std::vector<float> oppositeVector(const std::vector<float> & vec);
+float determinant(const std::vector<std::vector<float>> & array);
 
 #endif
