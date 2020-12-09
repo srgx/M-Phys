@@ -80,17 +80,26 @@ int main(){
                                vecf({ 0, 5 })) - M_PI/2)<d);
   assert(std::abs(angleBetween(vecf({ 5, 0 }),
                                vecf({ 5, 5 })) - M_PI/4)<d);
-  
-  
+
+
   // determinant is -15
   std::vector<vecf> mx {
     { 1, 3, 2 },
     { -3, -1, -3 },
     { 2, 3, 1 },
   };
-  
+
   float det = determinant(mx);
-  std::cout << det << std::endl;
-  
+  // std::cout << det << std::endl;
+
+  // -------------------------------------------------------
+
+  assert(normalVector(vecf({ 2, 3 })) == vecf({ 3, -2 }));
+
+  // -------------------------------------------------------
+
+  vecf a { 2, 3 }; vecf b { 2, 0 };
+  drawSquare(a,b);
+
 
 }

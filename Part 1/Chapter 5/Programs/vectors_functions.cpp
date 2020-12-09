@@ -48,6 +48,10 @@ vector<float> norm(const vector<float> & vec){
   }
 }
 
+vector<float> normalVector(const vector<float> & vec){
+  return vector<float>({ vec.at(1), -vec.at(0) });
+}
+
 float angleBetween(const std::vector<float> & v1, const std::vector<float> & v2){
   vector<float> v3 = subVectors(v1,v2);
   float m1 = magnitude(v1);
@@ -71,23 +75,23 @@ vector<float> oppositeVector(const std::vector<float> & vec){
 }
 
 float determinant(const vector<vector<float>> & array){
-  
+
   int size = array.size();
-  
+
   if(1==size){
-    
+
     return array.at(0).at(0);
-    
+
   }else{
-    
+
     int mult = 1; float sum = 0;
-    
+
     // Loop through first row
     for(int i=0;i<size;i++){
-      
+
       // Value from top row
       float el = array.at(0).at(i);
-      
+
       // New matrix consists of remaining rows
       // without values at current index (i).
       vector<vector<float>> newmatrix;
@@ -96,35 +100,63 @@ float determinant(const vector<vector<float>> & array){
        row.erase(row.begin()+i);
        newmatrix.push_back(row);
       }
-      
+
       // Array
-      
+
       // A B C
       // D E F
       // G H I
-      
+
       // New matrix at A
       // E F
       // H I
-      
+
       // New matrix at B
       // D F
       // G I
-      
+
       // New matrix at C
       // D E
       // G H
-      
+
       // Add current value to sum
       sum += mult*el*determinant(newmatrix);
-      
+
       // Change sign in every iteration
       mult *= -1;
-      
+
     }
-    
+
     return sum;
-    
+
   }
-  
+
+}
+
+std::vector<std::vector<float>> drawSquare(const std::vector<float> & a, const std::vector<float> & b){
+
+  std::vector<std::vector<float>> result(4);
+
+  // Start drawing from vector b (point B)
+
+  // A
+  result.at(0) = a;
+
+  // B
+  result.at(1) = b;
+
+  // Vector B->A
+  auto firstSide = subVectors(a,b);
+
+  // Vector A->C
+  auto secondSide = normalVector(firstSide);
+
+  // C
+  result.at(2) = addVectors(a,secondSide);
+
+  // D
+  result.at(3) = addVectors(b,secondSide);
+
+
+  return result;
 }
