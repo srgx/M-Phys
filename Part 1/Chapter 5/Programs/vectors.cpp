@@ -82,24 +82,44 @@ int main(){
                                vecf({ 5, 5 })) - M_PI/4)<d);
 
 
-  // determinant is -15
+  // Determinant
   std::vector<vecf> mx {
     { 1, 3, 2 },
     { -3, -1, -3 },
     { 2, 3, 1 },
   };
+  assert(determinant(mx)==-15);
 
-  float det = determinant(mx);
-  // std::cout << det << std::endl;
+  mx = std::vector<vecf>({{ 2, -3, 1 },
+                          { 2, 0, -1 },
+                          { 1, 4, 5 }});
+  assert(determinant(mx)==49);
 
-  // -------------------------------------------------------
-
+  // Normal vector(perpendicular)
   assert(normalVector(vecf({ 2, 3 })) == vecf({ 3, -2 }));
+  assert(normalVector(vecf({ 5, 7 })) == vecf({ 7, -5 }));
+  assert(normalVector(vecf({ 4, 0 })) == vecf({ 0, -4 }));
+  assert(normalVector(vecf({ 0, 9 })) == vecf({ 9, 0 }));
 
-  // -------------------------------------------------------
 
+  // Construct square
   vecf a { 2, 3 }; vecf b { 2, 0 };
-  drawSquare(a,b);
+  assert(constructSquare(a,b)==(std::array<std::vector<float>,4>({{
+    { 2, 3 }, { 2, 0 },
+    { 5, 3 }, { 5, 0 }}
+  })));
 
+  a = vecf({ 5, 2 }); b = vecf({ 2, 1 });
+  assert(constructSquare(a,b)==(std::array<std::vector<float>,4>({{
+    { 5, 2 }, { 2, 1 },
+    { 6, -1 }, { 3, -2 }}
+  })));
+
+  // Construct equilateral triangle
+  auto trng = constructEquilateralTriangle(vecf({ 2, 2 }), vecf({ 10, 2 }));
+
+  for(const auto & v : trng){
+    std::cout << v.at(0) << ", " << v.at(1) << std::endl;
+  }
 
 }

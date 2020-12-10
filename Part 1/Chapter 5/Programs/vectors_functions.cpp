@@ -133,11 +133,9 @@ float determinant(const vector<vector<float>> & array){
 
 }
 
-std::vector<std::vector<float>> drawSquare(const std::vector<float> & a, const std::vector<float> & b){
+std::array<std::vector<float>,4> constructSquare(const std::vector<float> & a, const std::vector<float> & b){
 
-  std::vector<std::vector<float>> result(4);
-
-  // Start drawing from vector b (point B)
+  std::array<std::vector<float>,4> result;
 
   // A
   result.at(0) = a;
@@ -157,6 +155,33 @@ std::vector<std::vector<float>> drawSquare(const std::vector<float> & a, const s
   // D
   result.at(3) = addVectors(b,secondSide);
 
+
+  return result;
+}
+
+std::array<std::vector<float>,3> constructEquilateralTriangle(const std::vector<float> & a, const std::vector<float> & b){
+
+  std::array<std::vector<float>,3> result;
+
+  // A
+  result.at(0) = a;
+
+  // B
+  result.at(1) = b;
+
+  // Vector to middle of AB side
+  auto midPoint = addVectors(a,b);
+  midPoint = scaleVector(midPoint,1.0/2);
+
+  // Side AB
+  auto bottomVector = subVectors(a,b);
+
+  // Perpendicular to AB
+  auto heightVector = normalVector(bottomVector);
+  heightVector = scaleVector(heightVector,sqrt(3)/2);
+
+  // C
+  result.at(2) = addVectors(midPoint,heightVector);
 
   return result;
 }
