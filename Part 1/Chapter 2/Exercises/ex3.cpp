@@ -7,7 +7,7 @@
 #include <SFML/System/Time.hpp>
 
 // g++ -c ex3.cpp ../Programs/arithmetic_functions.cpp
-// g++ ex3.o functions.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
+// g++ ex3.o arithmetic_functions.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
 
 void processInput(sf::RenderWindow & wnd);
 
@@ -89,7 +89,7 @@ int main(){
         switch (event.type){
 
           case sf::Event::KeyPressed:
-            
+
             if(event.key.code == sf::Keyboard::Left){
                 movingLeft = true;
             }else if(event.key.code == sf::Keyboard::Right){
@@ -100,20 +100,20 @@ int main(){
             break;
 
           case sf::Event::KeyReleased:
-            
+
             if(event.key.code == sf::Keyboard::Left){
               movingLeft = false;
             }else if(event.key.code == sf::Keyboard::Right){
               movingRight = false;
             }
-            
+
             break;
 
           case sf::Event::Closed:
-            
+
             wnd.close();
             break;
-            
+
         }
 
       }

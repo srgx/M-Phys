@@ -5,7 +5,8 @@
 
 typedef std::vector<float> vecf;
 
-// g++ vectors.cpp vectors_functions.cpp
+// g++ -c vectors.cpp vectors_functions.cpp
+// g++ vectors.o vectors_functions.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
 
 int main(){
 
@@ -118,8 +119,12 @@ int main(){
   // Construct equilateral triangle
   auto trng = constructEquilateralTriangle(vecf({ 2, 2 }), vecf({ 10, 2 }));
 
-  for(const auto & v : trng){
-    std::cout << v.at(0) << ", " << v.at(1) << std::endl;
-  }
+  // for(const auto & v : trng){
+  //   std::cout << v.at(0) << ", " << v.at(1) << std::endl;
+  // }
+
+  // ---------------------------------------------------------------------------
+
+  createA(200,1.50,2,2,10,0.5,0.5);
 
 }

@@ -15,5 +15,8 @@ float determinant(const std::vector<std::vector<float>> & array);
 
 std::array<std::vector<float>,4> constructSquare(const std::vector<float> & a, const std::vector<float> & b);
 std::array<std::vector<float>,3> constructEquilateralTriangle(const std::vector<float> & a, const std::vector<float> & b);
+void createA(float legLength, float angleAtTop, float serifProp,
+             float crossbarProp, float crossbarHeight, float serifAlign,
+             float crossbarAlign);
 
 #endif
