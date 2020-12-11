@@ -31,7 +31,7 @@ vector<float> addVectors(const vector<float> & v1, const vector<float> & v2){
 }
 
 // Subtract vectors
-vector<float> subVectors(const std::vector<float> & v1, const std::vector<float> & v2){
+vector<float> subVectors(const vector<float> & v1, const vector<float> & v2){
   return addVectors(v1,oppositeVector(v2));
 }
 
@@ -82,7 +82,7 @@ vector<float> normalVector(const vector<float> & vec){
 }
 
 // Angle between two vectors
-float angleBetween(const std::vector<float> & v1, const std::vector<float> & v2){
+float angleBetween(const vector<float> & v1, const vector<float> & v2){
 
   vector<float> v3 = subVectors(v1,v2);
   float m1 = magnitude(v1);
@@ -103,7 +103,7 @@ float angleBetween(const std::vector<float> & v1, const std::vector<float> & v2)
 
 }
 
-vector<float> oppositeVector(const std::vector<float> & vec){
+vector<float> oppositeVector(const vector<float> & vec){
 
   vector<float> vctr;
 
@@ -174,9 +174,9 @@ float determinant(const vector<vector<float>> & array){
 
 }
 
-std::array<std::vector<float>,4> constructSquare(const std::vector<float> & a, const std::vector<float> & b){
+std::array<vector<float>,4> constructSquare(const vector<float> & a, const vector<float> & b){
 
-  std::array<std::vector<float>,4> result;
+  std::array<vector<float>,4> result;
 
   // A
   result.at(0) = a;
@@ -200,9 +200,9 @@ std::array<std::vector<float>,4> constructSquare(const std::vector<float> & a, c
   return result;
 }
 
-std::array<std::vector<float>,3> constructEquilateralTriangle(const std::vector<float> & a, const std::vector<float> & b){
+std::array<vector<float>,3> constructEquilateralTriangle(const vector<float> & a, const vector<float> & b){
 
-  std::array<std::vector<float>,3> result;
+  std::array<vector<float>,3> result;
 
   // A
   result.at(0) = a;
@@ -227,77 +227,102 @@ std::array<std::vector<float>,3> constructEquilateralTriangle(const std::vector<
   return result;
 }
 
+// Draw letter A. Parameters 3-7 should be in range 0-1
 void createA(float legLength, float angleAtTop, float serifProp,
              float crossbarProp, float crossbarHeight, float serifAlign,
              float crossbarAlign){
-
-  float halfAngle = angleAtTop/2;
-
-  // Left leg vector
-  std::vector<float> leftLeg { -sin(halfAngle), cos(halfAngle) };
-  leftLeg = scaleVector(leftLeg,legLength);
-
-  // Right leg vector
-  std::vector<float> rightLeg { -leftLeg.at(0), leftLeg.at(1) };
-
-  std::vector<float> crossbarStart = scaleVector(leftLeg,crossbarHeight);
-  std::vector<float> crossbarEnd = scaleVector(rightLeg,crossbarHeight);
-  std::vector<float> crossbar = scaleVector(subVectors(crossbarEnd,crossbarStart),crossbarProp);
-
-  crossbarStart = addVectors(
-    scaleVector(subVectors(crossbarEnd,crossbarStart),crossbarAlign*(1-crossbarProp)),
-    crossbarStart);
-
-  std::vector<float> crossbarPlus = addVectors(crossbarStart,crossbar);
-
-
-  std::vector<float> serif = scaleVector(subVectors(rightLeg,leftLeg),serifProp);
-  std::vector<float> serifOffset = scaleVector(serif,serifAlign);
-  std::vector<float> start { 450, 50 };
-
-  // ---------------------------------------------------------------------------
-
   
+  // Starting position
+  vector<float> start { 450, 50 };
+  
+  
+  // Legs
+  
+    float halfAngle = angleAtTop/2;
 
+    // Left leg vector
+    vector<float> leftLeg { -sin(halfAngle), cos(halfAngle) };
+    leftLeg = scaleVector(leftLeg,legLength);
 
-  auto leftLegTarget = addVectors(start,leftLeg);
-  sf::Vertex line1[] = {
+    // Right leg vector
+    vector<float> rightLeg { -leftLeg.at(0), leftLeg.at(1) };
+    
+    // Absolute leg positions
+    auto leftLegTarget = addVectors(start,leftLeg);
+    auto rightLegTarget = addVectors(start,rightLeg);
+  
+  
+  // Crossbar
+  
+    // Vectors to crossbar points (max width)
+    vector<float> crossbarStart = scaleVector(leftLeg,crossbarHeight);
+    vector<float> crossbarEnd = scaleVector(rightLeg,crossbarHeight);
+    
+    // Crossbar vector left->right (max width)
+    vector<float> crossbar =
+      scaleVector(subVectors(crossbarEnd,crossbarStart),
+                  crossbarProp);
+    
+    // Add vector to align crossbar start
+    crossbarStart = addVectors(
+      scaleVector(subVectors(crossbarEnd,crossbarStart),crossbarAlign*(1-crossbarProp)),
+      crossbarStart);
+    
+    // Start drawing crossbar from there
+    const auto crossbarStartTarget = addVectors(start,crossbarStart);
+    
+    // Crossbar end position
+    auto crossbarEndTarget = addVectors(crossbarStartTarget,crossbar);
+  
+  
+  // Serif
+
+    // Serif vector
+    vector<float> serif = scaleVector(subVectors(rightLeg,leftLeg),serifProp);
+    
+    // Serif offset
+    vector<float> serifOffset = scaleVector(serif,serifAlign);
+    
+    // Left serif
+    auto leftSerifBeg = subVectors(leftLegTarget,serifOffset);
+    auto leftSerifEnd = addVectors(leftSerifBeg,serif);
+    
+    // Right serif
+    auto rightSerifBeg = subVectors(rightLegTarget,serifOffset);
+    auto rightSerifEnd = addVectors(rightSerifBeg,serif);
+  
+  
+  // ---------------------------------------------------------------------------
+    
+  // Create lines
+
+  sf::Vertex leftLegLine[] = {
     sf::Vertex(sf::Vector2f(start.at(0), start.at(1))),
     sf::Vertex(sf::Vector2f(leftLegTarget.at(0), leftLegTarget.at(1)))
   };
 
-  auto rightLegTarget = addVectors(start,rightLeg);
-  sf::Vertex line2[] = {
+  sf::Vertex rightLegLine[] = {
     sf::Vertex(sf::Vector2f(start.at(0), start.at(1))),
     sf::Vertex(sf::Vector2f(rightLegTarget.at(0), rightLegTarget.at(1)))
   };
-
-  sf::Vertex line3[] = {
-    sf::Vertex(sf::Vector2f(crossbarStart.at(0), crossbarStart.at(1))),
-    sf::Vertex(sf::Vector2f(crossbarPlus.at(0), crossbarPlus.at(1))),
+  
+  sf::Vertex crossbarLine[] = {
+    sf::Vertex(sf::Vector2f(crossbarStartTarget.at(0), crossbarStartTarget.at(1))),
+    sf::Vertex(sf::Vector2f(crossbarEndTarget.at(0), crossbarEndTarget.at(1))),
   };
   
-  
-  std::cout << "Linia 1: " << start.at(0) << " : " << start.at(1) << ", "
-                           << leftLegTarget.at(0) << " : " << leftLegTarget.at(1) << std::endl;
-
-  std::cout << "Linia 2: " << start.at(0) << " : " << start.at(1) << ", "
-                           << rightLegTarget.at(0) << " : " << rightLegTarget.at(1) << std::endl;
-                           
-  std::cout << "Linia 3: " << crossbarStart.at(0) << " : " << crossbarStart.at(1) << ", "
-                           << crossbarPlus.at(0) << " : " << crossbarPlus.at(1) << std::endl;
-
-  sf::Vertex line4[] = {
-    sf::Vertex(sf::Vector2f(10, 10)),
-    sf::Vertex(sf::Vector2f(150, 150))
+  sf::Vertex leftSerifLine[] = {
+    sf::Vertex(sf::Vector2f(leftSerifBeg.at(0), leftSerifBeg.at(1))),
+    sf::Vertex(sf::Vector2f(leftSerifEnd.at(0), leftSerifEnd.at(1))),
   };
 
-  sf::Vertex line5[] = {
-    sf::Vertex(sf::Vector2f(10, 10)),
-    sf::Vertex(sf::Vector2f(150, 150))
+  sf::Vertex rightSerifLine[] = {
+    sf::Vertex(sf::Vector2f(rightSerifBeg.at(0), rightSerifBeg.at(1))),
+    sf::Vertex(sf::Vector2f(rightSerifEnd.at(0), rightSerifEnd.at(1))),
   };
 
   // ---------------------------------------------------------------------------
+  
 
   sf::RenderWindow wnd(sf::VideoMode(1024, 768), "Letters", sf::Style::Close);
   wnd.setFramerateLimit(30);
@@ -344,11 +369,11 @@ void createA(float legLength, float angleAtTop, float serifProp,
 
     wnd.clear();
 
-    wnd.draw(line1, 2, sf::Lines);
-    wnd.draw(line2, 2, sf::Lines);
-    wnd.draw(line3, 2, sf::Lines);
-    // wnd.draw(line4, 2, sf::Lines);
-    // wnd.draw(line5, 2, sf::Lines);
+    wnd.draw(leftLegLine, 2, sf::Lines);
+    wnd.draw(rightLegLine, 2, sf::Lines);
+    wnd.draw(crossbarLine, 2, sf::Lines);
+    wnd.draw(leftSerifLine, 2, sf::Lines);
+    wnd.draw(rightSerifLine, 2, sf::Lines);
 
     wnd.display();
 

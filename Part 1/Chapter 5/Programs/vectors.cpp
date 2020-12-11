@@ -119,12 +119,15 @@ int main(){
   // Construct equilateral triangle
   auto trng = constructEquilateralTriangle(vecf({ 2, 2 }), vecf({ 10, 2 }));
 
-  // for(const auto & v : trng){
-  //   std::cout << v.at(0) << ", " << v.at(1) << std::endl;
-  // }
 
   // ---------------------------------------------------------------------------
 
-  createA(200,1.50,2,2,10,0.5,0.5);
+  createA(200, // leg length
+          1.7, // angle at top (radians)
+          0.45, // serif proportion (0-1)
+          0.5, // crossbar proportion (0-1)
+          0.4, // crossbar position, larger=lower (0-1)
+          0.5, // serif align (0-1)
+          0.5); // crossbar align, left/right/center (0-1)
 
 }
