@@ -214,10 +214,11 @@ eqResult solveSimultaneous(std::vector<vecflt> & equations){
 }
 
 std::string substituteNoX(const std::string & str){
+  
   std::string noPar = substituteParens(str);
-  std::cout << "Nop: " << noPar << std::endl;
   
   return addSub(noPar);
+  
 }
 
 std::string substituteParens(const std::string & str){
@@ -228,15 +229,26 @@ std::string substituteParens(const std::string & str){
     
     if(str.at(index)!='('){
       
+      //std::cout << "Pushing " << str.at(index) << std::endl;
       newString.push_back(str.at(index)); index++;
       
     }else{
       
       int lastIndex = findLastParenIndex(str,index);
+      //std::cout << "Last index: " << lastIndex << std::endl;
       
-      std::string subexp = str.substr(index+1,lastIndex-(index+1));
+      auto subexp = str.substr(index+1,lastIndex-(index+1));
       
       auto sb = substituteNoX(subexp);
+      
+      if(index!=0){
+        
+        auto prv = str.at(index-1);
+        if(std::isdigit(prv)||')'==prv){
+          newString.push_back('*');
+        }
+        
+      }
       
       newString += sb;
       
@@ -261,31 +273,109 @@ std::string addSub(const std::string & str){
       numstr.push_back(str.at(i));
     }else{
       
-      if(plus){
-        sum += stoi(numstr);
-      }else{
-        sum -= stoi(numstr);
-      }
+      int v = stoi(numstr);
+      sum += plus ? v : -v;
       
       numstr.clear();
       
-      if(str.at(i)=='+'){
-        plus = true;
-      }else{
-        plus = false;
-      }
+      plus = str.at(i)=='+';
       
     }
     
   }
   
-  if(plus){
-    sum += stoi(numstr);
-  }else{
-    sum -= stoi(numstr);
-  }
+  int v = stoi(numstr);
+  sum += plus ? v : -v;
 
   return std::to_string(sum);
+  
+}
+
+// 5+7*2/4-8*3+1
+
+std::string mulDiv(const std::string & str){
+  
+  int index = 0; std::string newString;
+  
+  while(index<str.size()){
+    char c = str.at(index);
+    
+    if(c!='*'&&c!='/'){
+      
+      newString.push_back(c);
+      index++;
+      
+    // Multiplication or division found
+    }else{
+      
+      // Simplify multiplication/division group
+      std:string subs = onlyMulDiv(str,index); newString += subs;
+      
+      // Set index after multiplication/division group
+      do{
+        index++;
+      }while(str.at(index)!='-'||str.at(index)!='+');
+    }
+  }
+}
+
+// First '*' or '/' at index
+std::string onlyMulDiv(const std::string & str,int index){
+  
+  std::string lastV; int backIndex = index-1; int laindex = index;
+  
+  while(laindex<str.size()&&str.at(laindex)!='-'&&str.at(laindex)!='+'){
+    laindex++;
+  }
+  
+  while(backIndex>=0&&std::isdigit(str.at(backIndex))){
+    lastV.push_back(str.at(backIndex)); backIndex--;
+  }
+  
+  // First number string
+  reverse(lastV.begin(), lastV.end());
+  
+  
+  // First number value
+  int totalV = stoi(lastV); lastV.clear();
+  
+  // Symbol '*' or '/'
+  char s = str.at(index);
+  
+  laindex--;
+  
+  std::cout << "La: " << laindex << std::endl;
+
+  
+  while(index!=laindex){
+    index++;
+    if(std::isdigit(str.at(index))){
+      std::cout << "Pushing " << str.at(index) << std::endl;
+      lastV.push_back(str.at(index));
+    }else{
+      
+      int currentV = stoi(lastV);
+      lastV.clear();
+      
+      if(s=='*'){
+        totalV *= currentV;
+      }else{
+        totalV /= currentV;
+      }
+      
+    }
+  }
+  
+  int currentV = stoi(lastV);
+  
+  if(s=='*'){
+    totalV *= currentV;
+  }else{
+    totalV /= currentV;
+  }
+  
+  
+  return std::to_string(totalV);
   
 }
 
