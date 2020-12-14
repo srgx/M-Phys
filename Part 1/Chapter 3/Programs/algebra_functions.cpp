@@ -22,64 +22,65 @@ bool isParExp(const std::string & str){
   }
 }
 
+std::string substituteX(const std::string & str,int valX){
+  
+  std::string newString; int index = 0;
+  
+  while(index<str.size()){
+    
+    // Char other than x
+    if(str.at(index)!='x'){
+      
+      newString.push_back(str.at(index));
+      
+    // Found x
+    }else{
+      
+      // Variable x at 0 or without coefficient
+      if(index==0||!std::isdigit(str.at(index-1))){
+        
+        newString += std::to_string(valX);
+        
+      // Variable x with coefficient
+      }else{
+        
+        int tempIndex = index-1; std::string strnum;
+        
+        // Go back to find coefficient
+        while(tempIndex>=0&&std::isdigit(str.at(tempIndex))){
+          
+          // Remove previously added chars
+          newString.pop_back();
+          
+          // Reversed coefficient
+          strnum.push_back(str.at(tempIndex));
+          
+          // Move back
+          tempIndex--;
+        }
+        
+        // Get coefficient string
+        reverse(strnum.begin(), strnum.end());
+        
+        newString += std::to_string(valX*stoi(strnum));
+        
+      }
+      
+    }
+    
+    index++;
+    
+  }
+  
+  return newString;
+  
+}
+
 int substitute(const string & str,int valX){
 
-  // Number or X expression
-  if(allDigits(str)){
-    return stoi(str);
-  }else if(isExp(str)){
-    if(1==str.length()){
-      return valX;
-    }else{
-      return stoi(str.substr(0,str.length()-1)) * valX;
-    }
-  }
-
-  int i = 0; float acc; bool accInitialized = false;
-
-  // Number not found
-  while(i<str.length()){
-
-    if('+'==str.at(i)){
-
-      if(!accInitialized){
-        acc = substitute(str.substr(0,i),valX);
-        accInitialized = true;
-      }
-
-      string right = getSubexpFrom(str,i+1);
-      float val = substitute(right,valX);
-      // cout << "Dodaje " << acc << " + " << val << endl;
-      acc += val;
-
-    }else if('-'==str.at(i)){
-
-      if(!accInitialized){
-        acc = substitute(str.substr(0,i),valX);
-        accInitialized = true;
-      }
-
-      string right = getSubexpFrom(str,i+1);
-      float val = substitute(right,valX);
-      // cout << "Odejmuje " << acc << " - " << val << endl;
-      acc -= val;
-
-    }
-
-    // else if('/'==str.at(i)){
-    //   int left = substitute(str.substr(0,i),valX);
-    //   int right = substitute(str.substr(i+1),valX);
-    //   return left / right;
-    // }else if('^'==str.at(i)){
-    //   int left = substitute(str.substr(0,i),valX);
-    //   int right = substitute(str.substr(i+1),valX);
-    //   return pow(left,right);
-    // }
-
-    i++;
-  }
-
-  return acc;
+  std::string noX = substituteX(str,valX);
+  
+  return 12;
 
 }
 
@@ -210,4 +211,97 @@ eqResult solveSimultaneous(std::vector<vecflt> & equations){
 
   return result;
 
+}
+
+std::string substituteNoX(const std::string & str){
+  std::string noPar = substituteParens(str);
+  std::cout << "Nop: " << noPar << std::endl;
+  
+  return addSub(noPar);
+}
+
+std::string substituteParens(const std::string & str){
+  
+  int index = 0; std::string newString;
+  
+  while(index<str.size()){
+    
+    if(str.at(index)!='('){
+      
+      newString.push_back(str.at(index)); index++;
+      
+    }else{
+      
+      int lastIndex = findLastParenIndex(str,index);
+      
+      std::string subexp = str.substr(index+1,lastIndex-(index+1));
+      
+      auto sb = substituteNoX(subexp);
+      
+      newString += sb;
+      
+      index = lastIndex+1;
+      
+    }
+  }
+  
+  return newString;
+}
+
+std::string addSub(const std::string & str){
+  
+  int sum = 0;
+  bool plus = true;
+  
+  std::string numstr;
+  
+  for(int i=0;i<str.size();i++){
+    
+    if(std::isdigit(str.at(i))){
+      numstr.push_back(str.at(i));
+    }else{
+      
+      if(plus){
+        sum += stoi(numstr);
+      }else{
+        sum -= stoi(numstr);
+      }
+      
+      numstr.clear();
+      
+      if(str.at(i)=='+'){
+        plus = true;
+      }else{
+        plus = false;
+      }
+      
+    }
+    
+  }
+  
+  if(plus){
+    sum += stoi(numstr);
+  }else{
+    sum -= stoi(numstr);
+  }
+
+  return std::to_string(sum);
+  
+}
+
+int findLastParenIndex(const std::string & str, int index){
+  
+  int count = 1;
+
+  while(count!=0){
+    index++;
+    if(str.at(index)=='('){
+      count++;
+    }else if(str.at(index)==')'){
+      count--;
+    }
+  }
+  
+  return index;
+  
 }

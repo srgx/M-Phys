@@ -24,4 +24,12 @@ std::string getSubexpFrom(const std::string & str,int index);
 bool isExp(const std::string & str);
 bool isParExp(const std::string & str);
 
+int findLastParenIndex(const std::string & str, int index);
+
+std::string substituteX(const std::string & str, int valX);
+std::string substituteNoX(const std::string & str);
+std::string substituteParens(const std::string & str);
+
+std::string addSub(const std::string & str);
+
 #endif
