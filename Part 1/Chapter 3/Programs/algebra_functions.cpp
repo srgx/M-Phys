@@ -215,9 +215,11 @@ eqResult solveSimultaneous(std::vector<vecflt> & equations){
 
 std::string substituteNoX(const std::string & str){
   
-  std::string noPar = substituteParens(str);
+  auto noPar = substituteParens(str);
   
-  return addSub(noPar);
+  auto noMulDiv = mulDiv(noPar);
+  
+  return addSub(noMulDiv);
   
 }
 
@@ -298,10 +300,10 @@ std::string mulDiv(const std::string & str){
   int index = 0; std::string newString;
   
   while(index<str.size()){
+    
     char c = str.at(index);
     
     if(c!='*'&&c!='/'){
-      
       newString.push_back(c);
       index++;
       
@@ -309,25 +311,38 @@ std::string mulDiv(const std::string & str){
     }else{
       
       // Simplify multiplication/division group
-      std:string subs = onlyMulDiv(str,index); newString += subs;
+      std::pair<std::string,int> subs = onlyMulDiv(str,index);
+      
+      // Drop unnecessary chars      
+      while(!newString.empty()&&std::isdigit(newString.back())){
+        newString.pop_back();
+      }
+            
+      newString += subs.first;
       
       // Set index after multiplication/division group
-      do{
-        index++;
-      }while(str.at(index)!='-'||str.at(index)!='+');
+      index = subs.second+1;
+      
     }
   }
+  
+  return newString;
 }
 
 // First '*' or '/' at index
-std::string onlyMulDiv(const std::string & str,int index){
+std::pair<std::string,int> onlyMulDiv(const std::string & str,int index){
   
-  std::string lastV; int backIndex = index-1; int laindex = index;
+  std::string lastV; int backIndex = index-1; int lastGroupIndex = index;
   
-  while(laindex<str.size()&&str.at(laindex)!='-'&&str.at(laindex)!='+'){
-    laindex++;
+  // Index of last character in group
+  while(lastGroupIndex<str.size()&&
+        str.at(lastGroupIndex)!='-'&&
+        str.at(lastGroupIndex)!='+'){
+    lastGroupIndex++;
   }
+  lastGroupIndex--;
   
+  // Find first number
   while(backIndex>=0&&std::isdigit(str.at(backIndex))){
     lastV.push_back(str.at(backIndex)); backIndex--;
   }
@@ -342,16 +357,14 @@ std::string onlyMulDiv(const std::string & str,int index){
   // Symbol '*' or '/'
   char s = str.at(index);
   
-  laindex--;
-  
-  std::cout << "La: " << laindex << std::endl;
-
-  
-  while(index!=laindex){
+  while(index!=lastGroupIndex){
+    
     index++;
+    
     if(std::isdigit(str.at(index))){
-      std::cout << "Pushing " << str.at(index) << std::endl;
+      
       lastV.push_back(str.at(index));
+      
     }else{
       
       int currentV = stoi(lastV);
@@ -374,8 +387,8 @@ std::string onlyMulDiv(const std::string & str,int index){
     totalV /= currentV;
   }
   
-  
-  return std::to_string(totalV);
+
+  return std::make_pair(std::to_string(totalV),lastGroupIndex);
   
 }
 

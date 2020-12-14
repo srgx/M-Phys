@@ -32,6 +32,6 @@ std::string substituteParens(const std::string & str);
 
 std::string addSub(const std::string & str);
 std::string mulDiv(const std::string & str);
-std::string onlyMulDiv(const std::string & str,int index);
+std::pair<std::string,int> onlyMulDiv(const std::string & str,int index);
 
 #endif
