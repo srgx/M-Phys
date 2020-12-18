@@ -22,6 +22,12 @@ trdata calculateTraj(arf oldLocation, arf newLocation,
 trdata calculateTrajectory(arf oldPosition, arf newPosition,
                            float speed, float currentTime);
 
+
+void setVals(trdata & str, float startTime,
+             arf stopPosition, arf startPosition);
+
+arf calculateDisplacement(const arf & a, const arf & b);
+
 int main(){
 
   const float currentTime = 20;
@@ -81,20 +87,14 @@ trdata calculateTraj(arf oldLocation,arf newLocation,
     //
   }else{
 
-    float newX = newLocation.at(0) - oldLocation.at(0);
-    float newY = newLocation.at(1) - oldLocation.at(1);
-
     // Total displacement
-    result.displacement = arf({ newX, newY });
-
-    newX /= travelTime; newY /= travelTime;
+    result.displacement = calculateDisplacement(oldLocation,newLocation);
 
     // Displacement per second
-    result.velocity = arf({ newX, newY });
-
-    result.startTime = currentTime;
-    result.stopPosition = newLocation;
-    result.startPosition = oldLocation;
+    result.velocity = arf({ result.displacement.at(0)/travelTime,
+                            result.displacement.at(1)/travelTime });
+        
+    setVals(result,currentTime,newLocation,oldLocation);
 
   }
 
@@ -112,11 +112,8 @@ trdata calculateTrajectory(arf oldPosition, arf newPosition,
     //
   }else{
     
-    float newX = newPosition.at(0) - oldPosition.at(0);
-    float newY = newPosition.at(1) - oldPosition.at(1);
-
     // Total displacement
-    result.displacement = arf({ newX, newY });
+    result.displacement = calculateDisplacement(oldPosition,newPosition);
     
     const float distance =
       sqrt(pow(result.displacement.at(0),2)+
@@ -124,19 +121,30 @@ trdata calculateTrajectory(arf oldPosition, arf newPosition,
     
     const float travelTime = distance/speed;
     
-    newX /= travelTime; newY /= travelTime;
     
     // Displacement per second
-    result.velocity = arf({ newX, newY });
-
-    result.startTime = currentTime;
-    result.stopPosition = newPosition;
-    result.startPosition = oldPosition;
+    result.velocity = arf({ result.displacement.at(0)/travelTime,
+                            result.displacement.at(1)/travelTime });
+    
+    setVals(result,currentTime,newPosition,oldPosition);
     
   }
   
   return result;
   
+}
+
+void setVals(trdata & str, float startTime,
+             arf stopPosition, arf startPosition){
+  
+  str.startTime = startTime;
+  str.stopPosition = stopPosition;
+  str.startPosition = startPosition;
+               
+}
+
+arf calculateDisplacement(const arf & a, const arf & b){
+  return { b.at(0) - a.at(0),b.at(1) - a.at(1) } ;
 }
 
 
