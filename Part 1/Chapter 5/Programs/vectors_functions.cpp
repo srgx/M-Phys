@@ -231,13 +231,13 @@ std::array<vector<float>,3> constructEquilateralTriangle(const vector<float> & a
 void createA(float legLength, float angleAtTop, float serifProp,
              float crossbarProp, float crossbarHeight, float serifAlign,
              float crossbarAlign){
-  
+
   // Starting position
   vector<float> start { 450, 50 };
-  
-  
+
+
   // Legs
-  
+
     float halfAngle = angleAtTop/2;
 
     // Left leg vector
@@ -246,54 +246,54 @@ void createA(float legLength, float angleAtTop, float serifProp,
 
     // Right leg vector
     vector<float> rightLeg { -leftLeg.at(0), leftLeg.at(1) };
-    
+
     // Absolute leg positions
     auto leftLegTarget = addVectors(start,leftLeg);
     auto rightLegTarget = addVectors(start,rightLeg);
-  
-  
+
+
   // Crossbar
-  
+
     // Vectors to crossbar points (max width)
     vector<float> crossbarStart = scaleVector(leftLeg,crossbarHeight);
     vector<float> crossbarEnd = scaleVector(rightLeg,crossbarHeight);
-    
+
     // Crossbar vector left->right (max width)
     vector<float> crossbar =
       scaleVector(subVectors(crossbarEnd,crossbarStart),
                   crossbarProp);
-    
+
     // Add vector to align crossbar start
     crossbarStart = addVectors(
       scaleVector(subVectors(crossbarEnd,crossbarStart),crossbarAlign*(1-crossbarProp)),
       crossbarStart);
-    
+
     // Start drawing crossbar from there
     const auto crossbarStartTarget = addVectors(start,crossbarStart);
-    
+
     // Crossbar end position
     auto crossbarEndTarget = addVectors(crossbarStartTarget,crossbar);
-  
-  
+
+
   // Serif
 
     // Serif vector
     vector<float> serif = scaleVector(subVectors(rightLeg,leftLeg),serifProp);
-    
+
     // Serif offset
     vector<float> serifOffset = scaleVector(serif,serifAlign);
-    
+
     // Left serif
     auto leftSerifBeg = subVectors(leftLegTarget,serifOffset);
     auto leftSerifEnd = addVectors(leftSerifBeg,serif);
-    
+
     // Right serif
     auto rightSerifBeg = subVectors(rightLegTarget,serifOffset);
     auto rightSerifEnd = addVectors(rightSerifBeg,serif);
-  
-  
+
+
   // ---------------------------------------------------------------------------
-    
+
   // Create lines
 
   sf::Vertex leftLegLine[] = {
@@ -305,12 +305,12 @@ void createA(float legLength, float angleAtTop, float serifProp,
     sf::Vertex(sf::Vector2f(start.at(0), start.at(1))),
     sf::Vertex(sf::Vector2f(rightLegTarget.at(0), rightLegTarget.at(1)))
   };
-  
+
   sf::Vertex crossbarLine[] = {
     sf::Vertex(sf::Vector2f(crossbarStartTarget.at(0), crossbarStartTarget.at(1))),
     sf::Vertex(sf::Vector2f(crossbarEndTarget.at(0), crossbarEndTarget.at(1))),
   };
-  
+
   sf::Vertex leftSerifLine[] = {
     sf::Vertex(sf::Vector2f(leftSerifBeg.at(0), leftSerifBeg.at(1))),
     sf::Vertex(sf::Vector2f(leftSerifEnd.at(0), leftSerifEnd.at(1))),
@@ -322,7 +322,7 @@ void createA(float legLength, float angleAtTop, float serifProp,
   };
 
   // ---------------------------------------------------------------------------
-  
+
 
   sf::RenderWindow wnd(sf::VideoMode(1024, 768), "Letters", sf::Style::Close);
   wnd.setFramerateLimit(30);
@@ -379,4 +379,8 @@ void createA(float legLength, float angleAtTop, float serifProp,
 
   }
 
+}
+
+void calculateTrajectory(std::vector<float> oldLocation,std::vector<float> newLocation, float travelTime){
+  
 }

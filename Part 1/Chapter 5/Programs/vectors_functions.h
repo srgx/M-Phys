@@ -19,4 +19,7 @@ void createA(float legLength, float angleAtTop, float serifProp,
              float crossbarProp, float crossbarHeight, float serifAlign,
              float crossbarAlign);
 
+
+void calculateTrajectory(std::vector<float> oldLocation,std::vector<float> newLocation, float travelTime);
+
 #endif
