@@ -3,10 +3,11 @@
 #include <iostream>
 
 using std::make_pair;
+using std::cout;
 
 // g++ ex2.cpp ../Programs/geometry_functions.cpp
 
-using std::cout;
+
 
 int main(){
 
