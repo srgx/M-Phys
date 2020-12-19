@@ -23,65 +23,61 @@ bool isParExp(const std::string & str){
 }
 
 std::string substituteX(const std::string & str,int valX){
-  
+
   std::string newString; int index = 0;
-  
+
   while(index<str.size()){
-    
+
     // Char other than x
     if(str.at(index)!='x'){
-      
+
       newString.push_back(str.at(index));
-      
+
     // Found x
     }else{
-      
+
       // Variable x at 0 or without coefficient
       if(index==0||!std::isdigit(str.at(index-1))){
-        
+
         newString += std::to_string(valX);
-        
+
       // Variable x with coefficient
       }else{
-        
+
         int tempIndex = index-1; std::string strnum;
-        
+
         // Go back to find coefficient
         while(tempIndex>=0&&std::isdigit(str.at(tempIndex))){
-          
+
           // Remove previously added chars
           newString.pop_back();
-          
+
           // Reversed coefficient
           strnum.push_back(str.at(tempIndex));
-          
+
           // Move back
           tempIndex--;
         }
-        
+
         // Get coefficient string
         reverse(strnum.begin(), strnum.end());
-        
+
         newString += std::to_string(valX*stoi(strnum));
-        
+
       }
-      
+
     }
-    
+
     index++;
-    
+
   }
-  
+
   return newString;
-  
+
 }
 
 int substitute(const string & str,int valX){
-
-  std::string noX = substituteX(str,valX);
-  
-  return 12;
-
+  return stoi(substituteNoX(substituteX(str,valX)));
 }
 
 bool allDigits(const string & str){
@@ -203,7 +199,7 @@ eqResult solveSimultaneous(std::vector<vecflt> & equations){
     }
 
     output.at(i) = redux.at(i).at(n) - sum;
-    
+
   }
 
   // Copy solution to result
@@ -213,127 +209,124 @@ eqResult solveSimultaneous(std::vector<vecflt> & equations){
 
 }
 
+// Process expression without variable
 std::string substituteNoX(const std::string & str){
-  
-  auto noPar = substituteParens(str);
-  
-  auto noMulDiv = mulDiv(noPar);
-  
-  return addSub(noMulDiv);
-  
+  return addSub(mulDiv(substituteParens(str)));
 }
 
 std::string substituteParens(const std::string & str){
-  
+
   int index = 0; std::string newString;
-  
+
   while(index<str.size()){
-    
+
     if(str.at(index)!='('){
-      
+
       //std::cout << "Pushing " << str.at(index) << std::endl;
       newString.push_back(str.at(index)); index++;
-      
+
     }else{
-      
+
       int lastIndex = findLastParenIndex(str,index);
       //std::cout << "Last index: " << lastIndex << std::endl;
-      
+
       auto subexp = str.substr(index+1,lastIndex-(index+1));
-      
+
       auto sb = substituteNoX(subexp);
-      
+
       if(index!=0){
-        
+
         auto prv = str.at(index-1);
         if(std::isdigit(prv)||')'==prv){
           newString.push_back('*');
         }
-        
+
       }
-      
+
       newString += sb;
-      
+
       index = lastIndex+1;
-      
+
     }
   }
-  
+
   return newString;
 }
 
+// Process expression consisting only
+// of numbers and symbols '+', '-'
 std::string addSub(const std::string & str){
-  
+
   int sum = 0;
   bool plus = true;
-  
+
   std::string numstr;
-  
+
   for(int i=0;i<str.size();i++){
-    
+
     if(std::isdigit(str.at(i))){
       numstr.push_back(str.at(i));
     }else{
-      
+
       int v = stoi(numstr);
       sum += plus ? v : -v;
-      
+
       numstr.clear();
-      
+
       plus = str.at(i)=='+';
-      
+
     }
-    
+
   }
-  
+
   int v = stoi(numstr);
   sum += plus ? v : -v;
 
   return std::to_string(sum);
-  
+
 }
 
-// 5+7*2/4-8*3+1
-
+// Simplify expression consisting only
+// of numbers and symbols '+', '-', '*', '/'
 std::string mulDiv(const std::string & str){
-  
+
   int index = 0; std::string newString;
-  
+
   while(index<str.size()){
-    
+
     char c = str.at(index);
-    
+
     if(c!='*'&&c!='/'){
       newString.push_back(c);
       index++;
-      
+
     // Multiplication or division found
     }else{
-      
+
       // Simplify multiplication/division group
       std::pair<std::string,int> subs = onlyMulDiv(str,index);
-      
-      // Drop unnecessary chars      
+
+      // Drop unnecessary chars
       while(!newString.empty()&&std::isdigit(newString.back())){
         newString.pop_back();
       }
-            
+
       newString += subs.first;
-      
+
       // Set index after multiplication/division group
       index = subs.second+1;
-      
+
     }
   }
-  
+
   return newString;
 }
 
 // First '*' or '/' at index
 std::pair<std::string,int> onlyMulDiv(const std::string & str,int index){
-  
+
   std::string lastV; int backIndex = index-1; int lastGroupIndex = index;
-  
+
   // Index of last character in group
   while(lastGroupIndex<str.size()&&
         str.at(lastGroupIndex)!='-'&&
@@ -341,59 +334,59 @@ std::pair<std::string,int> onlyMulDiv(const std::string & str,int index){
     lastGroupIndex++;
   }
   lastGroupIndex--;
-  
+
   // Find first number
   while(backIndex>=0&&std::isdigit(str.at(backIndex))){
     lastV.push_back(str.at(backIndex)); backIndex--;
   }
-  
+
   // First number string
   reverse(lastV.begin(), lastV.end());
-  
-  
+
+
   // First number value
   int totalV = stoi(lastV); lastV.clear();
-  
+
   // Symbol '*' or '/'
   char s = str.at(index);
-  
+
   while(index!=lastGroupIndex){
-    
+
     index++;
-    
+
     if(std::isdigit(str.at(index))){
-      
+
       lastV.push_back(str.at(index));
-      
+
     }else{
-      
+
       int currentV = stoi(lastV);
       lastV.clear();
-      
+
       if(s=='*'){
         totalV *= currentV;
       }else{
         totalV /= currentV;
       }
-      
+
     }
   }
-  
+
   int currentV = stoi(lastV);
-  
+
   if(s=='*'){
     totalV *= currentV;
   }else{
     totalV /= currentV;
   }
-  
+
 
   return std::make_pair(std::to_string(totalV),lastGroupIndex);
-  
+
 }
 
 int findLastParenIndex(const std::string & str, int index){
-  
+
   int count = 1;
 
   while(count!=0){
@@ -404,7 +397,7 @@ int findLastParenIndex(const std::string & str, int index){
       count--;
     }
   }
-  
+
   return index;
-  
+
 }
