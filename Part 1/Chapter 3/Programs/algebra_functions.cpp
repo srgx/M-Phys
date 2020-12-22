@@ -211,7 +211,7 @@ eqResult solveSimultaneous(std::vector<vecflt> & equations){
 
 // Process expression without variable
 std::string substituteNoX(const std::string & str){
-  return addSub(mulDiv(substituteParens(str)));
+  return addSub(mulDiv(expo(substituteParens(str))));
 }
 
 std::string substituteParens(const std::string & str){
@@ -221,14 +221,12 @@ std::string substituteParens(const std::string & str){
   while(index<str.size()){
 
     if(str.at(index)!='('){
-
-      //std::cout << "Pushing " << str.at(index) << std::endl;
+      
       newString.push_back(str.at(index)); index++;
 
     }else{
 
       int lastIndex = findLastParenIndex(str,index);
-      //std::cout << "Last index: " << lastIndex << std::endl;
 
       auto subexp = str.substr(index+1,lastIndex-(index+1));
 
@@ -318,7 +316,7 @@ std::string mulDiv(const std::string & str){
 
     }
   }
-
+  
   return newString;
 }
 
@@ -379,10 +377,96 @@ std::pair<std::string,int> onlyMulDiv(const std::string & str,int index){
   }else{
     totalV /= currentV;
   }
-
-
+  
   return std::make_pair(std::to_string(totalV),lastGroupIndex);
 
+}
+
+std::string expo(const std::string & str){
+  
+  int index = 0; std::string newString;
+
+  while(index<str.size()){
+    
+  
+    char c = str.at(index);
+    
+
+    if(c!='^'){
+      newString.push_back(c);
+      index++;
+
+    // Exponentiation found
+    }else{
+      
+      int lastIndex = index;
+      
+      while(lastIndex<str.size()&&
+           (std::isdigit(str.at(lastIndex))||str.at(lastIndex)=='^')){
+        lastIndex++;
+      }
+      
+      lastIndex--;
+      
+
+      // Drop unnecessary chars
+      while(!newString.empty()&&std::isdigit(newString.back())){
+        newString.pop_back();
+        index--;
+      }
+      
+      auto group = str.substr(index,lastIndex-index+1);
+      
+      
+      // Simplify exponentiation group
+      auto subs = onlyExpo(group);
+      
+
+      newString += subs;
+      
+      // Set index after exponentiation
+      index = lastIndex+1;
+      
+
+    }
+  }
+
+  return newString;
+  
+}
+
+std::string onlyExpo(const std::string & str){
+  
+  std::vector<int> numbers;
+  std::string currentString;
+  
+  for(int i=0;i<str.length();i++){
+    
+    if(str.at(i)!='^'){
+      currentString.push_back(str.at(i));
+    }else{
+      numbers.push_back(stoi(currentString));
+      currentString.clear();
+    }
+    
+  }
+  
+  numbers.push_back(stoi(currentString));
+  
+  // Penultimate number
+  int expoValue = numbers.back();
+  
+  // Index of current number
+  int index = numbers.size()-2;
+  
+  while(index>=0){
+    expoValue = pow(numbers.at(index),expoValue);
+    index--;
+  }
+  
+
+  return std::to_string(expoValue);
+  
 }
 
 int findLastParenIndex(const std::string & str, int index){

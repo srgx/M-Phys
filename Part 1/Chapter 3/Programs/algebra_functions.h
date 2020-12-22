@@ -34,4 +34,7 @@ std::string addSub(const std::string & str);
 std::string mulDiv(const std::string & str);
 std::pair<std::string,int> onlyMulDiv(const std::string & str,int index);
 
+std::string expo(const std::string & str);
+std::string onlyExpo(const std::string & str);
+
 #endif
