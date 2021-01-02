@@ -116,11 +116,20 @@ int main(){
     { 6, -1 }, { 3, -2 }}
   })));
 
+  
   // Construct equilateral triangle
   auto trng = constructEquilateralTriangle(vecf({ 2, 2 }), vecf({ 10, 2 }));
 
 
-  // ---------------------------------------------------------------------------
+  // Render shapes
+  
+  drawCurvedPath(std::vector<float>({500,500}), // end point
+                 std::vector<float>({300,300}), // current point
+                 5, // speed
+                 2, // normal proportion
+                 1); // time step
+  
+  return 0;
 
   createA(200, // leg length
           1.7, // angle at top (radians)

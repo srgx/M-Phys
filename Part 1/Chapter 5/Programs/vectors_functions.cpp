@@ -1,6 +1,7 @@
 #include "vectors_functions.h"
 #include <cmath>
 #include <iostream>
+#include <memory>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Time.hpp>
@@ -292,39 +293,51 @@ void createA(float legLength, float angleAtTop, float serifProp,
     auto rightSerifEnd = addVectors(rightSerifBeg,serif);
 
 
-  // ---------------------------------------------------------------------------
 
   // Create lines
 
-  sf::Vertex leftLegLine[] = {
-    sf::Vertex(sf::Vector2f(start.at(0), start.at(1))),
-    sf::Vertex(sf::Vector2f(leftLegTarget.at(0), leftLegTarget.at(1)))
-  };
+    std::array<sf::Vertex,2> leftLegLine = {
+      sf::Vertex(sf::Vector2f(start.at(0), start.at(1))),
+      sf::Vertex(sf::Vector2f(leftLegTarget.at(0), leftLegTarget.at(1)))
+    };
 
-  sf::Vertex rightLegLine[] = {
-    sf::Vertex(sf::Vector2f(start.at(0), start.at(1))),
-    sf::Vertex(sf::Vector2f(rightLegTarget.at(0), rightLegTarget.at(1)))
-  };
+    std::array<sf::Vertex,2> rightLegLine = {
+      sf::Vertex(sf::Vector2f(start.at(0), start.at(1))),
+      sf::Vertex(sf::Vector2f(rightLegTarget.at(0), rightLegTarget.at(1)))
+    };
 
-  sf::Vertex crossbarLine[] = {
-    sf::Vertex(sf::Vector2f(crossbarStartTarget.at(0), crossbarStartTarget.at(1))),
-    sf::Vertex(sf::Vector2f(crossbarEndTarget.at(0), crossbarEndTarget.at(1))),
-  };
+    std::array<sf::Vertex,2> crossbarLine = {
+      sf::Vertex(sf::Vector2f(crossbarStartTarget.at(0), crossbarStartTarget.at(1))),
+      sf::Vertex(sf::Vector2f(crossbarEndTarget.at(0), crossbarEndTarget.at(1))),
+    };
 
-  sf::Vertex leftSerifLine[] = {
-    sf::Vertex(sf::Vector2f(leftSerifBeg.at(0), leftSerifBeg.at(1))),
-    sf::Vertex(sf::Vector2f(leftSerifEnd.at(0), leftSerifEnd.at(1))),
-  };
+    std::array<sf::Vertex,2> leftSerifLine = {
+      sf::Vertex(sf::Vector2f(leftSerifBeg.at(0), leftSerifBeg.at(1))),
+      sf::Vertex(sf::Vector2f(leftSerifEnd.at(0), leftSerifEnd.at(1))),
+    };
 
-  sf::Vertex rightSerifLine[] = {
-    sf::Vertex(sf::Vector2f(rightSerifBeg.at(0), rightSerifBeg.at(1))),
-    sf::Vertex(sf::Vector2f(rightSerifEnd.at(0), rightSerifEnd.at(1))),
-  };
-
-  // ---------------------------------------------------------------------------
+    std::array<sf::Vertex,2> rightSerifLine = {
+      sf::Vertex(sf::Vector2f(rightSerifBeg.at(0), rightSerifBeg.at(1))),
+      sf::Vertex(sf::Vector2f(rightSerifEnd.at(0), rightSerifEnd.at(1))),
+    };
 
 
-  sf::RenderWindow wnd(sf::VideoMode(1024, 768), "Letters", sf::Style::Close);
+
+  // Render lines
+  
+    std::vector<std::array<sf::Vertex,2>> lines;
+    
+    lines.push_back(leftLegLine); lines.push_back(rightLegLine);
+    lines.push_back(crossbarLine); lines.push_back(leftSerifLine);
+    lines.push_back(rightSerifLine);
+    
+    renderLines(lines);
+
+}
+
+void renderLines(const std::vector<std::array<sf::Vertex,2>> & lines){
+  
+  sf::RenderWindow wnd(sf::VideoMode(1024, 768), "Vectors", sf::Style::Close);
   wnd.setFramerateLimit(30);
 
   const sf::Time TimePerFrame = sf::seconds(1.f/60.f);
@@ -363,20 +376,82 @@ void createA(float legLength, float angleAtTop, float serifProp,
 
       }
 
-
     }
 
-
     wnd.clear();
-
-    wnd.draw(leftLegLine, 2, sf::Lines);
-    wnd.draw(rightLegLine, 2, sf::Lines);
-    wnd.draw(crossbarLine, 2, sf::Lines);
-    wnd.draw(leftSerifLine, 2, sf::Lines);
-    wnd.draw(rightSerifLine, 2, sf::Lines);
+    
+    for(auto pt = lines.begin(); pt!=lines.end(); pt++){
+      sf::Vertex ln [] = {(*pt).at(0),(*pt).at(1)};
+      wnd.draw(ln,2,sf::Lines);
+    }
 
     wnd.display();
 
   }
-
 }
+
+
+std::vector<float> curvedPath(const std::vector<float> & endPoint,
+                              const std::vector<float> & currentPoint, float speed,
+                              float normalProportion, float timeStep){
+  
+  auto radius = subVectors(endPoint,currentPoint);
+  
+  std::cout << "Radius: " << radius.at(0) << ", " << radius.at(1) << std::endl;
+  
+  auto mag = magnitude(radius);
+  
+  std::cout << "Mag: " << mag << std::endl;
+  
+  if(mag<speed*timeStep){
+    return endPoint;
+  } else {
+    
+    auto radialComponent = norm(radius);
+    auto tangentialComponent =
+      scaleVector(normalVector(radialComponent),normalProportion);
+      
+    auto velocity =
+      scaleVector((addVectors(radialComponent,
+                              tangentialComponent)),
+                   speed);
+      
+    auto currentPosition = addVectors(currentPoint,velocity);
+    
+    return currentPosition;
+    
+  }
+  
+}
+
+void drawCurvedPath(const std::vector<float> & endPoint,
+                    const std::vector<float> & currentPoint, float speed,
+                    float normalProportion, float timeStep){
+  
+  
+  std::vector<std::array<sf::Vertex,2>> lines;
+  
+  auto cp = currentPoint; auto lastPoint = cp;
+  
+  std::cout << "Pozycja " << cp.at(0) << ", " << cp.at(1) << std::endl;
+  
+  for(int i=0;i<35;i++){
+    
+    cp = curvedPath(endPoint,cp,speed,normalProportion,timeStep);
+    std::cout << "Pozycja " << cp.at(0) << ", " << cp.at(1) << std::endl;
+    
+    auto arr = std::array<sf::Vertex,2>({sf::Vertex(sf::Vector2f(lastPoint.at(0), lastPoint.at(1))),sf::Vertex(sf::Vector2f(cp.at(0), cp.at(1)))});
+    
+    lastPoint = cp;
+    
+    lines.push_back(arr);
+    
+    timeStep++;
+  }
+  
+  std::cout << "Dlugosc: " << lines.size() << std::endl;
+  
+  renderLines(lines);
+  
+}
+

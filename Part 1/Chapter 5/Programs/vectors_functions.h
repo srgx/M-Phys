@@ -2,6 +2,8 @@
 #define VECTORS_FUNCTIONS__H__
 #include <vector>
 #include <array>
+#include <SFML/Graphics.hpp>
+#include <SFML/System/Time.hpp>
 
 std::vector<float> addVectors(const std::vector<float> & v1, const std::vector<float> & v2);
 std::vector<float> subVectors(const std::vector<float> & v1, const std::vector<float> & v2);
@@ -20,6 +22,16 @@ void createA(float legLength, float angleAtTop, float serifProp,
              float crossbarAlign);
 
 
+void renderLines(const std::vector<std::array<sf::Vertex,2>> & lines);
+
+std::vector<float> curvedPath(const std::vector<float> & endPoint,
+                const std::vector<float> & currentPoint, float speed,
+                float normalProportion, float timeStep);
+
+
+void drawCurvedPath(const std::vector<float> & endPoint,
+                    const std::vector<float> & currentPoint, float speed,
+                    float normalProportion, float timeStep);
 
 
 #endif
