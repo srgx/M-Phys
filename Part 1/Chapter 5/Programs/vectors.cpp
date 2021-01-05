@@ -123,11 +123,11 @@ int main(){
 
   // Render shapes
   
-  drawCurvedPath(std::vector<float>({500,500}), // end point
-                 std::vector<float>({300,300}), // current point
-                 5, // speed
-                 2, // normal proportion
-                 1); // time step
+  drawCurvedPath(std::vector<float>({200,250}), // end point
+                 std::vector<float>({200,20}), // current point
+                 1, // speed
+                 2.2, // normal proportion(larger = more curved)
+                 5.5); // time step(larger = earlier and bigger last step)
   
   return 0;
 

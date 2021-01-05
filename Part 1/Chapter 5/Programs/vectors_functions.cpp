@@ -397,11 +397,7 @@ std::vector<float> curvedPath(const std::vector<float> & endPoint,
   
   auto radius = subVectors(endPoint,currentPoint);
   
-  std::cout << "Radius: " << radius.at(0) << ", " << radius.at(1) << std::endl;
-  
   auto mag = magnitude(radius);
-  
-  std::cout << "Mag: " << mag << std::endl;
   
   if(mag<speed*timeStep){
     return endPoint;
@@ -433,12 +429,10 @@ void drawCurvedPath(const std::vector<float> & endPoint,
   
   auto cp = currentPoint; auto lastPoint = cp;
   
-  std::cout << "Pozycja " << cp.at(0) << ", " << cp.at(1) << std::endl;
-  
-  for(int i=0;i<35;i++){
+  // Loop while cp != target
+  while (cp.at(0)!=endPoint.at(0)||cp.at(1)!=endPoint.at(1)) {
     
     cp = curvedPath(endPoint,cp,speed,normalProportion,timeStep);
-    std::cout << "Pozycja " << cp.at(0) << ", " << cp.at(1) << std::endl;
     
     auto arr = std::array<sf::Vertex,2>({sf::Vertex(sf::Vector2f(lastPoint.at(0), lastPoint.at(1))),sf::Vertex(sf::Vector2f(cp.at(0), cp.at(1)))});
     
@@ -446,10 +440,7 @@ void drawCurvedPath(const std::vector<float> & endPoint,
     
     lines.push_back(arr);
     
-    timeStep++;
   }
-  
-  std::cout << "Dlugosc: " << lines.size() << std::endl;
   
   renderLines(lines);
   
