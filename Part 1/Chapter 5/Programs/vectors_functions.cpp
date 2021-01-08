@@ -1,7 +1,6 @@
 #include "vectors_functions.h"
 #include <cmath>
 #include <iostream>
-#include <memory>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Time.hpp>
@@ -444,5 +443,70 @@ void drawCurvedPath(const std::vector<float> & endPoint,
   
   renderLines(lines);
   
+}
+
+std::pair<std::vector<float>,float>
+  madPath(const std::vector<float> & endPoint,
+          const std::vector<float> & currentPoint,
+          float currentAlpha,
+          float speed,
+          float alphaSpeed,
+          float timeStep){
+
+  auto radius = subVectors(endPoint,currentPoint);
+  auto mag = magnitude(radius);
+  
+  if(mag<speed*timeStep){
+    return std::make_pair(endPoint,currentAlpha);
+  } else {
+    
+    auto radialComponent = norm(radius);
+    auto newAlpha = currentAlpha + alphaSpeed*timeStep;
+    
+    auto tanNewAlpha = tan(newAlpha);
+    
+    auto tangentialComponent =
+      scaleVector(normalVector(radialComponent),
+                  tanNewAlpha);
+    
+    auto vec = addVectors(radialComponent,tangentialComponent);
+    auto velocity = scaleVector(norm(vec),speed);
+    
+    return std::make_pair(addVectors(currentPoint,velocity),
+                          newAlpha);
+    
+  }
+  
+}
+
+void drawMadPath(const std::vector<float> & endPoint,
+                 const std::vector<float> & currentPoint,
+                 float currentAlpha,
+                 float speed,
+                 float alphaSpeed,
+                 float timeStep){
+    
+  std::cout << "Draw Mad Path\n";
+  
+  std::vector<std::array<sf::Vertex,2>> lines;
+  
+  auto cp = currentPoint; auto lastPoint = cp;
+  
+  // Loop while cp != target
+  while (cp.at(0)!=endPoint.at(0)||cp.at(1)!=endPoint.at(1)) {
+    
+    auto pointAlpha =
+      madPath(endPoint,cp,currentAlpha,speed,alphaSpeed,timeStep);
+    
+    cp = pointAlpha.first; currentAlpha = pointAlpha.second;
+    
+    auto arr = std::array<sf::Vertex,2>({sf::Vertex(sf::Vector2f(lastPoint.at(0), lastPoint.at(1))),sf::Vertex(sf::Vector2f(cp.at(0), cp.at(1)))});
+    
+    lastPoint = cp; lines.push_back(arr);
+    
+  }
+  
+  renderLines(lines);
+            
 }
 

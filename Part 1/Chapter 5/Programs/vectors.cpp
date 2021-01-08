@@ -119,6 +119,18 @@ int main(){
   
   // Construct equilateral triangle
   auto trng = constructEquilateralTriangle(vecf({ 2, 2 }), vecf({ 10, 2 }));
+  
+  // -----------------------------------------------------------
+  
+  
+  drawMadPath(std::vector<float>({400,250}),
+              std::vector<float>({200,20}),
+              2, // current alpha
+              4.5, // speed
+              6.32, // alpha speed
+              4.5); // time step
+  
+  return 0;
 
 
   // Render shapes
@@ -129,7 +141,7 @@ int main(){
                  2.2, // normal proportion(larger = more curved)
                  5.5); // time step(larger = earlier and bigger last step)
   
-  return 0;
+  //return 0;
 
   createA(200, // leg length
           1.7, // angle at top (radians)

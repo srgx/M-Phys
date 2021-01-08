@@ -34,4 +34,21 @@ void drawCurvedPath(const std::vector<float> & endPoint,
                     float normalProportion, float timeStep);
 
 
+std::pair<std::vector<float>,float>
+  madPath(const std::vector<float> & endPoint,
+          const std::vector<float> & currentPoint,
+          float currentAlpha,
+          float speed,
+          float alphaSpeed,
+          float timeStep);
+  
+
+void drawMadPath(const std::vector<float> & endPoint,
+                 const std::vector<float> & currentPoint,
+                 float currentAlpha,
+                 float speed,
+                 float alphaSpeed,
+                 float timeStep);
+
+
 #endif
