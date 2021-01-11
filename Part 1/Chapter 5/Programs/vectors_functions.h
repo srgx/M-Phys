@@ -5,6 +5,15 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Time.hpp>
 
+
+
+struct basis {
+  std::vector<float> b1;
+  std::vector<float> b2;
+  float a;
+  float b;
+};
+
 std::vector<float> addVectors(const std::vector<float> & v1, const std::vector<float> & v2);
 std::vector<float> subVectors(const std::vector<float> & v1, const std::vector<float> & v2);
 std::vector<float> scaleVector(const std::vector<float> & vec, float scale);
@@ -49,6 +58,10 @@ void drawMadPath(const std::vector<float> & endPoint,
                  float speed,
                  float alphaSpeed,
                  float timeStep);
+
+
+basis switchBasis(const std::vector<float> & vec,
+                 const std::vector<float> & directionVec);
 
 
 #endif

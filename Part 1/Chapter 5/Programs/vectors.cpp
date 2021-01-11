@@ -120,6 +120,32 @@ int main(){
   // Construct equilateral triangle
   auto trng = constructEquilateralTriangle(vecf({ 2, 2 }), vecf({ 10, 2 }));
   
+  assert(std::abs(trng.at(0).at(0)-2)<d);
+  assert(std::abs(trng.at(0).at(1)-2)<d);
+  
+  assert(std::abs(trng.at(1).at(0)-10)<d);
+  assert(std::abs(trng.at(1).at(1)-2)<d);
+  
+  assert(std::abs(trng.at(2).at(0)-6)<d);
+  assert(std::abs(trng.at(2).at(1)-8.9282)<d);
+  
+  
+  // Switch basis
+  basis bas = switchBasis(vecf({3,3}),vecf({1,1}));
+  
+  assert(std::abs(bas.b1.at(0)-0.7071)<d);
+  assert(std::abs(bas.b1.at(1)-0.7071)<d);
+  
+  assert(std::abs(bas.b2.at(0)-0.7071)<d);
+  assert(std::abs(bas.b2.at(1)-(-0.7071))<d);
+  
+  assert(std::abs(bas.a-4.24264)<d);
+  assert(std::abs(bas.b-0)<d);
+  
+  std::cout << "Exit\n";
+  
+  return 0;
+  
   // -----------------------------------------------------------
   
   

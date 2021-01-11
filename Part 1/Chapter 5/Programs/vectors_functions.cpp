@@ -510,3 +510,34 @@ void drawMadPath(const std::vector<float> & endPoint,
             
 }
 
+basis switchBasis(const std::vector<float> & vec,
+                 const std::vector<float> & directionVec){
+
+  // Unit vector
+  auto basis1 = norm(directionVec);
+  
+  // Perpendicular to basis1
+  auto basis2 = normalVector(basis1);
+  
+  // Alpha angle(between basis1 and x axis)
+  auto alpha = atan2(basis1.at(1),basis1.at(0));
+  
+  // Theta angle(between original vec and x axis)
+  auto theta = atan2(vec.at(1),vec.at(0));
+  
+  // Magnitude of original vector
+  auto mag = magnitude(vec);
+  
+  // -(alpha - theta)
+  auto df = theta - alpha;
+  
+  // cos(df) = a/mag(v)
+  auto a = mag*cos(df);
+  
+  // sin(df) = b/mag(v)
+  auto b = mag*sin(df);
+  
+  return basis({ basis1, basis2, a, b });
+  
+}
+
