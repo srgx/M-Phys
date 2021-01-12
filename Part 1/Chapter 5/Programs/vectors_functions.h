@@ -61,7 +61,20 @@ void drawMadPath(const std::vector<float> & endPoint,
 
 
 basis switchBasis(const std::vector<float> & vec,
-                 const std::vector<float> & directionVec);
+                  const std::vector<float> & directionVec);
 
+
+float component(const std::vector<float> & vec,
+                const std::vector<float> & directionVec);
+
+
+std::vector<float> componentVector(const std::vector<float> & vec,
+                                   const std::vector<float> & directionVec);
+
+
+std::vector<float> intersectionPoint(const std::vector<float> & a,
+                                     const std::vector<float> & b,
+                                     const std::vector<float> & c,
+                                     const std::vector<float> & d);
 
 #endif

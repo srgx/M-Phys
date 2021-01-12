@@ -541,3 +541,54 @@ basis switchBasis(const std::vector<float> & vec,
   
 }
 
+float component(const std::vector<float> & vec,
+                const std::vector<float> & directionVec){
+  
+  auto alpha = atan2(directionVec.at(1),directionVec.at(0));
+  auto theta = atan2(vec.at(1),vec.at(0));
+  
+  auto mag = magnitude(vec);
+  
+  return mag*cos(theta-alpha);
+  
+}
+
+std::vector<float> componentVector(const std::vector<float> & vec,
+                                   const std::vector<float> & directionVec){
+  
+  auto v = norm(directionVec);
+  
+  return scaleVector(v,component(vec,directionVec));
+  
+}
+
+std::vector<float> intersectionPoint(const std::vector<float> & a,
+                                     const std::vector<float> & b,
+                                     const std::vector<float> & c,
+                                     const std::vector<float> & d){
+  
+  auto tc1 = b.at(0)-a.at(0);
+  auto tc2 = b.at(1)-a.at(1);
+  
+  auto sc1 = c.at(0)-d.at(0);
+  auto sc2 = c.at(1)-d.at(1);
+  
+  auto con1 = c.at(0)-a.at(0);
+  auto con2 = c.at(1)-a.at(1);
+  
+  auto det = (tc2*sc1-tc1*sc2);
+  
+  if(det==0){
+    // No unique solution
+    return std::vector<float>({});
+  } else {
+    auto con = tc2*con1-tc1*con2;
+    auto s = con/det;
+    
+    auto dc = subVectors(d,c);
+    auto sdc = scaleVector(dc,s);
+    return addVectors(c,sdc);
+  }
+  
+}
+

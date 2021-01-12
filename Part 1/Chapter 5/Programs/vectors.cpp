@@ -142,6 +142,23 @@ int main(){
   assert(std::abs(bas.a-4.24264)<d);
   assert(std::abs(bas.b-0)<d);
   
+  // Vector components
+  assert(std::abs(component(vecf({3,3}),vecf({1,1}))-4.24264)<d);
+  
+  auto comV = componentVector(vecf({3,3}),vecf({1,1}));
+  
+  assert(std::abs(comV.at(0)-3)<d);
+  assert(std::abs(comV.at(1)-3)<d);
+  
+  // Intersection point
+  auto interPoint = intersectionPoint(vecf({2,2}),vecf({14,14}),
+                                      vecf({12,4}),vecf({8,16}));
+  
+  
+  assert(std::abs(interPoint.at(0)-10)<d);
+  assert(std::abs(interPoint.at(1)-10)<d);
+  
+  
   std::cout << "Exit\n";
   
   return 0;
