@@ -8,73 +8,87 @@
 
 
 struct basis {
-  std::vector<float> b1;
-  std::vector<float> b2;
-  float a;
-  float b;
+  std::vector<double> b1;
+  std::vector<double> b2;
+  double a;
+  double b;
 };
 
-std::vector<float> addVectors(const std::vector<float> & v1, const std::vector<float> & v2);
-std::vector<float> subVectors(const std::vector<float> & v1, const std::vector<float> & v2);
-std::vector<float> scaleVector(const std::vector<float> & vec, float scale);
-float magnitude(const std::vector<float> & vec);
-std::vector<float> norm(const std::vector<float> & vec);
-std::vector<float> normalVector(const std::vector<float> & vec);
-float angleBetween(const std::vector<float> & v1, const std::vector<float> & v2);
-std::vector<float> oppositeVector(const std::vector<float> & vec);
-float determinant(const std::vector<std::vector<float>> & array);
+std::vector<double> addVectors(const std::vector<double> & v1, const std::vector<double> & v2);
+std::vector<double> subVectors(const std::vector<double> & v1, const std::vector<double> & v2);
+std::vector<double> scaleVector(const std::vector<double> & vec, double scale);
+double magnitude(const std::vector<double> & vec);
+std::vector<double> norm(const std::vector<double> & vec);
+std::vector<double> normalVector(const std::vector<double> & vec);
+double angleBetween(const std::vector<double> & v1, const std::vector<double> & v2);
+std::vector<double> oppositeVector(const std::vector<double> & vec);
+double determinant(const std::vector<std::vector<double>> & array);
 
-std::array<std::vector<float>,4> constructSquare(const std::vector<float> & a, const std::vector<float> & b);
-std::array<std::vector<float>,3> constructEquilateralTriangle(const std::vector<float> & a, const std::vector<float> & b);
-void createA(float legLength, float angleAtTop, float serifProp,
-             float crossbarProp, float crossbarHeight, float serifAlign,
-             float crossbarAlign);
+std::array<std::vector<double>,4> constructSquare(const std::vector<double> & a, const std::vector<double> & b);
+std::array<std::vector<double>,3> constructEquilateralTriangle(const std::vector<double> & a, const std::vector<double> & b);
+void createA(double legLength, double angleAtTop, double serifProp,
+             double crossbarProp, double crossbarHeight, double serifAlign,
+             double crossbarAlign);
 
 
 void renderLines(const std::vector<std::array<sf::Vertex,2>> & lines);
 
-std::vector<float> curvedPath(const std::vector<float> & endPoint,
-                const std::vector<float> & currentPoint, float speed,
-                float normalProportion, float timeStep);
+std::vector<double> curvedPath(const std::vector<double> & endPoint,
+                const std::vector<double> & currentPoint, double speed,
+                double normalProportion, double timeStep);
 
 
-void drawCurvedPath(const std::vector<float> & endPoint,
-                    const std::vector<float> & currentPoint, float speed,
-                    float normalProportion, float timeStep);
+void drawCurvedPath(const std::vector<double> & endPoint,
+                    const std::vector<double> & currentPoint, double speed,
+                    double normalProportion, double timeStep);
 
 
-std::pair<std::vector<float>,float>
-  madPath(const std::vector<float> & endPoint,
-          const std::vector<float> & currentPoint,
-          float currentAlpha,
-          float speed,
-          float alphaSpeed,
-          float timeStep);
+std::pair<std::vector<double>,double>
+  madPath(const std::vector<double> & endPoint,
+          const std::vector<double> & currentPoint,
+          double currentAlpha,
+          double speed,
+          double alphaSpeed,
+          double timeStep);
   
 
-void drawMadPath(const std::vector<float> & endPoint,
-                 const std::vector<float> & currentPoint,
-                 float currentAlpha,
-                 float speed,
-                 float alphaSpeed,
-                 float timeStep);
+void drawMadPath(const std::vector<double> & endPoint,
+                 const std::vector<double> & currentPoint,
+                 double currentAlpha,
+                 double speed,
+                 double alphaSpeed,
+                 double timeStep);
 
 
-basis switchBasis(const std::vector<float> & vec,
-                  const std::vector<float> & directionVec);
+basis switchBasis(const std::vector<double> & vec,
+                  const std::vector<double> & directionVec);
 
 
-float component(const std::vector<float> & vec,
-                const std::vector<float> & directionVec);
+double component(const std::vector<double> & vec,
+                const std::vector<double> & directionVec);
 
 
-std::vector<float> componentVector(const std::vector<float> & vec,
-                                   const std::vector<float> & directionVec);
+std::vector<double> componentVector(const std::vector<double> & vec,
+                                    const std::vector<double> & directionVec);
 
 
-std::vector<float> intersectionPoint(const std::vector<float> & a,
-                                     const std::vector<float> & b,
-                                     const std::vector<float> & c,
-                                     const std::vector<float> & d);
+std::vector<double> intersectionPoint(const std::vector<double> & a,
+                                      const std::vector<double> & b,
+                                      const std::vector<double> & c,
+                                      const std::vector<double> & d);
+
+
+
+double intersectionTime(std::vector<double> p1,
+                        std::vector<double> v1,
+                        std::vector<double> p2,
+                        std::vector<double> v2);
+
+
+double intersection(const std::vector<double> & a,
+                    const std::vector<double> & b,
+                    const std::vector<double> & c,
+                    const std::vector<double> & d);
+
 
 #endif

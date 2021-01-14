@@ -8,7 +8,7 @@
 using std::vector;
 
 // Add vectors
-vector<float> addVectors(const vector<float> & v1, const vector<float> & v2){
+vector<double> addVectors(const vector<double> & v1, const vector<double> & v2){
 
   // Vectors must be the same size
   if(v1.size()!=v2.size()){
@@ -18,7 +18,7 @@ vector<float> addVectors(const vector<float> & v1, const vector<float> & v2){
 
   }else{
 
-    vector<float> vec;
+    vector<double> vec;
 
     // Add corresponding components together
     for(int i=0;i<v1.size();i++){
@@ -31,14 +31,14 @@ vector<float> addVectors(const vector<float> & v1, const vector<float> & v2){
 }
 
 // Subtract vectors
-vector<float> subVectors(const vector<float> & v1, const vector<float> & v2){
+vector<double> subVectors(const vector<double> & v1, const vector<double> & v2){
   return addVectors(v1,oppositeVector(v2));
 }
 
 
-vector<float> scaleVector(const vector<float> & vec, float scale){
+vector<double> scaleVector(const vector<double> & vec, double scale){
 
-  vector<float> nVec;
+  vector<double> nVec;
 
   //Scale all vector components
   for(int i=0;i<vec.size();i++){
@@ -50,9 +50,9 @@ vector<float> scaleVector(const vector<float> & vec, float scale){
 }
 
 // Length of vector
-float magnitude(const vector<float> & vec){
+double magnitude(const vector<double> & vec){
 
-  float s = 0;
+  double s = 0;
 
   // Sum squares of all components
   for(int i=0;i<vec.size();i++){
@@ -64,9 +64,9 @@ float magnitude(const vector<float> & vec){
 }
 
 // Normalize vector (create unit vector)
-vector<float> norm(const vector<float> & vec){
+vector<double> norm(const vector<double> & vec){
 
-  float m = magnitude(vec);
+  double m = magnitude(vec);
 
   if(m==0){
     // You cant normalize zero vector
@@ -77,17 +77,17 @@ vector<float> norm(const vector<float> & vec){
 
 }
 
-vector<float> normalVector(const vector<float> & vec){
-  return vector<float>({ vec.at(1), -vec.at(0) });
+vector<double> normalVector(const vector<double> & vec){
+  return vector<double>({ vec.at(1), -vec.at(0) });
 }
 
 // Angle between two vectors
-float angleBetween(const vector<float> & v1, const vector<float> & v2){
+double angleBetween(const vector<double> & v1, const vector<double> & v2){
 
-  vector<float> v3 = subVectors(v1,v2);
-  float m1 = magnitude(v1);
-  float m2 = magnitude(v2);
-  float m3 = magnitude(v3);
+  vector<double> v3 = subVectors(v1,v2);
+  double m1 = magnitude(v1);
+  double m2 = magnitude(v2);
+  double m3 = magnitude(v3);
 
   // Zero vector or vectors are equal
   if((0==m1||0==m2)||0==m3){
@@ -103,9 +103,9 @@ float angleBetween(const vector<float> & v1, const vector<float> & v2){
 
 }
 
-vector<float> oppositeVector(const vector<float> & vec){
+vector<double> oppositeVector(const vector<double> & vec){
 
-  vector<float> vctr;
+  vector<double> vctr;
 
   for(auto i=vec.begin();i!=vec.end();i++){
     vctr.push_back(-(*i));
@@ -115,7 +115,7 @@ vector<float> oppositeVector(const vector<float> & vec){
 
 }
 
-float determinant(const vector<vector<float>> & array){
+double determinant(const vector<vector<double>> & array){
 
   int size = array.size();
 
@@ -125,19 +125,19 @@ float determinant(const vector<vector<float>> & array){
 
   }else{
 
-    int mult = 1; float sum = 0;
+    int mult = 1; double sum = 0;
 
     // Loop through first row
     for(int i=0;i<size;i++){
 
       // Value from top row
-      float el = array.at(0).at(i);
+      double el = array.at(0).at(i);
 
       // New matrix consists of remaining rows
       // without values at current index (i).
-      vector<vector<float>> newmatrix;
+      vector<vector<double>> newmatrix;
       for(int j=1;j<size;j++){
-       vector<float> row = array.at(j);
+       vector<double> row = array.at(j);
        row.erase(row.begin()+i);
        newmatrix.push_back(row);
       }
@@ -174,9 +174,9 @@ float determinant(const vector<vector<float>> & array){
 
 }
 
-std::array<vector<float>,4> constructSquare(const vector<float> & a, const vector<float> & b){
+std::array<vector<double>,4> constructSquare(const vector<double> & a, const vector<double> & b){
 
-  std::array<vector<float>,4> result;
+  std::array<vector<double>,4> result;
 
   // A
   result.at(0) = a;
@@ -200,9 +200,9 @@ std::array<vector<float>,4> constructSquare(const vector<float> & a, const vecto
   return result;
 }
 
-std::array<vector<float>,3> constructEquilateralTriangle(const vector<float> & a, const vector<float> & b){
+std::array<vector<double>,3> constructEquilateralTriangle(const vector<double> & a, const vector<double> & b){
 
-  std::array<vector<float>,3> result;
+  std::array<vector<double>,3> result;
 
   // A
   result.at(0) = a;
@@ -228,24 +228,24 @@ std::array<vector<float>,3> constructEquilateralTriangle(const vector<float> & a
 }
 
 // Draw letter A. Parameters 3-7 should be in range 0-1
-void createA(float legLength, float angleAtTop, float serifProp,
-             float crossbarProp, float crossbarHeight, float serifAlign,
-             float crossbarAlign){
+void createA(double legLength, double angleAtTop, double serifProp,
+             double crossbarProp, double crossbarHeight, double serifAlign,
+             double crossbarAlign){
 
   // Starting position
-  vector<float> start { 450, 50 };
+  vector<double> start { 450, 50 };
 
 
   // Legs
 
-    float halfAngle = angleAtTop/2;
+    double halfAngle = angleAtTop/2;
 
     // Left leg vector
-    vector<float> leftLeg { -sin(halfAngle), cos(halfAngle) };
+    vector<double> leftLeg { -sin(halfAngle), cos(halfAngle) };
     leftLeg = scaleVector(leftLeg,legLength);
 
     // Right leg vector
-    vector<float> rightLeg { -leftLeg.at(0), leftLeg.at(1) };
+    vector<double> rightLeg { -leftLeg.at(0), leftLeg.at(1) };
 
     // Absolute leg positions
     auto leftLegTarget = addVectors(start,leftLeg);
@@ -255,11 +255,11 @@ void createA(float legLength, float angleAtTop, float serifProp,
   // Crossbar
 
     // Vectors to crossbar points (max width)
-    vector<float> crossbarStart = scaleVector(leftLeg,crossbarHeight);
-    vector<float> crossbarEnd = scaleVector(rightLeg,crossbarHeight);
+    vector<double> crossbarStart = scaleVector(leftLeg,crossbarHeight);
+    vector<double> crossbarEnd = scaleVector(rightLeg,crossbarHeight);
 
     // Crossbar vector left->right (max width)
-    vector<float> crossbar =
+    vector<double> crossbar =
       scaleVector(subVectors(crossbarEnd,crossbarStart),
                   crossbarProp);
 
@@ -278,10 +278,10 @@ void createA(float legLength, float angleAtTop, float serifProp,
   // Serif
 
     // Serif vector
-    vector<float> serif = scaleVector(subVectors(rightLeg,leftLeg),serifProp);
+    vector<double> serif = scaleVector(subVectors(rightLeg,leftLeg),serifProp);
 
     // Serif offset
-    vector<float> serifOffset = scaleVector(serif,serifAlign);
+    vector<double> serifOffset = scaleVector(serif,serifAlign);
 
     // Left serif
     auto leftSerifBeg = subVectors(leftLegTarget,serifOffset);
@@ -390,9 +390,9 @@ void renderLines(const std::vector<std::array<sf::Vertex,2>> & lines){
 }
 
 
-std::vector<float> curvedPath(const std::vector<float> & endPoint,
-                              const std::vector<float> & currentPoint, float speed,
-                              float normalProportion, float timeStep){
+std::vector<double> curvedPath(const std::vector<double> & endPoint,
+                              const std::vector<double> & currentPoint, double speed,
+                              double normalProportion, double timeStep){
   
   auto radius = subVectors(endPoint,currentPoint);
   
@@ -419,9 +419,9 @@ std::vector<float> curvedPath(const std::vector<float> & endPoint,
   
 }
 
-void drawCurvedPath(const std::vector<float> & endPoint,
-                    const std::vector<float> & currentPoint, float speed,
-                    float normalProportion, float timeStep){
+void drawCurvedPath(const std::vector<double> & endPoint,
+                    const std::vector<double> & currentPoint, double speed,
+                    double normalProportion, double timeStep){
   
   
   std::vector<std::array<sf::Vertex,2>> lines;
@@ -445,13 +445,13 @@ void drawCurvedPath(const std::vector<float> & endPoint,
   
 }
 
-std::pair<std::vector<float>,float>
-  madPath(const std::vector<float> & endPoint,
-          const std::vector<float> & currentPoint,
-          float currentAlpha,
-          float speed,
-          float alphaSpeed,
-          float timeStep){
+std::pair<std::vector<double>,double>
+  madPath(const std::vector<double> & endPoint,
+          const std::vector<double> & currentPoint,
+          double currentAlpha,
+          double speed,
+          double alphaSpeed,
+          double timeStep){
 
   auto radius = subVectors(endPoint,currentPoint);
   auto mag = magnitude(radius);
@@ -479,12 +479,12 @@ std::pair<std::vector<float>,float>
   
 }
 
-void drawMadPath(const std::vector<float> & endPoint,
-                 const std::vector<float> & currentPoint,
-                 float currentAlpha,
-                 float speed,
-                 float alphaSpeed,
-                 float timeStep){
+void drawMadPath(const std::vector<double> & endPoint,
+                 const std::vector<double> & currentPoint,
+                 double currentAlpha,
+                 double speed,
+                 double alphaSpeed,
+                 double timeStep){
     
   std::cout << "Draw Mad Path\n";
   
@@ -510,8 +510,8 @@ void drawMadPath(const std::vector<float> & endPoint,
             
 }
 
-basis switchBasis(const std::vector<float> & vec,
-                 const std::vector<float> & directionVec){
+basis switchBasis(const std::vector<double> & vec,
+                 const std::vector<double> & directionVec){
 
   // Unit vector
   auto basis1 = norm(directionVec);
@@ -541,8 +541,8 @@ basis switchBasis(const std::vector<float> & vec,
   
 }
 
-float component(const std::vector<float> & vec,
-                const std::vector<float> & directionVec){
+double component(const std::vector<double> & vec,
+                const std::vector<double> & directionVec){
   
   auto alpha = atan2(directionVec.at(1),directionVec.at(0));
   auto theta = atan2(vec.at(1),vec.at(0));
@@ -553,8 +553,8 @@ float component(const std::vector<float> & vec,
   
 }
 
-std::vector<float> componentVector(const std::vector<float> & vec,
-                                   const std::vector<float> & directionVec){
+std::vector<double> componentVector(const std::vector<double> & vec,
+                                   const std::vector<double> & directionVec){
   
   auto v = norm(directionVec);
   
@@ -562,10 +562,10 @@ std::vector<float> componentVector(const std::vector<float> & vec,
   
 }
 
-std::vector<float> intersectionPoint(const std::vector<float> & a,
-                                     const std::vector<float> & b,
-                                     const std::vector<float> & c,
-                                     const std::vector<float> & d){
+std::vector<double> intersectionPoint(const std::vector<double> & a,
+                                      const std::vector<double> & b,
+                                      const std::vector<double> & c,
+                                      const std::vector<double> & d){
   
   auto tc1 = b.at(0)-a.at(0);
   auto tc2 = b.at(1)-a.at(1);
@@ -580,7 +580,7 @@ std::vector<float> intersectionPoint(const std::vector<float> & a,
   
   if(det==0){
     // No unique solution
-    return std::vector<float>({});
+    return std::vector<double>({});
   } else {
     auto con = tc2*con1-tc1*con2;
     auto s = con/det;
@@ -588,6 +588,83 @@ std::vector<float> intersectionPoint(const std::vector<float> & a,
     auto dc = subVectors(d,c);
     auto sdc = scaleVector(dc,s);
     return addVectors(c,sdc);
+  }
+  
+}
+
+
+// Point1, Vector1, Point2, Vector2
+double intersectionTime(std::vector<double> p1,
+                        std::vector<double> v1,
+                        std::vector<double> p2,
+                        std::vector<double> v2){
+
+  auto tc1 = v1.at(0);
+  auto tc2 = v1.at(1);
+  
+  auto sc1 = v2.at(0);
+  auto sc2 = v2.at(1);
+  
+  auto con1 = p2.at(0)-p1.at(0);
+  auto con2 = p2.at(1)-p1.at(1);
+  
+  auto det = tc2*sc1-tc1*sc2;
+  
+  if(det==0){
+    // No unique solution
+    return 0;
+  } else {
+    auto con = sc1*con2-sc2*con1;
+    auto t = con/det;
+    return t;
+  }
+  
+}
+
+double intersection(const std::vector<double> & a,
+                    const std::vector<double> & b,
+                    const std::vector<double> & c,
+                    const std::vector<double> & d){
+
+  auto tc1 = b.at(0)-a.at(0);
+  auto tc2 = b.at(1)-a.at(1);
+  
+  auto sc1 = c.at(0)-d.at(0);
+  auto sc2 = c.at(1)-d.at(1);
+  
+  auto con1 = c.at(0)-a.at(0);
+  auto con2 = c.at(1)-a.at(1);
+  
+  auto det = (tc2*sc1-tc1*sc2);
+  
+  if(det==0){
+    // No unique solution
+    return 0;
+  } else {
+    
+    auto con = tc2*con1-tc1*con2;
+    auto s = con/det;
+    
+    if(s<0||s>1){
+      return 0; // false
+    } else {
+      
+      double t =
+        tc1 != 0 ? (con1-s*sc1)/tc1 :
+                   (con2-s*sc2)/tc2;
+                   
+      if(t<0||t>1){
+        return 0; // none
+      } else {
+        return t;
+      }
+      
+    }
+    
+    
+    
+    
+    
   }
   
 }
