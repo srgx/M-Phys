@@ -486,8 +486,6 @@ void drawMadPath(const std::vector<double> & endPoint,
                  double alphaSpeed,
                  double timeStep){
     
-  std::cout << "Draw Mad Path\n";
-  
   std::vector<std::array<sf::Vertex,2>> lines;
   
   auto cp = currentPoint; auto lastPoint = cp;
@@ -661,10 +659,125 @@ double intersection(const std::vector<double> & a,
       
     }
     
+  }
+  
+}
+
+void drawArrowhead(double lineSegment,double size, double angle){
+  
+  vector<double> start { 200, 200 };
+
+  double halfAngle = angle/2;
+  
+  vector<double> leftPart { cos(halfAngle), sin(halfAngle) };
+  leftPart = scaleVector(leftPart,size);
+  
+  vector<double> rightPart { cos(halfAngle), -sin(halfAngle) };
+  rightPart = scaleVector(rightPart,size);
+  
+  auto leftPartTarget = addVectors(start,leftPart);
+  auto rightPartTarget = addVectors(start,rightPart);
+  
+  auto halfBack =
+    scaleVector(subVectors(leftPartTarget,
+                           rightPartTarget),
+                0.5);
+  
+  auto tail =
+    scaleVector(norm(normalVector(halfBack)),
+                lineSegment);
+
+  auto midBack = addVectors(rightPartTarget,halfBack);
+  
+  auto finalTarget = addVectors(midBack,tail);
+  
+  
+  std::vector<std::array<sf::Vertex,2>> lines;
+  
+  std::array<sf::Vertex,2> leftPartLine = {
+    sf::Vertex(sf::Vector2f(start.at(0), start.at(1))),
+    sf::Vertex(sf::Vector2f(leftPartTarget.at(0), leftPartTarget.at(1)))
+  };
+  
+  std::array<sf::Vertex,2> rightPartLine = {
+    sf::Vertex(sf::Vector2f(start.at(0), start.at(1))),
+    sf::Vertex(sf::Vector2f(rightPartTarget.at(0), rightPartTarget.at(1)))
+  };
+  
+  std::array<sf::Vertex,2> backLine = {
+    sf::Vertex(sf::Vector2f(leftPartTarget.at(0), leftPartTarget.at(1))),
+    sf::Vertex(sf::Vector2f(rightPartTarget.at(0), rightPartTarget.at(1)))
+  };
+  
+  std::array<sf::Vertex,2> tailLine = {
+    sf::Vertex(sf::Vector2f(midBack.at(0), midBack.at(1))),
+    sf::Vertex(sf::Vector2f(finalTarget.at(0), finalTarget.at(1)))
+  };
+  
+  lines.push_back(leftPartLine);
+  lines.push_back(rightPartLine);
+  lines.push_back(backLine);
+  lines.push_back(tailLine);
+  
+  
+  renderLines(lines);
+  
+}
+
+void drawKite(double lineSegment, double height, double width){
+  
+}
+
+void drawShape(int index){
+  
+  switch(index){
     
-    
-    
-    
+    case 1:
+      
+      createA(200, // leg length
+          1.7, // angle at top (radians)
+          0.45, // serif proportion (0-1)
+          0.5, // crossbar proportion (0-1)
+          0.4, // crossbar position, larger=lower (0-1)
+          0.5, // serif align (0-1)
+          0.5); // crossbar align, left/right/center (0-1)
+          
+      break;
+      
+    case 2:
+      
+      drawCurvedPath(std::vector<double>({200,250}), // end point
+                 std::vector<double>({200,20}), // current point
+                 1, // speed
+                 2.2, // normal proportion(larger = more curved)
+                 5.5); // time step(larger = earlier and bigger last step)
+      break;
+      
+    case 3:
+      
+      drawMadPath(std::vector<double>({400,250}),
+              std::vector<double>({200,20}),
+              2, // current alpha
+              4.5, // speed
+              6.32, // alpha speed
+              4.5); // time step
+      
+      break;
+      
+    case 4:
+      
+      drawArrowhead(200, // line segment
+                150, // size
+                0.5); // angle
+      
+      break;
+      
+    default:
+      
+      std::cout << "Wrong index\n";
+      
+      break;
+      
   }
   
 }

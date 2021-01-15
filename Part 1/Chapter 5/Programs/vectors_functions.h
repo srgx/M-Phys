@@ -91,4 +91,10 @@ double intersection(const std::vector<double> & a,
                     const std::vector<double> & d);
 
 
+void drawArrowhead(double lineSegment,double size, double angle);
+
+void drawKite(double lineSegment, double height, double width);
+
+void drawShape(int index);
+
 #endif

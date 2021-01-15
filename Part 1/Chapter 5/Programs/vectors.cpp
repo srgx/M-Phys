@@ -172,39 +172,12 @@ int main(){
   // Intersection at 2/3 of line (a-b)
   assert(std::abs(intrsc-(2.0/3))<d);
   
-  std::cout << "Exit\n";
+  // 1 - Letter A
+  // 2 - Curved path
+  // 3 - Mad path
+  // 4 - Arrowhead
+  drawShape(4);
   
   return 0;
-  
-  // -----------------------------------------------------------
-  
-  
-  drawMadPath(std::vector<double>({400,250}),
-              std::vector<double>({200,20}),
-              2, // current alpha
-              4.5, // speed
-              6.32, // alpha speed
-              4.5); // time step
-  
-  return 0;
-
-
-  // Render shapes
-  
-  drawCurvedPath(std::vector<double>({200,250}), // end point
-                 std::vector<double>({200,20}), // current point
-                 1, // speed
-                 2.2, // normal proportion(larger = more curved)
-                 5.5); // time step(larger = earlier and bigger last step)
-  
-  //return 0;
-
-  createA(200, // leg length
-          1.7, // angle at top (radians)
-          0.45, // serif proportion (0-1)
-          0.5, // crossbar proportion (0-1)
-          0.4, // crossbar position, larger=lower (0-1)
-          0.5, // serif align (0-1)
-          0.5); // crossbar align, left/right/center (0-1)
 
 }
