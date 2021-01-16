@@ -176,8 +176,8 @@ int main(){
   // 2 - Curved path
   // 3 - Mad path
   // 4 - Arrowhead
-  drawShape(4);
+  // 5 - Kite
+  drawShape(5);
   
-  return 0;
-
+  
 }

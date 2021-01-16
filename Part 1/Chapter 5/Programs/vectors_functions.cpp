@@ -6,9 +6,15 @@
 #include <SFML/System/Time.hpp>
 
 using std::vector;
+using std::array;
+using sf::Vertex;
+using sf::Vector2f;
+
+typedef vector<double> vecd;
+
 
 // Add vectors
-vector<double> addVectors(const vector<double> & v1, const vector<double> & v2){
+vecd addVectors(const vecd & v1, const vecd & v2){
 
   // Vectors must be the same size
   if(v1.size()!=v2.size()){
@@ -18,7 +24,7 @@ vector<double> addVectors(const vector<double> & v1, const vector<double> & v2){
 
   }else{
 
-    vector<double> vec;
+    vecd vec;
 
     // Add corresponding components together
     for(int i=0;i<v1.size();i++){
@@ -31,14 +37,14 @@ vector<double> addVectors(const vector<double> & v1, const vector<double> & v2){
 }
 
 // Subtract vectors
-vector<double> subVectors(const vector<double> & v1, const vector<double> & v2){
+vecd subVectors(const vecd & v1, const vecd & v2){
   return addVectors(v1,oppositeVector(v2));
 }
 
 
-vector<double> scaleVector(const vector<double> & vec, double scale){
+vecd scaleVector(const vecd & vec, double scale){
 
-  vector<double> nVec;
+  vecd nVec;
 
   //Scale all vector components
   for(int i=0;i<vec.size();i++){
@@ -50,7 +56,7 @@ vector<double> scaleVector(const vector<double> & vec, double scale){
 }
 
 // Length of vector
-double magnitude(const vector<double> & vec){
+double magnitude(const vecd & vec){
 
   double s = 0;
 
@@ -64,7 +70,7 @@ double magnitude(const vector<double> & vec){
 }
 
 // Normalize vector (create unit vector)
-vector<double> norm(const vector<double> & vec){
+vecd norm(const vecd & vec){
 
   double m = magnitude(vec);
 
@@ -77,14 +83,14 @@ vector<double> norm(const vector<double> & vec){
 
 }
 
-vector<double> normalVector(const vector<double> & vec){
-  return vector<double>({ vec.at(1), -vec.at(0) });
+vecd normalVector(const vecd & vec){
+  return vecd({ vec.at(1), -vec.at(0) });
 }
 
 // Angle between two vectors
-double angleBetween(const vector<double> & v1, const vector<double> & v2){
+double angleBetween(const vecd & v1, const vecd & v2){
 
-  vector<double> v3 = subVectors(v1,v2);
+  vecd v3 = subVectors(v1,v2);
   double m1 = magnitude(v1);
   double m2 = magnitude(v2);
   double m3 = magnitude(v3);
@@ -103,9 +109,9 @@ double angleBetween(const vector<double> & v1, const vector<double> & v2){
 
 }
 
-vector<double> oppositeVector(const vector<double> & vec){
+vecd oppositeVector(const vecd & vec){
 
-  vector<double> vctr;
+  vecd vctr;
 
   for(auto i=vec.begin();i!=vec.end();i++){
     vctr.push_back(-(*i));
@@ -115,7 +121,7 @@ vector<double> oppositeVector(const vector<double> & vec){
 
 }
 
-double determinant(const vector<vector<double>> & array){
+double determinant(const vector<vecd> & array){
 
   int size = array.size();
 
@@ -135,9 +141,9 @@ double determinant(const vector<vector<double>> & array){
 
       // New matrix consists of remaining rows
       // without values at current index (i).
-      vector<vector<double>> newmatrix;
+      vector<vecd> newmatrix;
       for(int j=1;j<size;j++){
-       vector<double> row = array.at(j);
+       vecd row = array.at(j);
        row.erase(row.begin()+i);
        newmatrix.push_back(row);
       }
@@ -174,9 +180,9 @@ double determinant(const vector<vector<double>> & array){
 
 }
 
-std::array<vector<double>,4> constructSquare(const vector<double> & a, const vector<double> & b){
+array<vecd,4> constructSquare(const vecd & a, const vecd & b){
 
-  std::array<vector<double>,4> result;
+  array<vecd,4> result;
 
   // A
   result.at(0) = a;
@@ -200,9 +206,9 @@ std::array<vector<double>,4> constructSquare(const vector<double> & a, const vec
   return result;
 }
 
-std::array<vector<double>,3> constructEquilateralTriangle(const vector<double> & a, const vector<double> & b){
+array<vecd,3> constructEquilateralTriangle(const vecd & a, const vecd & b){
 
-  std::array<vector<double>,3> result;
+  array<vecd,3> result;
 
   // A
   result.at(0) = a;
@@ -233,7 +239,7 @@ void createA(double legLength, double angleAtTop, double serifProp,
              double crossbarAlign){
 
   // Starting position
-  vector<double> start { 450, 50 };
+  vecd start { 450, 50 };
 
 
   // Legs
@@ -241,11 +247,11 @@ void createA(double legLength, double angleAtTop, double serifProp,
     double halfAngle = angleAtTop/2;
 
     // Left leg vector
-    vector<double> leftLeg { -sin(halfAngle), cos(halfAngle) };
+    vecd leftLeg { -sin(halfAngle), cos(halfAngle) };
     leftLeg = scaleVector(leftLeg,legLength);
 
     // Right leg vector
-    vector<double> rightLeg { -leftLeg.at(0), leftLeg.at(1) };
+    vecd rightLeg { -leftLeg.at(0), leftLeg.at(1) };
 
     // Absolute leg positions
     auto leftLegTarget = addVectors(start,leftLeg);
@@ -255,11 +261,11 @@ void createA(double legLength, double angleAtTop, double serifProp,
   // Crossbar
 
     // Vectors to crossbar points (max width)
-    vector<double> crossbarStart = scaleVector(leftLeg,crossbarHeight);
-    vector<double> crossbarEnd = scaleVector(rightLeg,crossbarHeight);
+    vecd crossbarStart = scaleVector(leftLeg,crossbarHeight);
+    vecd crossbarEnd = scaleVector(rightLeg,crossbarHeight);
 
     // Crossbar vector left->right (max width)
-    vector<double> crossbar =
+    vecd crossbar =
       scaleVector(subVectors(crossbarEnd,crossbarStart),
                   crossbarProp);
 
@@ -278,10 +284,10 @@ void createA(double legLength, double angleAtTop, double serifProp,
   // Serif
 
     // Serif vector
-    vector<double> serif = scaleVector(subVectors(rightLeg,leftLeg),serifProp);
+    vecd serif = scaleVector(subVectors(rightLeg,leftLeg),serifProp);
 
     // Serif offset
-    vector<double> serifOffset = scaleVector(serif,serifAlign);
+    vecd serifOffset = scaleVector(serif,serifAlign);
 
     // Left serif
     auto leftSerifBeg = subVectors(leftLegTarget,serifOffset);
@@ -295,36 +301,36 @@ void createA(double legLength, double angleAtTop, double serifProp,
 
   // Create lines
 
-    std::array<sf::Vertex,2> leftLegLine = {
-      sf::Vertex(sf::Vector2f(start.at(0), start.at(1))),
-      sf::Vertex(sf::Vector2f(leftLegTarget.at(0), leftLegTarget.at(1)))
+    array<Vertex,2> leftLegLine = {
+      Vertex(Vector2f(start.at(0), start.at(1))),
+      Vertex(Vector2f(leftLegTarget.at(0), leftLegTarget.at(1)))
     };
 
-    std::array<sf::Vertex,2> rightLegLine = {
-      sf::Vertex(sf::Vector2f(start.at(0), start.at(1))),
-      sf::Vertex(sf::Vector2f(rightLegTarget.at(0), rightLegTarget.at(1)))
+    array<Vertex,2> rightLegLine = {
+      Vertex(Vector2f(start.at(0), start.at(1))),
+      Vertex(Vector2f(rightLegTarget.at(0), rightLegTarget.at(1)))
     };
 
-    std::array<sf::Vertex,2> crossbarLine = {
-      sf::Vertex(sf::Vector2f(crossbarStartTarget.at(0), crossbarStartTarget.at(1))),
-      sf::Vertex(sf::Vector2f(crossbarEndTarget.at(0), crossbarEndTarget.at(1))),
+    array<Vertex,2> crossbarLine = {
+      Vertex(Vector2f(crossbarStartTarget.at(0), crossbarStartTarget.at(1))),
+      Vertex(Vector2f(crossbarEndTarget.at(0), crossbarEndTarget.at(1))),
     };
 
-    std::array<sf::Vertex,2> leftSerifLine = {
-      sf::Vertex(sf::Vector2f(leftSerifBeg.at(0), leftSerifBeg.at(1))),
-      sf::Vertex(sf::Vector2f(leftSerifEnd.at(0), leftSerifEnd.at(1))),
+    array<Vertex,2> leftSerifLine = {
+      Vertex(Vector2f(leftSerifBeg.at(0), leftSerifBeg.at(1))),
+      Vertex(Vector2f(leftSerifEnd.at(0), leftSerifEnd.at(1))),
     };
 
-    std::array<sf::Vertex,2> rightSerifLine = {
-      sf::Vertex(sf::Vector2f(rightSerifBeg.at(0), rightSerifBeg.at(1))),
-      sf::Vertex(sf::Vector2f(rightSerifEnd.at(0), rightSerifEnd.at(1))),
+    array<Vertex,2> rightSerifLine = {
+      Vertex(Vector2f(rightSerifBeg.at(0), rightSerifBeg.at(1))),
+      Vertex(Vector2f(rightSerifEnd.at(0), rightSerifEnd.at(1))),
     };
 
 
 
   // Render lines
   
-    std::vector<std::array<sf::Vertex,2>> lines;
+    vector<array<Vertex,2>> lines;
     
     lines.push_back(leftLegLine); lines.push_back(rightLegLine);
     lines.push_back(crossbarLine); lines.push_back(leftSerifLine);
@@ -334,7 +340,7 @@ void createA(double legLength, double angleAtTop, double serifProp,
 
 }
 
-void renderLines(const std::vector<std::array<sf::Vertex,2>> & lines){
+void renderLines(const vector<array<Vertex,2>> & lines){
   
   sf::RenderWindow wnd(sf::VideoMode(1024, 768), "Vectors", sf::Style::Close);
   wnd.setFramerateLimit(30);
@@ -380,7 +386,7 @@ void renderLines(const std::vector<std::array<sf::Vertex,2>> & lines){
     wnd.clear();
     
     for(auto pt = lines.begin(); pt!=lines.end(); pt++){
-      sf::Vertex ln [] = {(*pt).at(0),(*pt).at(1)};
+      Vertex ln [] = {(*pt).at(0),(*pt).at(1)};
       wnd.draw(ln,2,sf::Lines);
     }
 
@@ -390,8 +396,8 @@ void renderLines(const std::vector<std::array<sf::Vertex,2>> & lines){
 }
 
 
-std::vector<double> curvedPath(const std::vector<double> & endPoint,
-                              const std::vector<double> & currentPoint, double speed,
+vecd curvedPath(const vecd & endPoint,
+                              const vecd & currentPoint, double speed,
                               double normalProportion, double timeStep){
   
   auto radius = subVectors(endPoint,currentPoint);
@@ -419,12 +425,12 @@ std::vector<double> curvedPath(const std::vector<double> & endPoint,
   
 }
 
-void drawCurvedPath(const std::vector<double> & endPoint,
-                    const std::vector<double> & currentPoint, double speed,
+void drawCurvedPath(const vecd & endPoint,
+                    const vecd & currentPoint, double speed,
                     double normalProportion, double timeStep){
   
   
-  std::vector<std::array<sf::Vertex,2>> lines;
+  vector<array<Vertex,2>> lines;
   
   auto cp = currentPoint; auto lastPoint = cp;
   
@@ -433,7 +439,7 @@ void drawCurvedPath(const std::vector<double> & endPoint,
     
     cp = curvedPath(endPoint,cp,speed,normalProportion,timeStep);
     
-    auto arr = std::array<sf::Vertex,2>({sf::Vertex(sf::Vector2f(lastPoint.at(0), lastPoint.at(1))),sf::Vertex(sf::Vector2f(cp.at(0), cp.at(1)))});
+    auto arr = array<Vertex,2>({Vertex(Vector2f(lastPoint.at(0), lastPoint.at(1))),Vertex(Vector2f(cp.at(0), cp.at(1)))});
     
     lastPoint = cp;
     
@@ -445,9 +451,9 @@ void drawCurvedPath(const std::vector<double> & endPoint,
   
 }
 
-std::pair<std::vector<double>,double>
-  madPath(const std::vector<double> & endPoint,
-          const std::vector<double> & currentPoint,
+std::pair<vecd,double>
+  madPath(const vecd & endPoint,
+          const vecd & currentPoint,
           double currentAlpha,
           double speed,
           double alphaSpeed,
@@ -479,14 +485,14 @@ std::pair<std::vector<double>,double>
   
 }
 
-void drawMadPath(const std::vector<double> & endPoint,
-                 const std::vector<double> & currentPoint,
+void drawMadPath(const vecd & endPoint,
+                 const vecd & currentPoint,
                  double currentAlpha,
                  double speed,
                  double alphaSpeed,
                  double timeStep){
     
-  std::vector<std::array<sf::Vertex,2>> lines;
+  vector<array<Vertex,2>> lines;
   
   auto cp = currentPoint; auto lastPoint = cp;
   
@@ -498,7 +504,7 @@ void drawMadPath(const std::vector<double> & endPoint,
     
     cp = pointAlpha.first; currentAlpha = pointAlpha.second;
     
-    auto arr = std::array<sf::Vertex,2>({sf::Vertex(sf::Vector2f(lastPoint.at(0), lastPoint.at(1))),sf::Vertex(sf::Vector2f(cp.at(0), cp.at(1)))});
+    auto arr = array<Vertex,2>({Vertex(Vector2f(lastPoint.at(0), lastPoint.at(1))),Vertex(Vector2f(cp.at(0), cp.at(1)))});
     
     lastPoint = cp; lines.push_back(arr);
     
@@ -508,8 +514,8 @@ void drawMadPath(const std::vector<double> & endPoint,
             
 }
 
-basis switchBasis(const std::vector<double> & vec,
-                 const std::vector<double> & directionVec){
+basis switchBasis(const vecd & vec,
+                 const vecd & directionVec){
 
   // Unit vector
   auto basis1 = norm(directionVec);
@@ -539,8 +545,8 @@ basis switchBasis(const std::vector<double> & vec,
   
 }
 
-double component(const std::vector<double> & vec,
-                const std::vector<double> & directionVec){
+double component(const vecd & vec,
+                const vecd & directionVec){
   
   auto alpha = atan2(directionVec.at(1),directionVec.at(0));
   auto theta = atan2(vec.at(1),vec.at(0));
@@ -551,8 +557,8 @@ double component(const std::vector<double> & vec,
   
 }
 
-std::vector<double> componentVector(const std::vector<double> & vec,
-                                   const std::vector<double> & directionVec){
+vecd componentVector(const vecd & vec,
+                                   const vecd & directionVec){
   
   auto v = norm(directionVec);
   
@@ -560,10 +566,10 @@ std::vector<double> componentVector(const std::vector<double> & vec,
   
 }
 
-std::vector<double> intersectionPoint(const std::vector<double> & a,
-                                      const std::vector<double> & b,
-                                      const std::vector<double> & c,
-                                      const std::vector<double> & d){
+vecd intersectionPoint(const vecd & a,
+                                      const vecd & b,
+                                      const vecd & c,
+                                      const vecd & d){
   
   auto tc1 = b.at(0)-a.at(0);
   auto tc2 = b.at(1)-a.at(1);
@@ -578,7 +584,7 @@ std::vector<double> intersectionPoint(const std::vector<double> & a,
   
   if(det==0){
     // No unique solution
-    return std::vector<double>({});
+    return vecd({});
   } else {
     auto con = tc2*con1-tc1*con2;
     auto s = con/det;
@@ -592,10 +598,10 @@ std::vector<double> intersectionPoint(const std::vector<double> & a,
 
 
 // Point1, Vector1, Point2, Vector2
-double intersectionTime(std::vector<double> p1,
-                        std::vector<double> v1,
-                        std::vector<double> p2,
-                        std::vector<double> v2){
+double intersectionTime(vecd p1,
+                        vecd v1,
+                        vecd p2,
+                        vecd v2){
 
   auto tc1 = v1.at(0);
   auto tc2 = v1.at(1);
@@ -619,10 +625,10 @@ double intersectionTime(std::vector<double> p1,
   
 }
 
-double intersection(const std::vector<double> & a,
-                    const std::vector<double> & b,
-                    const std::vector<double> & c,
-                    const std::vector<double> & d){
+double intersection(const vecd & a,
+                    const vecd & b,
+                    const vecd & c,
+                    const vecd & d){
 
   auto tc1 = b.at(0)-a.at(0);
   auto tc2 = b.at(1)-a.at(1);
@@ -665,14 +671,14 @@ double intersection(const std::vector<double> & a,
 
 void drawArrowhead(double lineSegment,double size, double angle){
   
-  vector<double> start { 200, 200 };
+  vecd start { 200, 200 };
 
   double halfAngle = angle/2;
   
-  vector<double> leftPart { cos(halfAngle), sin(halfAngle) };
+  vecd leftPart { cos(halfAngle), sin(halfAngle) };
   leftPart = scaleVector(leftPart,size);
   
-  vector<double> rightPart { cos(halfAngle), -sin(halfAngle) };
+  vecd rightPart { cos(halfAngle), -sin(halfAngle) };
   rightPart = scaleVector(rightPart,size);
   
   auto leftPartTarget = addVectors(start,leftPart);
@@ -692,26 +698,26 @@ void drawArrowhead(double lineSegment,double size, double angle){
   auto finalTarget = addVectors(midBack,tail);
   
   
-  std::vector<std::array<sf::Vertex,2>> lines;
+  vector<array<Vertex,2>> lines;
   
-  std::array<sf::Vertex,2> leftPartLine = {
-    sf::Vertex(sf::Vector2f(start.at(0), start.at(1))),
-    sf::Vertex(sf::Vector2f(leftPartTarget.at(0), leftPartTarget.at(1)))
+  array<Vertex,2> leftPartLine = {
+    Vertex(Vector2f(start.at(0), start.at(1))),
+    Vertex(Vector2f(leftPartTarget.at(0), leftPartTarget.at(1)))
   };
   
-  std::array<sf::Vertex,2> rightPartLine = {
-    sf::Vertex(sf::Vector2f(start.at(0), start.at(1))),
-    sf::Vertex(sf::Vector2f(rightPartTarget.at(0), rightPartTarget.at(1)))
+  array<Vertex,2> rightPartLine = {
+    Vertex(Vector2f(start.at(0), start.at(1))),
+    Vertex(Vector2f(rightPartTarget.at(0), rightPartTarget.at(1)))
   };
   
-  std::array<sf::Vertex,2> backLine = {
-    sf::Vertex(sf::Vector2f(leftPartTarget.at(0), leftPartTarget.at(1))),
-    sf::Vertex(sf::Vector2f(rightPartTarget.at(0), rightPartTarget.at(1)))
+  array<Vertex,2> backLine = {
+    Vertex(Vector2f(leftPartTarget.at(0), leftPartTarget.at(1))),
+    Vertex(Vector2f(rightPartTarget.at(0), rightPartTarget.at(1)))
   };
   
-  std::array<sf::Vertex,2> tailLine = {
-    sf::Vertex(sf::Vector2f(midBack.at(0), midBack.at(1))),
-    sf::Vertex(sf::Vector2f(finalTarget.at(0), finalTarget.at(1)))
+  array<Vertex,2> tailLine = {
+    Vertex(Vector2f(midBack.at(0), midBack.at(1))),
+    Vertex(Vector2f(finalTarget.at(0), finalTarget.at(1)))
   };
   
   lines.push_back(leftPartLine);
@@ -724,7 +730,103 @@ void drawArrowhead(double lineSegment,double size, double angle){
   
 }
 
-void drawKite(double lineSegment, double height, double width){
+void drawKite(double lineSegment, double height, double width, double angle){
+  
+  
+  // Main part
+  
+    const vecd start { 200, 300 }; const vecd main { height, 0 };
+    
+    const auto rightEnd = addVectors(start,main);
+      
+    const auto toMid = scaleVector(main,1.0/3);
+    
+    const auto midPoint = addVectors(start,toMid);
+
+    const auto vert = scaleVector(norm(normalVector(toMid)),width);
+    
+    const auto vertStart = addVectors(midPoint,scaleVector(vert,0.5));
+    
+    const auto vertTarget = addVectors(vertStart,oppositeVector(vert));
+    
+  // Tail
+        
+    const auto tailDown =
+      scaleVector({ cos(angle), sin(angle) },
+                  lineSegment);
+    
+    const auto tailUp =
+      scaleVector({ cos(angle), -sin(angle) },
+                  lineSegment);
+    
+    const auto tailTarget1 = addVectors(rightEnd,tailDown);
+    const auto tailTarget2 = addVectors(tailTarget1,tailUp);
+    const auto tailTarget3 = addVectors(tailTarget2,tailDown);
+    
+  
+  vector<array<Vertex,2>> lines;
+  
+  array<Vertex,2> mainLine = {
+    Vertex(Vector2f(start.at(0), start.at(1))),
+    Vertex(Vector2f(rightEnd.at(0), rightEnd.at(1)))
+  };
+  
+  array<Vertex,2> verticalLine = {
+    Vertex(Vector2f(vertStart.at(0), vertStart.at(1))),
+    Vertex(Vector2f(vertTarget.at(0), vertTarget.at(1)))
+  };
+  
+  array<Vertex,2> topRight = {
+    Vertex(Vector2f(start.at(0), start.at(1))),
+    Vertex(Vector2f(vertStart.at(0), vertStart.at(1)))
+  };
+  
+  array<Vertex,2> topLeft = {
+    Vertex(Vector2f(start.at(0), start.at(1))),
+    Vertex(Vector2f(vertTarget.at(0), vertTarget.at(1)))
+  };
+  
+  array<Vertex,2> botRight = {
+    Vertex(Vector2f(vertStart.at(0), vertStart.at(1))),
+    Vertex(Vector2f(rightEnd.at(0), rightEnd.at(1)))
+  };
+  
+  array<Vertex,2> botLeft = {
+    Vertex(Vector2f(vertTarget.at(0), vertTarget.at(1))),
+    Vertex(Vector2f(rightEnd.at(0), rightEnd.at(1)))
+  };
+  
+  
+  array<Vertex,2> tailA = {
+    Vertex(Vector2f(rightEnd.at(0), rightEnd.at(1))),
+    Vertex(Vector2f(tailTarget1.at(0), tailTarget1.at(1)))
+  };
+  
+  array<Vertex,2> tailB = {
+    Vertex(Vector2f(tailTarget1.at(0), tailTarget1.at(1))),
+    Vertex(Vector2f(tailTarget2.at(0), tailTarget2.at(1)))
+  };
+  
+  array<Vertex,2> tailC = {
+    Vertex(Vector2f(tailTarget2.at(0), tailTarget2.at(1))),
+    Vertex(Vector2f(tailTarget3.at(0), tailTarget3.at(1)))
+  };
+  
+  
+  lines.push_back(mainLine);
+  lines.push_back(verticalLine);
+  
+  lines.push_back(topRight);
+  lines.push_back(topLeft);
+  
+  lines.push_back(botRight);
+  lines.push_back(botLeft);
+  
+  lines.push_back(tailA);
+  lines.push_back(tailB);
+  lines.push_back(tailC);
+  
+  renderLines(lines);
   
 }
 
@@ -735,42 +837,49 @@ void drawShape(int index){
     case 1:
       
       createA(200, // leg length
-          1.7, // angle at top (radians)
-          0.45, // serif proportion (0-1)
-          0.5, // crossbar proportion (0-1)
-          0.4, // crossbar position, larger=lower (0-1)
-          0.5, // serif align (0-1)
-          0.5); // crossbar align, left/right/center (0-1)
+              1.7, // angle at top (radians)
+              0.45, // serif proportion (0-1)
+              0.5, // crossbar proportion (0-1)
+              0.4, // crossbar position, larger=lower (0-1)
+              0.5, // serif align (0-1)
+              0.5); // crossbar align, left/right/center (0-1)
           
       break;
       
     case 2:
       
-      drawCurvedPath(std::vector<double>({200,250}), // end point
-                 std::vector<double>({200,20}), // current point
-                 1, // speed
-                 2.2, // normal proportion(larger = more curved)
-                 5.5); // time step(larger = earlier and bigger last step)
+      drawCurvedPath(vecd({200,250}), // end point
+                     vecd({200,20}), // current point
+                     1, // speed
+                     2.2, // normal proportion(larger = more curved)
+                     5.5); // time step(larger = earlier and bigger last step)
       break;
       
     case 3:
       
-      drawMadPath(std::vector<double>({400,250}),
-              std::vector<double>({200,20}),
-              2, // current alpha
-              4.5, // speed
-              6.32, // alpha speed
-              4.5); // time step
+      drawMadPath(vecd({400,250}),
+                  vecd({200,20}),
+                  2, // current alpha
+                  4.5, // speed
+                  6.32, // alpha speed
+                  4.5); // time step
       
       break;
       
     case 4:
       
       drawArrowhead(200, // line segment
-                150, // size
-                0.5); // angle
+                    150, // size
+                    0.5); // angle
       
       break;
+      
+    case 5:
+      
+      drawKite(110, // line segment
+               225, // height
+               135, // width
+               0.22); // angle
       
     default:
       

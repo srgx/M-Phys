@@ -93,7 +93,7 @@ double intersection(const std::vector<double> & a,
 
 void drawArrowhead(double lineSegment,double size, double angle);
 
-void drawKite(double lineSegment, double height, double width);
+void drawKite(double lineSegment, double height, double width, double angle);
 
 void drawShape(int index);
 
