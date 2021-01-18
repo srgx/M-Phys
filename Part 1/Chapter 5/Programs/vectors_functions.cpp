@@ -830,6 +830,121 @@ void drawKite(double lineSegment, double height, double width, double angle){
   
 }
 
+void drawCube(double side, double angle, double depth){
+  
+  // A1
+  const vecd start { 200, 300 };
+  
+  // Horizontal vector
+  const vecd hori { side, 0 };
+  
+  // Vertical vector
+  const vecd veri = normalVector(hori);
+  
+  // Diagonal vector
+  vecd diagv ({ cos(angle), -sin(angle) });
+  diagv = scaleVector(diagv,depth);
+  
+  const auto b1 = addVectors(start,hori);
+  
+  const auto c1 = addVectors(b1,veri);
+  
+  const auto d1 = addVectors(start,veri);
+  
+  const auto a2 = addVectors(start,diagv);
+  
+  const auto b2 = addVectors(b1,diagv);
+  
+  const auto c2 = addVectors(c1,diagv);
+  
+  const auto d2 = addVectors(d1,diagv);
+  
+  vector<array<Vertex,2>> lines;
+  
+  array<Vertex,2> ab = {
+    Vertex(Vector2f(start.at(0), start.at(1))),
+    Vertex(Vector2f(b1.at(0), b1.at(1)))
+  };
+  
+  array<Vertex,2> bc = {
+    Vertex(Vector2f(b1.at(0), b1.at(1))),
+    Vertex(Vector2f(c1.at(0), c1.at(1)))
+  };
+  
+  array<Vertex,2> cd = {
+    Vertex(Vector2f(c1.at(0), c1.at(1))),
+    Vertex(Vector2f(d1.at(0), d1.at(1)))
+  };
+  
+  array<Vertex,2> ad = {
+    Vertex(Vector2f(start.at(0), start.at(1))),
+    Vertex(Vector2f(d1.at(0), d1.at(1)))
+  };
+  
+  array<Vertex,2> aa2 = {
+    Vertex(Vector2f(start.at(0), start.at(1))),
+    Vertex(Vector2f(a2.at(0), a2.at(1)))
+  };
+  
+  array<Vertex,2> bb2 = {
+    Vertex(Vector2f(b1.at(0), b1.at(1))),
+    Vertex(Vector2f(b2.at(0), b2.at(1)))
+  };
+  
+  array<Vertex,2> cc2 = {
+    Vertex(Vector2f(c1.at(0), c1.at(1))),
+    Vertex(Vector2f(c2.at(0), c2.at(1)))
+  };
+  
+  array<Vertex,2> dd2 = {
+    Vertex(Vector2f(d1.at(0), d1.at(1))),
+    Vertex(Vector2f(d2.at(0), d2.at(1)))
+  };
+  
+  array<Vertex,2> a2b2 = {
+    Vertex(Vector2f(a2.at(0), a2.at(1))),
+    Vertex(Vector2f(b2.at(0), b2.at(1)))
+  };
+  
+  array<Vertex,2> b2c2 = {
+    Vertex(Vector2f(b2.at(0), b2.at(1))),
+    Vertex(Vector2f(c2.at(0), c2.at(1)))
+  };
+  
+  array<Vertex,2> c2d2 = {
+    Vertex(Vector2f(c2.at(0), c2.at(1))),
+    Vertex(Vector2f(d2.at(0), d2.at(1)))
+  };
+  
+  array<Vertex,2> d2a2 = {
+    Vertex(Vector2f(d2.at(0), d2.at(1))),
+    Vertex(Vector2f(a2.at(0), a2.at(1)))
+  };
+  
+  
+  // Front
+  lines.push_back(ab);
+  lines.push_back(bc);
+  lines.push_back(cd);
+  lines.push_back(ad);
+  
+  // Diagonal
+  lines.push_back(aa2);
+  lines.push_back(bb2);
+  lines.push_back(cc2);
+  lines.push_back(dd2);
+  
+  // Back
+  lines.push_back(a2b2);
+  lines.push_back(b2c2);
+  lines.push_back(c2d2);
+  lines.push_back(d2a2);
+  
+  
+  renderLines(lines);
+  
+}
+
 void drawShape(int index){
   
   switch(index){
@@ -885,9 +1000,9 @@ void drawShape(int index){
       
     case 6:
       
-      drawCube(100,
-               1,
-               100);
+      drawCube(100, // side
+               0.35, // angle
+               60); // depth
       
       break;
       
@@ -901,63 +1016,5 @@ void drawShape(int index){
   
 }
 
-void drawCube(double side, double angle, double depth){
-  
-  std::cout << "Drawing cube\n";
-  
-  
-  // A
-  const vecd start { 200, 300 };
-  
-  
-  // Horizontal vector
-  const vecd hori { side, 0 };
-  
-  // Vertical vector
-  const vecd veri = normalVector(hori);
-  
-  // B
-  const auto b1 = addVectors(start,hori);
-  
-  // C
-  const auto c1 = addVectors(b1,veri);
-  
-  // D
-  const auto d1 = addVectors(start,veri);
-  
-  vector<array<Vertex,2>> lines;
-  
-  
-  // A-B
-  array<Vertex,2> ab = {
-    Vertex(Vector2f(start.at(0), start.at(1))),
-    Vertex(Vector2f(b1.at(0), b1.at(1)))
-  };
-  
-  // B-C
-  array<Vertex,2> bc = {
-    Vertex(Vector2f(b1.at(0), b1.at(1))),
-    Vertex(Vector2f(c1.at(0), c1.at(1)))
-  };
-  
-  // C-D
-  array<Vertex,2> cd = {
-    Vertex(Vector2f(c1.at(0), c1.at(1))),
-    Vertex(Vector2f(d1.at(0), d1.at(1)))
-  };
-  
-  // A-D
-  array<Vertex,2> ad = {
-    Vertex(Vector2f(start.at(0), start.at(1))),
-    Vertex(Vector2f(d1.at(0), d1.at(1)))
-  };
-  
-  lines.push_back(ab);
-  lines.push_back(bc);
-  lines.push_back(cd);
-  lines.push_back(ad);
-  
-  renderLines(lines);
-  
-}
+
 
