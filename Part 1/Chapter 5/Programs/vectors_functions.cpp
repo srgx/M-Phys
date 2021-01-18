@@ -881,6 +881,16 @@ void drawShape(int index){
                135, // width
                0.22); // angle
       
+      break;
+      
+    case 6:
+      
+      drawCube(100,
+               1,
+               100);
+      
+      break;
+      
     default:
       
       std::cout << "Wrong index\n";
@@ -888,6 +898,66 @@ void drawShape(int index){
       break;
       
   }
+  
+}
+
+void drawCube(double side, double angle, double depth){
+  
+  std::cout << "Drawing cube\n";
+  
+  
+  // A
+  const vecd start { 200, 300 };
+  
+  
+  // Horizontal vector
+  const vecd hori { side, 0 };
+  
+  // Vertical vector
+  const vecd veri = normalVector(hori);
+  
+  // B
+  const auto b1 = addVectors(start,hori);
+  
+  // C
+  const auto c1 = addVectors(b1,veri);
+  
+  // D
+  const auto d1 = addVectors(start,veri);
+  
+  vector<array<Vertex,2>> lines;
+  
+  
+  // A-B
+  array<Vertex,2> ab = {
+    Vertex(Vector2f(start.at(0), start.at(1))),
+    Vertex(Vector2f(b1.at(0), b1.at(1)))
+  };
+  
+  // B-C
+  array<Vertex,2> bc = {
+    Vertex(Vector2f(b1.at(0), b1.at(1))),
+    Vertex(Vector2f(c1.at(0), c1.at(1)))
+  };
+  
+  // C-D
+  array<Vertex,2> cd = {
+    Vertex(Vector2f(c1.at(0), c1.at(1))),
+    Vertex(Vector2f(d1.at(0), d1.at(1)))
+  };
+  
+  // A-D
+  array<Vertex,2> ad = {
+    Vertex(Vector2f(start.at(0), start.at(1))),
+    Vertex(Vector2f(d1.at(0), d1.at(1)))
+  };
+  
+  lines.push_back(ab);
+  lines.push_back(bc);
+  lines.push_back(cd);
+  lines.push_back(ad);
+  
+  renderLines(lines);
   
 }
 

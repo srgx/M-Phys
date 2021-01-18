@@ -177,7 +177,8 @@ int main(){
   // 3 - Mad path
   // 4 - Arrowhead
   // 5 - Kite
-  drawShape(5);
+  // 6 - Cube
+  drawShape(6);
   
   
 }

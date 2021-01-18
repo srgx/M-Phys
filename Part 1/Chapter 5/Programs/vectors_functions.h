@@ -97,4 +97,6 @@ void drawKite(double lineSegment, double height, double width, double angle);
 
 void drawShape(int index);
 
+void drawCube(double side, double angle, double depth);
+
 #endif
