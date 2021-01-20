@@ -37,4 +37,9 @@ std::pair<std::string,int> onlyMulDiv(const std::string & str,int index);
 std::string expo(const std::string & str);
 std::string onlyExpo(const std::string & str);
 
+std::string groupTerms(const std::string & str);
+
+int countX(const std::string & str);
+int countNums(const std::string & str);
+
 #endif

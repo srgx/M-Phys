@@ -485,3 +485,121 @@ int findLastParenIndex(const std::string & str, int index){
   return index;
 
 }
+
+
+// -----------------------------------------------------------------------
+
+// Count x terms
+int countX(const std::string & str){
+  
+  int count = 0; int len = str.length();
+  
+  for(int i=0;i<len;i++){
+    
+    char c = str.at(i);
+    
+    if('x'==c){
+      
+      // First character is x
+      if(0==i){
+        count++;
+      } else {
+        
+        std::string coef; int ind = i;
+        char z;
+        
+        while((--ind)>=0 && std::isdigit(z=str.at(ind))){
+          coef.push_back(z);
+        }
+        
+        reverse(coef.begin(), coef.end());
+        
+        int n = stoi(coef);
+  
+        count += ind>=0&&z=='-' ? -n : n;
+        
+      }
+      
+    }
+    
+  }
+  
+  return count;
+  
+}
+
+int countNums(const std::string & str){
+  
+  int count = 0; int len = str.length();
+  
+  string currentNumString; bool plus = true;
+  char c;
+  
+  for(int i=0;i<len;i++){
+    
+    c = str.at(i);
+    
+    if(std::isdigit(c)){
+      
+      currentNumString.push_back(c);
+      
+    }else if('x'==c){
+      
+      currentNumString.clear();
+      
+    }else if('+'==c){
+      
+      if(!currentNumString.empty()){
+      
+        int cNum = stoi(currentNumString);
+        currentNumString.clear();
+        
+        count += plus ? cNum : -cNum;
+
+      }
+      
+      plus = true;
+      
+    }else if('-'==c){
+      
+      if(!currentNumString.empty()){
+      
+        int cNum = stoi(currentNumString);
+        currentNumString.clear();
+        
+        count += plus ? cNum : -cNum;
+
+      }
+      
+      plus = false;
+      
+    }
+    
+  }
+  
+  if(!currentNumString.empty()){
+    
+    int cNum = stoi(currentNumString);
+    
+    count += plus ? cNum : -cNum;
+    
+  }
+  
+  return count;
+  
+}
+
+std::string groupTerms(const std::string & str){
+  
+  auto a = std::to_string(countX(str));
+  auto b = std::to_string(countNums(str));
+  
+  std::string equation;
+  
+  equation += a;
+  equation += "x+";
+  equation += b;
+  
+  return equation;
+    
+}
