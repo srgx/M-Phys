@@ -172,13 +172,6 @@ int main(){
   // Intersection at 2/3 of line (a-b)
   assert(std::abs(intrsc-(2.0/3))<d);
   
-  // 1 - Letter A
-  // 2 - Curved path
-  // 3 - Mad path
-  // 4 - Arrowhead
-  // 5 - Kite
-  // 6 - Cuboid
-  drawShape(6);
-  
-  
+  std::cout << "Exit\n";
+    
 }

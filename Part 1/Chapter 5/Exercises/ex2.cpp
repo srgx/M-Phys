@@ -1,8 +1,9 @@
 #include <array>
 #include <cassert>
 #include <cmath>
+#include <iostream>
 
-// g++ ex2.cpp
+// g++ ex2.cpp && ./a.out
 
 typedef std::array<float,2> arf;
 
@@ -72,6 +73,8 @@ int main(){
 
   assert(std::abs(result.stopPosition.at(0)-8)<1e-5&&
          std::abs(result.stopPosition.at(1)-15)<1e-5);
+         
+  std::cout << "Exit\n";
   
 
 }
