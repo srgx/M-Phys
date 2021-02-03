@@ -8,7 +8,7 @@ Solutions to exercises from book "Mathematics and Physics for Programmers", 2nd 
 
 * Letter A
 
-![Letter](https://i.imgur.com/qng5WpO.png)
+![Letter](https://i.imgur.com/9uPladh.png)
 
 * Arrow
 
@@ -16,7 +16,7 @@ Solutions to exercises from book "Mathematics and Physics for Programmers", 2nd 
 
 * Kite
 
-![Kite](https://i.imgur.com/EsPqmW1.png)
+![Kite](https://i.imgur.com/Munw10o.png)
 
 * Cuboid
 
