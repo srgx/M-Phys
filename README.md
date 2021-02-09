@@ -1,4 +1,4 @@
-# M-Phys
+# ![Logo](https://i.imgur.com/FkewpfW.png)
 
 Solutions to exercises from book "Mathematics and Physics for Programmers", 2nd Edition
 
