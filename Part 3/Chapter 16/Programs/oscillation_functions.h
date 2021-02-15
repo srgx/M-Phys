@@ -1,0 +1,4 @@
+#ifndef OSCILLATION_FUNCTIONS__H__
+#define OSCILLATION_FUNCTIONS__H__
+
+#endif
