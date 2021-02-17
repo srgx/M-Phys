@@ -2,8 +2,6 @@
 #include <cmath>
 #include "arithmetic_functions.h"
 
-// g++ arithmetic.cpp arithmetic_functions.cpp
-
 using std::vector;
 using std::array;
 

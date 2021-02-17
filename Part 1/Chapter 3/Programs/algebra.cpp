@@ -4,8 +4,6 @@
 
 using std::any_of;
 
-// g++ algebra.cpp algebra_functions.cpp ../../Chapter\ 2/Programs/arithmetic_functions.cpp
-
 int main(){
 
   // x^3 - 6x^2 + 11x - 6

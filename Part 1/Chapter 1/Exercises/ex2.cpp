@@ -4,8 +4,6 @@
 #include <cassert>
 #include "../Programs/numbers_functions.h"
 
-// g++ ex2.cpp ../Programs/numbers_functions.cpp
-
 int main(){
 
 

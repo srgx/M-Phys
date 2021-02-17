@@ -5,10 +5,6 @@
 using std::make_pair;
 using std::cout;
 
-// g++ ex2.cpp ../Programs/geometry_functions.cpp
-
-
-
 int main(){
 
   const float D = 0.1;

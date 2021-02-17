@@ -6,8 +6,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Time.hpp>
 
-// g++ -c ex3.cpp ../Programs/arithmetic_functions.cpp && g++ ex3.o arithmetic_functions.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system && ./sfml-app
-
 void processInput(sf::RenderWindow & wnd);
 
 int main(){

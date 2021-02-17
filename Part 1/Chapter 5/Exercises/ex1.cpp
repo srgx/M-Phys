@@ -1,8 +1,6 @@
 #include <iostream>
 #include "../Programs/vectors_functions.h"
 
-// g++ -c ex1.cpp ../Programs/vectors_functions.cpp && g++ ex1.o vectors_functions.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system && ./sfml-app
-
 int main(){
 
   // 1 - Letter A

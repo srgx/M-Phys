@@ -1,8 +1,6 @@
 #include <cassert>
 #include "../Programs/numbers_functions.h"
 
-// g++ ex1.cpp ../Programs/numbers_functions.cpp
-
 int main(){
 
   // Bin to Hex

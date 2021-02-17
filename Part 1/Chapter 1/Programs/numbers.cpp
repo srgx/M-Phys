@@ -2,8 +2,6 @@
 #include "numbers_functions.h"
 #include <iostream>
 
-// g++ numbers.cpp numbers_functions.cpp
-
 int main(){
 
   assert(numberToBase(69,2) == vecstr({ "1", "0", "0", "0", "1", "0", "1" }));

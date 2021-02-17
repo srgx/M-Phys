@@ -5,8 +5,6 @@
 using std::cout;
 using std::endl;
 
-// g++ ex1.cpp ../Programs/algebra_functions.cpp ../../Chapter\ 2/Programs/arithmetic_functions.cpp
-
 int main(){
 
   // Substitute variable x

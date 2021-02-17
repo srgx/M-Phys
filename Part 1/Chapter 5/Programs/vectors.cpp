@@ -5,8 +5,6 @@
 
 typedef std::vector<double> vecd;
 
-// g++ -c vectors.cpp vectors_functions.cpp && g++ vectors.o vectors_functions.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system && ./sfml-app
-
 int main(){
 
   const double mg = sqrt(109);

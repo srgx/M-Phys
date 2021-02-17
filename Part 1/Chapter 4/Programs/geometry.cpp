@@ -2,8 +2,6 @@
 #include <cmath>
 #include <cassert>
 
-// g++ geometry.cpp geometry_functions.cpp
-
 int main(){
 
   const float X = 12; const float Y = 7;

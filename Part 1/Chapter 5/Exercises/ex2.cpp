@@ -3,8 +3,6 @@
 #include <cmath>
 #include <iostream>
 
-// g++ ex2.cpp && ./a.out
-
 typedef std::array<float,2> arf;
 
 struct trdata {

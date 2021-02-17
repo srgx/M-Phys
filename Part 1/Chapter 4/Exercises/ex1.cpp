@@ -5,8 +5,6 @@
 
 using std::cout; using std::endl;
 
-// g++ ex1.cpp ../Programs/geometry_functions.cpp
-
 int main(){
 
   // 3 sides

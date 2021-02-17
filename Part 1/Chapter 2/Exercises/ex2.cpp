@@ -1,8 +1,6 @@
 #include <cassert>
 #include "../Programs/arithmetic_functions.h"
 
-// g++ ex2.cpp ../Programs/arithmetic_functions.cpp
-
 int main(){
 
   const float INITIAL_CASH = 1000;
