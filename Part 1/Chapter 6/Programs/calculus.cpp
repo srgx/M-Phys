@@ -1,5 +1,13 @@
+#include "calculus_functions.h"
 #include <iostream>
+#include <cassert>
+
+using std::cout;
 
 int main(){
-  std::cout << "Calculus\n";
+
+  cout << "Calculus\n";
+ 
+  assert(derivatives(1000));
+  
 }
