@@ -12,4 +12,6 @@ int main(){
   
   assert(groupTerms("22x+19+13x-3x-6+2+7x")=="39x+15");
   
+  std::cout << "Part 1 - Chapter 3 - Exercise 2\n";
+  
 }

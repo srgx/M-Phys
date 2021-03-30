@@ -74,5 +74,7 @@ int main(){
   assert(divBinary(vecin({ 1, 1, 0, 1, 0, 1, 1, 1 }),
                    vecin({ 1, 0, 0 })) ==
                    vecin({ 1, 1, 0, 1, 0, 1 }));
+  
+  std::cout << "Part 1 - Chapter 1 - Numbers\n";
 
 }

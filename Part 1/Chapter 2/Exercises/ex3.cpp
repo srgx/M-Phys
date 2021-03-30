@@ -148,5 +148,7 @@ int main(){
     wnd.display();
 
   }
+  
+  std::cout << "Part 1 - Chapter 2 - Exercise 3\n";
 
 }

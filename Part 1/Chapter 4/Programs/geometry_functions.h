@@ -39,6 +39,6 @@ triangleInfo solve3Sides(triangleInfo data);
 triangleInfo solve2Angles1Side(triangleInfo data,int angles);
 triangleInfo angleBetween2Sides(triangleInfo data);
 triangleInfo rightAngle2Sides(triangleInfo data);
-float thirdAngle(triangleInfo & data);
+void thirdAngle(triangleInfo & data);
 
 #endif

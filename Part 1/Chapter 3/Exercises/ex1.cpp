@@ -55,6 +55,6 @@ int main(){
   assert(substitute("2^((x-4)/(x-5))",6)==4);
   assert(substitute("2^((x-4)/(x-5))",10)==2);
   
-  std::cout << "Exit\n";
+  std::cout << "Part 1 - Chapter 3 - Exercise 1\n";
 
 }

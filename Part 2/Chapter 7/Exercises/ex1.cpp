@@ -31,6 +31,8 @@ int main(){
     
   }
   
+  std::cout << "Part 2 - Chapter 7 - Exercise 1\n";
+  
 }
 
 std::pair<std::array<float,2>,float> javelin(float throwAngle,

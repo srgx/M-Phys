@@ -386,5 +386,6 @@ int main(){
     assert(quot==arr5);
 
 
-  std::cout << "Exit\n";
+  std::cout << "Part 1 - Chapter 1 - Exercise 2\n";
+  
 }

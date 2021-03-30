@@ -1,3 +1,4 @@
+#include <iostream>
 #include <cassert>
 #include <cmath>
 #include "arithmetic_functions.h"
@@ -88,5 +89,7 @@ int main(){
   assert(mthRoot(-4096,4).error);
   assert(mthRoot(4096,4).result == 8);
   assert(mthRoot(-16807,5).result == -7);
+  
+  std::cout << "Part 1 - Chapter 2 - Arithmetic\n";
 
 }

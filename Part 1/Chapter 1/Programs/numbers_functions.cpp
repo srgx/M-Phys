@@ -206,15 +206,19 @@ vecstr convertBase(vecstr str,int base1,int base2){
 }
 
 fbits hexToBin(const string & str,const conv & table){
+  fbits result;
   for(auto it = table.begin(); it<table.end();it++){
-    if(it->first==str){ return it->second; }
+    if(it->first==str){ result = it->second; break; }
   }
+  return result;
 }
 
 string binToHex(const fbits & fb, const conv & table){
+  string result;
   for(auto it = table.begin(); it<table.end();it++){
-    if(it->second==fb){ return it->first; }
+    if(it->second==fb){ result = it->first; break; }
   }
+  return result;
 }
 
 int getExponentValue(const iefloat & arr){

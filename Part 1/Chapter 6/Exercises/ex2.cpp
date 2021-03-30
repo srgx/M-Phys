@@ -1,5 +1,5 @@
 #include <iostream>
 
 int main(){
-  std::cout << "Ex 6 2\n";
+  std::cout << "Part 1 - Chapter 6 - Exercise 2\n";
 }

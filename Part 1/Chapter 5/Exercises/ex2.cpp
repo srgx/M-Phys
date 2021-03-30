@@ -72,7 +72,7 @@ int main(){
   assert(std::abs(result.stopPosition.at(0)-8)<1e-5&&
          std::abs(result.stopPosition.at(1)-15)<1e-5);
          
-  std::cout << "Exit\n";
+  std::cout << "Part 1 - Chapter 5 - Exercise 2\n";
   
 
 }

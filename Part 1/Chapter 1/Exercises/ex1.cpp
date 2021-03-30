@@ -42,6 +42,8 @@ int main(){
 
   assert(convertBase(vecstr({ "6", "1", "2" }), 24, 33) ==
                      vecstr({ "3", "6", "17" }));
-
+  
+  
+  std::cout << "Part 1 - Chapter 1 - Exercise 1\n";
 
 }

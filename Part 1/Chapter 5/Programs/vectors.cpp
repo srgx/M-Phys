@@ -170,6 +170,6 @@ int main(){
   // Intersection at 2/3 of line (a-b)
   assert(std::abs(intrsc-(2.0/3))<d);
   
-  std::cout << "Exit\n";
+  std::cout << "Part 1 - Chapter 5 - Vectors\n";
     
 }

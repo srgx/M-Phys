@@ -234,6 +234,6 @@ int main(){
   assert(std::abs(newTriangle.at(2).second - 10)<D);
 
 
-  cout << "Exit\n";
+  std::cout << "Part 1 - Chapter 4 - Exercise 2\n";
 
 }

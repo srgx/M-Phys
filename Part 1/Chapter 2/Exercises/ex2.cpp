@@ -1,3 +1,4 @@
+#include <iostream>
 #include <cassert>
 #include "../Programs/arithmetic_functions.h"
 
@@ -15,5 +16,7 @@ int main(){
     currentAmount = compoundInterest(currentAmount,INTEREST_RATE,1);
     assert(abs(currentAmount-AMOUNTS[i])<0.01);
   }
+  
+  std::cout << "Part 1 - Chapter 2 - Exercise 2\n";
 
 }

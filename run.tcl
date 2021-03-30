@@ -1,3 +1,4 @@
+#!/usr/bin/tclsh
 
 set lbs "-lsfml-graphics -lsfml-window -lsfml-system"
 
@@ -14,11 +15,11 @@ set data "
    {arithmetic.cpp arithmetic_functions.cpp}}
 
   {{{ex1.cpp ../Programs/algebra_functions.cpp
-     ../../Chapter\ 2/Programs/arithmetic_functions.cpp}
+    ../../Chapter\\ 2/Programs/arithmetic_functions.cpp}
     {ex2.cpp ../Programs/algebra_functions.cpp
-     ../../Chapter\ 2/Programs/arithmetic_functions.cpp}}
+     ../../Chapter\\ 2/Programs/arithmetic_functions.cpp}}
    {algebra.cpp algebra_functions.cpp
-    ../../Chapter\ 2/Programs/arithmetic_functions.cpp}}
+    ../../Chapter\\ 2/Programs/arithmetic_functions.cpp}}
 
   {{{ex1.cpp ../Programs/geometry_functions.cpp}
     {ex2.cpp ../Programs/geometry_functions.cpp}}

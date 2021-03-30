@@ -98,6 +98,7 @@ float radToDeg(float rad){
 }
 
 float mytan2(float y,float x){
+  float result;
   float deg = 1;
   if(x==0&&y<0){
     deg = 90;
@@ -108,14 +109,16 @@ float mytan2(float y,float x){
   }else if(y==0&&x>=0){
     deg = -180;
   }else if(deg==1){
-    return atan(y/x);
+    result = atan(y/x);
   }else{
-    return degToRad(deg);
+    result = degToRad(deg);
   }
+  return result;
 }
 
 triangleInfo solveTriangle(const triangleInfo & data){
 
+  triangleInfo result;
   int sides = countSides(data); int angles = countAngles(data);
 
   // Complete solution
@@ -141,10 +144,12 @@ triangleInfo solveTriangle(const triangleInfo & data){
   }else{
 
     if(2==angles){
-      auto dt = data; thirdAngle(dt); return dt;
+      result = data; thirdAngle(result);
     }
 
   }
+  
+  return result;
 
 }
 
@@ -213,7 +218,7 @@ triangleInfo solve3Sides(triangleInfo data){
 
 }
 
-float thirdAngle(triangleInfo & data){
+void thirdAngle(triangleInfo & data){
 
   float sum = 0; int angleIndex;
 

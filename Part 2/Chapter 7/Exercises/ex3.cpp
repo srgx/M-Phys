@@ -22,6 +22,8 @@ int main(){
   cout << "Speed of cannonball: " << speed.at(0) << endl;
   cout << "Speed of cannon: " << speed.at(1) << endl;
   
+  std::cout << "Part 2 - Chapter 7 - Exercise 3\n";
+  
 }
 
 arrf fireCannon(float massOfBall,

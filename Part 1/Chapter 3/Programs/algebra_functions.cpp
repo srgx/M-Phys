@@ -7,19 +7,21 @@
 using std::string;
 
 bool isParExp(const std::string & str){
+  bool result;
   if('('==str.at(0)){
     return true;
   }else{
     for(int i=0;i<str.length();i++){
       if('('==str.at(i)){
-        return true;
+        result = true; break;
       }else if(std::isdigit(str.at(i))){
         continue;
       }else{
-        return false;
+        result = false; break;
       }
     }
   }
+  return result;
 }
 
 std::string substituteX(const std::string & str,int valX){

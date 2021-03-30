@@ -1,6 +1,7 @@
 #include "algebra_functions.h"
 #include <cassert>
 #include <algorithm>
+#include <iostream>
 
 using std::any_of;
 
@@ -98,5 +99,7 @@ int main(){
   // Equation with no solution
   simres = solveSimultaneous(sim4);
   assert(!simres.success);
+  
+  std::cout << "Part 1 - Chapter 3 - Algebra\n";
 
 }

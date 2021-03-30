@@ -96,4 +96,6 @@ int main(){
            triangleInfo({ 5, 3, 4, 90, 36.87, 53.13 })));
 
 
+    std::cout << "Part 1 - Chapter 4 - Exercise 1\n";
+    
 }
