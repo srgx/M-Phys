@@ -1,6 +1,6 @@
 # ![Logo](https://i.imgur.com/FkewpfW.png)
 
-Solutions to exercises from book "Mathematics and Physics for Programmers", 2nd Edition
+Exercises and examples from book "Mathematics and Physics for Programmers", 2nd Edition
 
 * Slide rule
 

@@ -1,0 +1,5 @@
+#ifndef RESOLUTION_FUNCTIONS__H__
+#define RESOLUTION_FUNCTIONS__H__
+
+
+#endif

@@ -38,7 +38,19 @@ set data "
   {{{ex1.cpp}
     {ex2.cpp}
     {ex3.cpp}}
-   {energy.cpp energy_functions.cpp}}
+   {energy.cpp}}
+   
+  {{{ex1.cpp}
+    {ex2.cpp}}
+   {collisions.cpp}}
+   
+  {{{ex1.cpp}
+    {ex2.cpp}}
+   {resolution.cpp}}
+   
+  {{{ex1.cpp}
+    {ex2.cpp}}
+   {shapes.cpp}}
    
 "
 
