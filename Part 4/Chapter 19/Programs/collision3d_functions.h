@@ -1,0 +1,4 @@
+#ifndef COLLISION3D_FUNCTIONS__H__
+#define COLLISION3D_FUNCTIONS__H__
+
+#endif
