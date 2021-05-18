@@ -11,7 +11,7 @@ float dot3d(const vector3d & v1, const vector3d & v2){
   return (v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]);
 }
 
-std::array<float,3> unit3d(const vector3d & v){
+vector3d unit3d(const vector3d & v){
   return scale3d(v,1/magnitude3d(v));
 }
 
@@ -49,9 +49,7 @@ float linePlaneIntersection(const vector3d & linePt, const vector3d & lineVect,
     return d;
   } else {
 
-    vector3d v = { linePt[0] - planePt[0],
-                   linePt[1] - planePt[1],
-                   linePt[2] - planePt[2] };
+    vector3d v = sub3d(linePt,planePt);
 
     return dot3d(v,planeNormal)/d;
 
@@ -83,10 +81,15 @@ vector2d pos3DToScreenPos(const vector3d & pt, const vector3d & observerPos,
                           const vector3d & observerVect, const vector3d & observerUp,
                           float fov,float h){
 
+
   vector3d observerRight = crossProduct(observerUp,observerVect);
-  vector3d v = {pt[0] - observerPos[0], pt[1] - observerPos[1], pt[2] - observerPos[2]};
+
+  // From point to observer
+  vector3d v = sub3d(pt,observerPos);
+
   float z = dot3d(v,observerVect);
-  float d = h * tan(fov);
+  float d = h / tan(fov);
+
   float x = d * dot3d(v,observerRight) / z;
   float y = d * dot3d(v,observerUp) / z;
 
