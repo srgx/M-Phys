@@ -1,6 +1,7 @@
 #include <iostream>
 #include <array>
 #include <cmath>
+#include "../Programs/energy_functions.h"
 
 std::pair<std::array<float,2>,float> javelin(float throwAngle,
                                              float throwSpeed, float time);
@@ -44,8 +45,8 @@ std::pair<std::array<float,2>,float> javelin(float throwAngle,
   const float horizontal = cos(throwAngle) * throwSpeed;
   
   const float javelinX = time * horizontal;
-  const float javelinY = time * vertical + acceleration*pow(time,2)/2;
-  
+  const float javelinY = distanceAcceleration(vertical,acceleration,time);
+
   const float currentVertical = vertical + acceleration * time;
   const float currentAngle = atan2(currentVertical,horizontal);
   
