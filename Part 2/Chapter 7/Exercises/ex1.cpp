@@ -1,16 +1,15 @@
 #include <iostream>
-#include <array>
-#include <cmath>
+#include <iomanip>
 #include "../Programs/energy_functions.h"
 
-std::pair<std::array<float,2>,float> javelin(float throwAngle,
-                                             float throwSpeed, float time);
 
 using std::cout;
 using std::endl;
 
 
 int main(){
+
+  cout << std::setprecision(2);
   
   const float initialAngle { 0.8 };
   const float initialSpeed { 25 };
@@ -28,7 +27,7 @@ int main(){
     cout << result.first.at(1) << endl;
     
     cout << "  Angle: ";
-    cout << result.second << endl;
+    cout << result.second << " radians (" << radToDeg(result.second) << " degrees)" << endl;
     
   }
   
@@ -36,20 +35,3 @@ int main(){
   
 }
 
-std::pair<std::array<float,2>,float> javelin(float throwAngle,
-                                             float throwSpeed, float time){
-    
-  const float acceleration = -10;
-  
-  const float vertical = sin(throwAngle) * throwSpeed;
-  const float horizontal = cos(throwAngle) * throwSpeed;
-  
-  const float javelinX = time * horizontal;
-  const float javelinY = distanceAcceleration(vertical,acceleration,time);
-
-  const float currentVertical = vertical + acceleration * time;
-  const float currentAngle = atan2(currentVertical,horizontal);
-  
-  return std::make_pair(std::array<float,2>({ javelinX, javelinY }), currentAngle);
-  
-}

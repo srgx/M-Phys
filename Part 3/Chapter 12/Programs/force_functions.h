@@ -24,6 +24,11 @@ double gravityForce(double mass1, double mass2, double distance);
 double earthForce(double mass);
 double orbitalPeriod(double totalMass,double semiMajorAxis);
 double ellipticOrbitalSpeed(double semiMajorAxis,double distance);
+double centripetalForce(double mass, double speed, double radius);
+double rotationRadius(double mass,double period);
+double rotationSpeed(double radius, double period);
+double moveCannonBall(double currentHeight, double initialSpeed,
+                      double timePeriod, double mass);
 
 
 #endif
