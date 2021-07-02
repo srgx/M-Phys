@@ -1,5 +1,6 @@
 #ifndef FORCE_FUNCTIONS__H__
 #define FORCE_FUNCTIONS__H__
+#include <array>
 
 // Gravitational constant
 const double G = 6.67408e-11;
@@ -18,6 +19,16 @@ const double moonSemiMajorAxis = 384748e3;
 const double moonMass = 7.34767309e22;
 
 const double moonOrbitalPeriodDays = 27.3;
+
+typedef std::array<double,2> v2d;
+
+double distance(v2d a,v2d b);
+v2d mulVector(v2d vector,double value);
+v2d divVector(v2d vector,double value);
+v2d addVectors(v2d a,v2d b);
+v2d subVectors(v2d a,v2d b);
+v2d unitVector(v2d vector);
+double vectorMagnitude(v2d vector);
 
 
 double gravityForce(double mass1, double mass2, double distance);
