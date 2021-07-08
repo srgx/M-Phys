@@ -29,7 +29,16 @@ public:
 
 float circleWallCollision(const circle & cir,const wall & wal);
 float pointCircleCollision(const point & pt, const circle & cir);
+float circleCircleStraightCollision(const circle & cir1,float cir1speed,
+                                    float cir1linearPosition,
+                                    const circle & cir2,float cir2speed,
+                                    float cir2linearPosition);
+float circleCircleCollision(const circle & cir1,const circle & cir2);
+
+vf add(const vf & a,const vf & b);
 vf sub(const vf & a,const vf & b);
+vf mul(const vf & vec,float v);
+float dot(const vf & a,const vf & b);
 float intersectionTime(const vf & p1,const vf & v1,const vf & p2,const vf & v2);
 
 
