@@ -35,9 +35,7 @@ float intersectionTime(const vf & p1,const vf & v1,const vf & p2,const vf & v2){
 float circleWallCollision(const circle & cir,const wall & wal){
 
   // Wall normal (unit)
-  vf n = wal.normal();
-  float mag = sqrt(pow(n[0],2) + pow(n[1],2));
-  n = mul(n,1/mag);
+  vf n = unit(wal.normal());
 
   // Vector from circle to wall start point
   vf a = sub(wal.position,cir.position);
@@ -176,6 +174,54 @@ float circleCircleCollision(const circle & cir1,const circle & cir2){
 
 }
 
+float circleCircleInnerCollision(const circle & cir1,const circle & cir2){
+
+  vf w = sub(cir1.position,cir2.position);
+  float r = cir2.radius - cir1.radius;
+  float ww = dot(w,w);
+
+  if (ww > pow(r,2)){
+    cout << ((ww < pow(cir2.radius+cir2.radius,2)) ? "Embedded" : "Outside");
+  } else {
+    vf v = sub(cir1.displacement,cir2.displacement);
+    float a = dot(v,v); float b = dot(w,v);
+    float t = (-b + sqrt(pow(b,2) - a * (ww - pow(r,2)))) / a;
+    if (t > 1) {
+      cout << "None\n";
+    } else {
+      return t;
+    }
+  }
+
+  return -1;
+
+}
+
+bool pointInsideRectangle(const vf & pt, const vf & rectCenter,
+                          const vf & side1, const vf & side2){
+
+  vf vect = sub(pt,rectCenter);
+  return !(std::abs(component(vect,side1)) > magn(side1) ||
+           std::abs(component(vect,side2)) > magn(side2));
+
+}
+
+bool pointOnRectangle(const vf & pt, const vf & rectCenter,
+                      const vf & side1, const vf side2){
+
+  const float d = 1e-3;
+  const vf vect = sub(pt,rectCenter);
+  const float s1 = magn(side1); const float s2 = magn(side2);
+
+  return std::abs(std::abs(dot(vect,mul(side1,1/s1))) - s1) < d ||
+         std::abs(std::abs(dot(vect,mul(side2,1/s2))) - s2) < d;
+
+}
+
+float magn(const vf & vec){
+  return sqrt(pow(vec[0],2) + pow(vec[1],2));
+}
+
 vf add(const vf & a,const vf & b){
   return {a[0]+b[0],a[1]+b[1]};
 }
@@ -190,4 +236,13 @@ vf mul(const vf & vec,float v){
 
 float dot(const vf & a,const vf & b){
   return a[0]*b[0] + a[1]*b[1];
+}
+
+vf unit(const vf & vec){
+  float m = magn(vec);
+  return {vec[0]/m,vec[1]/m};
+}
+
+float component(const vf & vec, const vf & dir){
+  return dot(vec,unit(dir));
 }

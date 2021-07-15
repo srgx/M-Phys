@@ -34,12 +34,21 @@ float circleCircleStraightCollision(const circle & cir1,float cir1speed,
                                     const circle & cir2,float cir2speed,
                                     float cir2linearPosition);
 float circleCircleCollision(const circle & cir1,const circle & cir2);
+float circleCircleInnerCollision(const circle & cir1,const circle & cir2);
+
+bool pointInsideRectangle(const vf & pt, const vf & rectCenter,
+                          const vf & side1, const vf & side2);
+bool pointOnRectangle(const vf & pt, const vf & rectCenter,
+                      const vf & side1, const vf side2);
 
 vf add(const vf & a,const vf & b);
 vf sub(const vf & a,const vf & b);
 vf mul(const vf & vec,float v);
+vf unit(const vf & vec);
 float dot(const vf & a,const vf & b);
+float magn(const vf & vec);
 float intersectionTime(const vf & p1,const vf & v1,const vf & p2,const vf & v2);
+float component(const vf & vec, const vf & dir);
 
 
 
