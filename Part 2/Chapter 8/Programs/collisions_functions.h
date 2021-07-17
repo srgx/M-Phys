@@ -12,6 +12,14 @@ public:
   circle(const vf & pos, const vf & dp, const float rad);
 };
 
+class straightCircle{
+public:
+  float position;
+  float radius;
+  float speed;
+  straightCircle(const float & pos, const float & rad, const float spd);
+};
+
 class wall{
 public:
   vf position;
@@ -29,10 +37,8 @@ public:
 
 float circleWallCollision(const circle & cir,const wall & wal);
 float pointCircleCollision(const point & pt, const circle & cir);
-float circleCircleStraightCollision(const circle & cir1,float cir1speed,
-                                    float cir1linearPosition,
-                                    const circle & cir2,float cir2speed,
-                                    float cir2linearPosition);
+float circleCircleStraightCollision(const straightCircle & cir1,
+                                    const straightCircle & cir2);
 float circleCircleCollision(const circle & cir1,const circle & cir2);
 float circleCircleInnerCollision(const circle & cir1,const circle & cir2);
 

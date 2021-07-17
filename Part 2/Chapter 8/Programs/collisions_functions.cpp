@@ -9,6 +9,10 @@ circle::circle(const vf & pos,
                const float rad) : position(pos), displacement(dp), radius(rad){
 }
 
+straightCircle::straightCircle(const float & pos, const float & rad, const float spd) :
+                               position(pos), radius(rad), speed(spd){
+}
+
 wall::wall(const vf & pos,
            const vf & vec) : position(pos),vector(vec){
 }
@@ -57,12 +61,7 @@ float circleWallCollision(const circle & cir,const wall & wal){
     } else {
 
       // Find radius vector perpendicular to wall
-      vf r;
-      if (c > 0){
-        r = {n[0]*cir.radius,n[1]*cir.radius};
-      } else {
-        r = {n[0]*cir.radius*-1,n[1]*cir.radius*-1};
-      }
+      vf r = mul(n,cir.radius - (c > 0 ? 0 : -1));
 
       // Point of collision on circle circumference
       vf p = add(cir.position,r);
@@ -71,7 +70,7 @@ float circleWallCollision(const circle & cir,const wall & wal){
 
       // No collision in this time period
       if (t > 1){
-        cout << "None (t > 1): " << t << std::endl;
+        cout << "None (t > 1): " << t << '\n';
       } else {
         return t;
       }
@@ -86,52 +85,48 @@ float circleWallCollision(const circle & cir,const wall & wal){
 
 float pointCircleCollision(const point & pt, const circle & cir){
 
-  vf w = {pt.position[0]-cir.position[0],pt.position[1]-cir.position[1]};
+  vf w = sub(pt.position,cir.position);
   float ww = dot(w,w);
-
   float cRadSq = pow(cir.radius,2);
 
   if (ww < cRadSq){
     cout << "Inside\n";
-    return -1;
-  }
-
-  vf v = {pt.vector[0]-cir.displacement[0],pt.vector[1]-cir.displacement[1]};
-
-  float a = dot(v,v);
-  float b = dot(w,v);
-  float c = ww - cRadSq;
-
-  float root = pow(b,2) - a * c;
-
-  if (root < 0) {
-    cout << "None\n";
-    return -1;
-  }
-
-  float t = (-b-sqrt(root))/a;
-  if ((t > 1) || (t < 0)) {
-    cout << "None\n";
-    return -1;
   } else {
-    return t;
+
+    vf v = sub(pt.vector,cir.displacement);
+    float a = dot(v,v); float b = dot(w,v);
+    float root = pow(b,2) - a * (ww - cRadSq);
+
+    if (root < 0) {
+      cout << "None\n";
+    } else {
+
+      float t = (-b - sqrt(root)) / a;
+
+      if ((t > 1) || (t < 0)) {
+        cout << "None\n";
+      } else {
+        return t;
+      }
+
+    }
   }
+
+  return -1;
 
 }
 
-float circleCircleStraightCollision(const circle & cir1,float cir1speed,
-                                    float cir1linearPosition,
-                                    const circle & cir2,float cir2speed,
-                                    float cir2linearPosition){
+float circleCircleStraightCollision(const straightCircle & cir1,
+                                    const straightCircle & cir2){
 
-  float relSpeed = cir1speed - cir2speed;
-  float d = cir1linearPosition - cir2linearPosition;
-  float r = cir1.radius + cir2.radius;
+  float relSpeed = cir1.speed - cir2.speed;
+  float d = std::abs(cir1.position - cir2.position);
+  float twoR = cir1.radius + cir2.radius;
 
-  if(d < r){
+  if(d < twoR){
     cout << "Embedded\n";
   } else {
-    float t = (d - r) / relSpeed;
+    float t = (d - twoR) / relSpeed;
     if(t > 1 || t < 0){
       cout << "None\n";
     } else {
@@ -161,7 +156,7 @@ float circleCircleCollision(const circle & cir1,const circle & cir2){
     if(root < 0){
       cout << "None\n";
     } else {
-      float t = (-b-sqrt(root))/a;
+      float t = (-b - sqrt(root))/a;
       if(t > 1 || t < 0){
         cout << "None\n";
       } else {
@@ -181,7 +176,7 @@ float circleCircleInnerCollision(const circle & cir1,const circle & cir2){
   float ww = dot(w,w);
 
   if (ww > pow(r,2)){
-    cout << ((ww < pow(cir2.radius+cir2.radius,2)) ? "Embedded" : "Outside");
+    cout << ((ww < pow(cir2.radius+cir2.radius,2)) ? "Embedded\n" : "Outside\n");
   } else {
     vf v = sub(cir1.displacement,cir2.displacement);
     float a = dot(v,v); float b = dot(w,v);
