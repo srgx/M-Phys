@@ -18,10 +18,16 @@ wall::wall(const vf & pos,
 }
 
 vf wall::normal() const{
-  return {-vector[1],vector[0]};
+  // Use function normal from global scope: ::
+  return ::normal(vector);
 }
 
 point::point(const vf & pos,const vf & vec) : position(pos),vector(vec){
+}
+
+rectangle::rectangle(const vf & pos,
+                     const vf & s1,
+                     const vf & s2) : position(pos), side1(s1), side2(s2){
 }
 
 float intersectionTime(const vf & p1,const vf & v1,const vf & p2,const vf & v2){
@@ -213,6 +219,99 @@ bool pointOnRectangle(const vf & pt, const vf & rectCenter,
 
 }
 
+float pointRectangleIntersection(const point & pt, const rectangle & rec){
+
+  vf c = add(rec.side1,rec.side2); float t = 2;
+  std::array<vf,2> sides = {rec.side1,rec.side2};
+
+  for (const auto & v : sides){
+    for (int m = 1 ; m >= -1 ; m -= 2) {
+
+      float t1 =
+        intersectionTime(pt.position,
+                         pt.vector,
+                         sub(rec.position,mul(c,m)),
+                         mul(mul(v,m),2)); // * rec.axis
+
+      if (-1 != t1){ t = min(t,t1); }
+
+    }
+
+  }
+
+  if (2==t) {
+    cout << "None\n";
+    return -1;
+  }
+
+  return t;
+
+}
+
+float rectangleRectangleCollisionStraight(const rectangle & rec1,const rectangle & rec2){
+  float t1 = rrVertexCollisionStraight(rec1,rec2);
+  float t2 = rrVertexCollisionStraight(rec2,rec1);
+  return -1 == t1 ? t2 : -1 == t2 ? t1 : min(t1,t2);
+}
+
+float rrVertexCollisionStraight(const rectangle & rec1,const rectangle & rec2){
+//   vf xVector = rec1.axis;
+//   vf yVector = normal(rec1)
+//   vf r1 = mul(xVector,rec1.side1);
+//   vf r2 = mul(xVector,rec1.side2);
+  return 5;
+}
+
+std::vector<vf> pointsToCheck(const vf & r1, const vf & r2, const vf & displacement){
+
+  std::vector<vf> points;
+  float c1 = component(displacement,r1);
+  float c2 = component(displacement,r2);
+
+  if (c1>0){
+    points.push_back(add(r1,r2));
+    points.push_back(sub(r1,r2));
+  } else {
+    points.push_back(add(negate(r1),r2));
+    points.push_back(sub(negate(r1),r2));
+  }
+
+  if (c2>0){
+    points.push_back(c1 > 0 ? add(negate(r1),r2) : add(r1,r2));
+  } else {
+    points.push_back(c1 > 0 ? sub(negate(r1),r2) : sub(r1,r2));
+  }
+
+  return points;
+
+}
+
+std::vector<vf> drawEllipseByFoci(const vf & focus1, const vf & focus2,
+                                  float diameter, int resolution){
+
+  std::vector<vf> points;
+
+  float angle = 2 * M_PI / resolution;
+  float d = magn(sub(focus1,focus2));
+  float tp = pow(diameter,2) - pow(d,2);
+
+  //angleOfAxis = angleBetween(sub(focus2,focus1),{1,0});
+
+  for(int i=1;i <= resolution;i++){
+    float a = angle * i;
+    float k = tp / (2 * (diameter - d * cos(a)));
+    float ha = a; // a + angleOfAxis;
+    vf p = mul({float(cos(ha)),float(sin(ha))},k);
+    points.push_back(p);
+  }
+
+  return points;
+}
+
+float min(float a, float b){
+  return a < b ? a : b;
+}
+
 float magn(const vf & vec){
   return sqrt(pow(vec[0],2) + pow(vec[1],2));
 }
@@ -236,6 +335,14 @@ float dot(const vf & a,const vf & b){
 vf unit(const vf & vec){
   float m = magn(vec);
   return {vec[0]/m,vec[1]/m};
+}
+
+vf normal(const vf & vec){
+  return {-vec[1],vec[0]};
+}
+
+vf negate(const vf & vec){
+  return {-vec[0],-vec[1]};
 }
 
 float component(const vf & vec, const vf & dir){

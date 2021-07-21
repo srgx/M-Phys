@@ -137,6 +137,49 @@ int main(){
 
   cout << "\n***Point Inside Rectangle***\n\n";
 
-  std::cout << "Part 2 - Chapter 8 - Collisions\n";
+  vf rectangleCenter = {0,0}; vf longSide = {4,-4}; vf shortSide = {2,2};
+  vf pointInsideR = {2,-5.5};
+
+  bool isPointInside =
+    pointInsideRectangle(pointInsideR,rectangleCenter,longSide,shortSide);
+
+  cout << "Point (" <<
+    pointInsideR[0] << ", " << pointInsideR[1] << ") is " <<
+    (isPointInside ? "inside" : "outside") << " rectangle\n";
+
+  assert(isPointInside);
+
+  // --------------------------------------------------------------------------------
+
+  cout << "\n***Point On Rectangle***\n\n";
+
+  vf pOnRec = {5,-3};
+
+  bool isPointOnRec =
+    pointOnRectangle(pOnRec,rectangleCenter,longSide,shortSide);
+
+  if (isPointOnRec){
+    cout << "Point (" <<
+      pOnRec[0] << ", " << pOnRec[1] <<
+      ") is on the perimeter of the rectangle\n\n";
+  }
+
+  assert(isPointOnRec);
+
+  // --------------------------------------------------------------------------------
+
+  cout << "\n***Point Rectangle Intersection***\n\n";
+
+  // --------------------------------------------------------------------------------
+
+  cout << "\n***Two Aligned Rectangles***\n\n";
+
+  // --------------------------------------------------------------------------------
+
+  cout << "\n***Two Rectangles At Angle***\n\n";
+
+  // --------------------------------------------------------------------------------
+
+  cout << "Part 2 - Chapter 8 - Collisions\n";
 
 }
