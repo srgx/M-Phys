@@ -53,6 +53,14 @@ Exercises and examples from book "Mathematics and Physics for Programmers", 2nd 
     * [Strings, Pulleys, and Conveyor Belts](Part%203/Chapter%2015)
     * [Oscillations](Part%203/Chapter%2016)
 4. [3-D Mathematics](Part%204)
+    * [3-D Geometry](Part%204/Chapter%2017)
+    * [Transforms](Part%204/Chapter%2018)
+    * [3-D Collision Detection](Part%204/Chapter%2019)
+    * [Lighting and Textures](Part%204/Chapter%2020)
+    * [Modeling Techniques](Part%204/Chapter%2021)
 5. [Game Algorithms](Part%205)
-
-
+    * [Speeding Things Up](Part%205/Chapter%2022)
+    * [Tile-Based Games](Part%205/Chapter%2023)
+    * [Mazes](Part%205/Chapter%2024)
+    * [Game Theory and Artificial Intelligence](Part%205/Chapter%2025)
+    * [Search Techniques](Part%205/Chapter%2026)

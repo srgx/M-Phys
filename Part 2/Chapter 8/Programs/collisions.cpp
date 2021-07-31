@@ -170,13 +170,36 @@ int main(){
 
   cout << "\n***Point Rectangle Intersection***\n\n";
 
+  const point somePoint({15,2},{-3.75,0.5});
+  const rectangle someRectangle(rectangleCenter,shortSide,longSide);
+
+  cout << "Test:\n";
+  cout << pointRectangleIntersection(somePoint, someRectangle);
+
   // --------------------------------------------------------------------------------
 
   cout << "\n***Two Aligned Rectangles***\n\n";
 
+  // rectangleRectangleCollisionStraight(const rectangle & rec1,const rectangle & rec2)
+
   // --------------------------------------------------------------------------------
 
   cout << "\n***Two Rectangles At Angle***\n\n";
+
+  // --------------------------------------------------------------------------------
+
+  cout << "\n***Ellipse Drawing***\n\n";
+
+  const vf foc1 = {-4,0}; const vf foc2 = {4,0};
+  const float ellipseResolution = 20;
+  const float internalDiameter = 10;
+
+  const std::vector<vf> ellipsePoints =
+    drawEllipseByFoci(foc1,foc2,internalDiameter,ellipseResolution);
+
+  for (const auto & p : ellipsePoints){
+    cout << "Point: " << p[0] << ", " << p[1] << "\n";
+  }
 
   // --------------------------------------------------------------------------------
 

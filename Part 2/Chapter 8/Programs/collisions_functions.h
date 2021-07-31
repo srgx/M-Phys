@@ -63,12 +63,18 @@ std::vector<vf> pointsToCheck(const vf & r1, const vf & r2, const vf & displacem
 std::vector<vf> drawEllipseByFoci(const vf & focus1, const vf & focus2,
                                   float diameter,int resolution);
 
+
+float angleBetween(const vf & v1, const vf & v2);
+
 vf add(const vf & a,const vf & b);
 vf sub(const vf & a,const vf & b);
 vf mul(const vf & vec,float v);
 vf unit(const vf & vec);
 vf normal(const vf & vec);
 vf negate(const vf & vec);
+vf rotateVector(vf v, float alpha);
+std::vector<vf> drawEllipseByAxes(const vf & center, float a, float b, float alpha);
+
 float min(float a, float b);
 float dot(const vf & a,const vf & b);
 float magn(const vf & vec);

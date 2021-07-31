@@ -231,7 +231,7 @@ float pointRectangleIntersection(const point & pt, const rectangle & rec){
         intersectionTime(pt.position,
                          pt.vector,
                          sub(rec.position,mul(c,m)),
-                         mul(mul(v,m),2)); // * rec.axis
+                         mul(mul(v,m),2)); // * rec.axis (probably diagonal)
 
       if (-1 != t1){ t = min(t,t1); }
 
@@ -291,21 +291,71 @@ std::vector<vf> drawEllipseByFoci(const vf & focus1, const vf & focus2,
 
   std::vector<vf> points;
 
-  float angle = 2 * M_PI / resolution;
-  float d = magn(sub(focus1,focus2));
-  float tp = pow(diameter,2) - pow(d,2);
+  // Angle between points
+  const float angle = 2 * M_PI / resolution;
 
-  //angleOfAxis = angleBetween(sub(focus2,focus1),{1,0});
+  // Distance between foci
+  const float d = magn(sub(focus1,focus2));
+
+  const float tp = pow(diameter,2) - pow(d,2);
+
+  float angleOfAxis = angleBetween(sub(focus2,focus1),{1,0});
+
+  cout << "Angle: " << angleOfAxis<< std::endl;
 
   for(int i=1;i <= resolution;i++){
     float a = angle * i;
     float k = tp / (2 * (diameter - d * cos(a)));
-    float ha = a; // a + angleOfAxis;
+    float ha = a + angleOfAxis;
     vf p = mul({float(cos(ha)),float(sin(ha))},k);
     points.push_back(p);
   }
 
   return points;
+}
+
+float angleBetween(const vf & v1, const vf & v2){
+
+  vf v3 = sub(v1,v2);
+  float m1 = magn(v1);
+  float m2 = magn(v2);
+  float m3 = magn(v3);
+
+  // Zero vector
+  if (0==m1||0==m2){
+
+    cout << "Error\n";
+    return -1;
+
+  // Vectors are equal
+  } else if (0==m3){
+    cout << "Equal\n";
+    return 0;
+
+  } else {
+
+    // Calculate angle from cosine rule
+    return acos((pow(m1,2) + pow(m2,2) - pow(m3,2))/(2*m1*m2));
+
+  }
+
+}
+
+std::vector<vf> drawEllipseByAxes(const vf & center, float a, float b, float alpha){
+
+  std::vector<vf> points;
+
+  float resolution = 100;
+  float ang = 2 * M_PI / resolution;
+
+  for (int i=1; i <= resolution; i++) {
+    float angle = ang * i;
+    vf p = rotateVector({a * float(cos(angle)),b * float(sin(angle))},alpha);
+    points.push_back(add(center,p));
+  }
+
+  return points;
+
 }
 
 float min(float a, float b){
@@ -343,6 +393,14 @@ vf normal(const vf & vec){
 
 vf negate(const vf & vec){
   return {-vec[0],-vec[1]};
+}
+
+vf rotateVector(vf v, float alpha){
+  float x = v[0];
+  float y = v[1];
+  float l = sqrt(pow(x,2) + pow(y,2));
+  float aat = alpha - atan2(y,x);
+  return { l * float(cos(aat)), l * float(sin(aat)) };
 }
 
 float component(const vf & vec, const vf & dir){
