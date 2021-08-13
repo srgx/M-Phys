@@ -3,15 +3,25 @@
 #include <random>
 #include "maze_functions.h"
 
+using std::cout;
+
 Maze::Maze(int wdth, int hght) : width(wdth), height(hght) {
 
   for (int i=0;i<height;i++){
     std::vector<MazeCell> row;
     for (int j=0;j<width;j++){
-      row.push_back(MazeCell());
+      cell pos = {j,i};
+      row.push_back(MazeCell(pos));
     }
     cells.push_back(row);
   }
+
+  leftWall.setSize(sf::Vector2f(lineWidth, prop*height));
+  leftWall.setFillColor(sf::Color::Red);
+
+  botWall.setSize(sf::Vector2f(prop*height,lineWidth));
+  botWall.setFillColor(sf::Color::Red);
+  botWall.setPosition(0, prop*height);
 
 }
 
@@ -20,23 +30,78 @@ void Maze::showMaze() const{
     for (const auto & c : row) {
       c.showCell();
     }
-    std::cout << '\n';
+    cout << '\n';
   }
 }
 
-MazeCell::MazeCell() : northWall(true), eastWall(true) {
+void Maze::removeWall(const cell & c, Side s){
+
+  int x = c[0]; int y = c[1];
+
+  switch(s){
+
+    case Side::North:
+      cells[y][x].removeNorthWall();
+      break;
+
+    case Side::East:
+      cells[y][x].removeEastWall();
+      break;
+
+    default:
+      break;
+
+  }
+
+}
+
+void Maze::drawMaze(sf::RenderWindow & w) const{
+
+  w.draw(leftWall);
+  w.draw(botWall);
+
+  for(int y=0;y<height;y++){
+    for(int x=0;x<width;x++){
+      cell pos = {x,y};
+      cells[y][x].drawCell(w);
+    }
+  }
+
+}
+
+MazeCell::MazeCell(const cell & c) : northWall(true), eastWall(true) {
+
+  northRect.setSize(sf::Vector2f(prop, lineWidth));
+  northRect.setFillColor(sf::Color::Red);
+  northRect.setPosition(c[0]*prop, c[1]*prop);
+
+  eastRect.setSize(sf::Vector2f(lineWidth, prop));
+  eastRect.setFillColor(sf::Color::Red);
+  eastRect.setPosition(c[0]*prop+prop, c[1]*prop);
 }
 
 void MazeCell::showCell() const{
-  using std::cout;
   cout << (northWall ? 'N' : ' ');
   cout << (eastWall ? 'E' : ' ');
   cout << ' ';
 }
 
-void recursiveBacktrack(Maze & maze,
-                        cell startCell,
-                        cell endCell,
+void MazeCell::removeNorthWall(){
+  northWall = false;
+}
+
+void MazeCell::removeEastWall(){
+  eastWall = false;
+}
+
+void MazeCell::drawCell(sf::RenderWindow & w) const{
+  if(northWall){ w.draw(northRect); }
+  if(eastWall){ w.draw(eastRect); }
+}
+
+// ------------------------------------------------------------------
+
+void recursiveBacktrack(Maze & maze,cell startCell,cell endCell,
                         std::vector<cell> & path){
 
   if (path.empty()) { path.push_back(startCell); }
@@ -51,22 +116,42 @@ void recursiveBacktrack(Maze & maze,
   auto reng = std::default_random_engine { rd() };
   std::shuffle(std::begin(neighbours), std::end(neighbours), reng);
 
-  for (const auto & c : neighbours) {
+  for (const auto & neighbour : neighbours) {
 
-    std::cout << c[0] << ", " << c[1] << '\n';
+    cout << neighbour[0] << ", " << neighbour[1] << '\n';
 
-    if (!std::count(path.begin(), path.end(), c)) {
+    if (!std::count(path.begin(), path.end(), neighbour)) {
 
-      std::cout << "Element not found\n";
+      cout << "Element not found\n";
 
-      path.push_back(c);
+      path.push_back(neighbour);
 
-      // remove wall
+      // Remove walls
+
+      // West
+      if(neighbour==cell({currentCell[0]-1,currentCell[1]})){
+        maze.removeWall(neighbour,Side::East);
+
+      // East
+      } else if(neighbour==cell({currentCell[0]+1,currentCell[1]})){
+        maze.removeWall(currentCell,Side::East);
+
+      // North
+      } else if(neighbour==cell({currentCell[0],currentCell[1]-1})){
+        maze.removeWall(currentCell,Side::North);
+
+      // South
+      } else if(neighbour==cell({currentCell[0],currentCell[1]+1})){
+        maze.removeWall(neighbour,Side::North);
+
+      } else {
+        cout << "Error\n";
+      }
 
       recursiveBacktrack(maze,startCell,endCell,path);
 
     } else {
-      std::cout << "Element found\n";
+      cout << "Element found\n";
     }
 
   }
