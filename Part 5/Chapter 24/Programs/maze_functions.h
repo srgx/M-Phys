@@ -5,13 +5,14 @@
 #include <SFML/Graphics.hpp>
 
 
+using std::vector;
+
 enum Side {North,East};
 typedef std::array<int,2> cell;
 const int prop = 20;
 const int lineWidth = 2;
 
-class MazeCell {
-public:
+struct MazeCell {
   bool northWall;
   bool eastWall;
   sf::RectangleShape northRect;
@@ -23,22 +24,37 @@ public:
   void drawCell(sf::RenderWindow & w) const;
 };
 
-class Maze {
-public:
+struct Maze {
   int width;
   int height;
   sf::RectangleShape leftWall;
   sf::RectangleShape botWall;
-  std::vector<std::vector<MazeCell>> cells;
+  vector<vector<MazeCell>> cells;
   Maze(int wdth, int hght);
   void showMaze() const;
   void removeWall(const cell & c, Side s);
   void drawMaze(sf::RenderWindow & w) const;
 };
 
+struct KruskalCell {
+  int id;
+  cell c;
+  KruskalCell(const cell & ce);
+};
+
+struct KruskalMaze {
+  vector<cell> walls;
+  vector<KruskalCell> cells;
+  int width;
+  int height;
+  KruskalMaze(int wdth,int hght);
+};
+
 
 void recursiveBacktrack(Maze & maze,cell startCell,cell endCell,
-                        std::vector<cell> & path);
-std::vector<cell> getNeighbours(int width, int height,const cell & c);
+                        vector<cell> & path);
+vector<cell> getNeighbours(int width, int height,const cell & c);
+
+void kruskal(KruskalMaze & maze);
 
 #endif

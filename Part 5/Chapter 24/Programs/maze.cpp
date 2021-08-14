@@ -9,6 +9,13 @@ using std::cout;
 
 int main(){
 
+  KruskalMaze km(5,5);
+  kruskal(km);
+
+  return 0;
+
+  // ---------------------
+
   std::vector<cell> path;
   Maze maze(20,20);
 

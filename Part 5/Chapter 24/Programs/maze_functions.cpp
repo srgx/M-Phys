@@ -99,6 +99,23 @@ void MazeCell::drawCell(sf::RenderWindow & w) const{
   if(eastWall){ w.draw(eastRect); }
 }
 
+KruskalMaze::KruskalMaze(int wdth,int hght) : width(wdth), height(hght){
+
+  // Create cells and walls
+  for(int y=0;y<height;y++){
+    for(int x=0;x<width;x++){
+      cells.push_back(KruskalCell({x,y}));
+      if(x<width-1 && y<height-1){
+        walls.push_back({x,y});
+      }
+    }
+  }
+
+}
+
+KruskalCell::KruskalCell(const cell & ce) : c(ce){
+}
+
 // ------------------------------------------------------------------
 
 void recursiveBacktrack(Maze & maze,cell startCell,cell endCell,
@@ -180,5 +197,22 @@ std::vector<cell> getNeighbours(int width, int height,const cell & c){
   if (nextCell<height) { result.push_back({col,nextCell}); }
 
   return result;
+
+}
+
+void kruskal(KruskalMaze & maze){
+
+  std::vector<cell> wallList = maze.walls;
+
+  std::random_device rd;
+  auto reng = std::default_random_engine { rd() };
+  std::shuffle(std::begin(wallList), std::end(wallList), reng);
+
+  int i = 0;
+  for(int y=0;y<maze.height;y++){
+    for(int x=0;x<maze.width;x++){
+      maze.cells[i].id = i++;
+    }
+  }
 
 }
