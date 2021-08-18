@@ -25,7 +25,7 @@ int main(){
 
   maze.showMaze();
 
-  sf::RenderWindow window(sf::VideoMode(1920, 1080), "Flocking Boids");
+  sf::RenderWindow window(sf::VideoMode(1920, 1080), "Mazes");
   window.setFramerateLimit(30);
 
   while (window.isOpen()){

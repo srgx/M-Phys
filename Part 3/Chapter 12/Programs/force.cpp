@@ -35,7 +35,6 @@ int main(){
   assert(std::abs(gf-ef) < 2);
   assert(std::abs(moonOrbitalPeriod-moonOrbitalPeriodDays) < 0.1);
 
-  cout << "Force\n";
   cout << "Part 3 - Chapter 12 - Force\n";
 
 }
