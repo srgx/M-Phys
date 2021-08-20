@@ -39,3 +39,10 @@ vf resolveFixedCollision(const vf & velocity,const vf & n){
   return {velocity[0]-val,velocity[1]-val};
 }
 
+std::array<vf,2> resolveCollisionFree1(float mass1, float mass2,
+                                       float vel1, float vel2){
+
+  return {{{2,3},{4,5}}};
+
+}
+

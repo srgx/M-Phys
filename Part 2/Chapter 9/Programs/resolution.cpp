@@ -10,4 +10,5 @@ int main(){
     resolveFixedCollision(initialVelocity,normal);
 
   std::cout << "Part 2 - Chapter 9 - Resolution\n";
+
 }
