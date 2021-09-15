@@ -6,30 +6,22 @@ Exercises and examples from book "Mathematics and Physics for Programmers", 2nd 
 
 ![Rule](https://i.imgur.com/axaCJJl.png)
 
-* Letter A
 
-![Letter](https://i.imgur.com/9uPladh.png)
+* Vector graphics
 
-* Arrow
+![Vector graphics](https://i.imgur.com/ZgUAufM.png)
 
-![Arrow](https://i.imgur.com/puO7ShE.png)
+* Planets moving under gravity
 
-* Kite
+![Planets moving under gravity](https://i.imgur.com/dtfE7Wn.gif)
 
-![Kite](https://i.imgur.com/Munw10o.png)
+* 3D Projection
 
-* Cuboid
+![3D Projection](https://i.imgur.com/qznRTRl.gif)
 
-![Cuboid](https://i.imgur.com/p3kvxYE.png)
+* Maze generation
 
-* Mad Path
-
-![MPath](https://i.imgur.com/DMlXICA.png)
-
-* Spiral
-
-![Spiral](https://i.imgur.com/pi4gssX.png)
-
+![Maze generation](https://i.imgur.com/awKsO0W.png)
 
 ## Table of Contents
 
