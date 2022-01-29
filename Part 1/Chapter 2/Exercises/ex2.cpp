@@ -14,7 +14,7 @@ int main(){
   float currentAmount = INITIAL_CASH;
   for(int i=0;i<YEARS;i++){
     currentAmount = compoundInterest(currentAmount,INTEREST_RATE,1);
-    assert(abs(currentAmount-AMOUNTS[i])<0.01);
+    assert(std::abs(currentAmount - AMOUNTS[i])<0.01);
   }
   
   std::cout << "Part 1 - Chapter 2 - Exercise 2\n";

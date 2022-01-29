@@ -1,5 +1,13 @@
 #!/usr/bin/tclsh
 
+# Run programs
+# Each chapter contains exercise files and 1 p (program) file
+# Usage: ./run.tcl chapterNumber exerciseNumber/p
+
+# Examples
+# Chapter 1, exercise 2: './run.tcl 1 2'
+# Chapter 1, program: './run.tcl 1 p'
+
 set lbs "-lsfml-graphics -lsfml-window -lsfml-system"
 
 set data "
