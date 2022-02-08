@@ -52,7 +52,7 @@ int main(){
   });
 
   // 3x + 10y = 2
-  // 6x + 6y = 14
+  // 5x + 6y = 14
   auto sim2 = std::vector<vecflt>({
     vecflt({3, 10, 2}),
     vecflt({5, 6, 14})
@@ -71,6 +71,15 @@ int main(){
   auto sim4 = std::vector<vecflt>({
     vecflt({6, -3, 3}),
     vecflt({2, -1, 4})
+  });
+
+  // x - 2y + 3z = 7
+  // 2x + y + z = 4
+  // -3x + 2y - 2z = -10
+  auto sim5 = std::vector<vecflt>({
+    vecflt({1, -2, 3, 7}),
+    vecflt({2, 1, 1, 4}),
+    vecflt({-3, 2, -2, -10})
   });
 
   vecflt answer;
@@ -99,6 +108,15 @@ int main(){
   // Equation with no solution
   simres = solveSimultaneous(sim4);
   assert(!simres.success);
+
+  // Equations with 3 variables
+  simres = solveSimultaneous(sim5);
+  assert(simres.success);
+  answer = simres.answer;
+  assert(answer.size()==3);
+  assert(any_of(answer.begin(),answer.end(),compare(2)));
+  assert(any_of(answer.begin(),answer.end(),compare(-1)));
+  assert(any_of(answer.begin(),answer.end(),compare(1)));
   
   std::cout << "Part 1 - Chapter 3 - Algebra\n";
 

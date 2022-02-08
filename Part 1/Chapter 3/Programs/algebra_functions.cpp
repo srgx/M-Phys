@@ -2,7 +2,6 @@
 #include "../../Chapter 2/Programs/arithmetic_functions.h"
 #include <cmath>
 #include <algorithm>
-#include <iostream>
 
 using std::string;
 
@@ -156,13 +155,23 @@ vecflt solveCubic(float a, float b, float c, float d){
 }
 
 eqResult solveSimultaneous(std::vector<vecflt> & equations){
-  std::vector<vecflt> redux; const int n = equations.size();
 
+  // List of reduced equations
+  std::vector<vecflt> redux;
+
+  // Number of equations and variables
+  const int n = equations.size();
+
+  // Initialize result and output variables
   eqResult result({ true });
   vecflt output(n);
 
+  // Go through all variables
   for(int i=n-1;i>=0;i--){
+
     vecflt row;
+
+    // Find row with non-zero coefficient of the variable at i
     for(int j=i;j>=0;j--){
       if(equations.at(j).at(i)!=0){
         row = equations.at(j); break;
@@ -170,36 +179,57 @@ eqResult solveSimultaneous(std::vector<vecflt> & equations){
     }
 
     if(row.empty()){
+
       // No Solution
       result.success = false; return result;
-    }else{
 
+    } else {
+
+      // Set divisor
       float divisor = row.at(i);
+
+      // Delete row from equations
       equations.erase(std::remove(equations.begin(), equations.end(), row), equations.end());
+
+      // Remove coefficient at i
       for(int j=0;j<row.size();j++){ row.at(j) /= divisor; }
+
+      // Save row without coefficient at i
       redux.insert(redux.begin(),row);
 
+      // Go through all equations
       for(int j=equations.size()-1;j>=0;j--){
 
         if(equations.at(j).at(i)!=0){
 
+          // Find coefficient for redux variable in this row
           float t = equations.at(j).at(i);
+
+          // Subtract multiple of last redux equation (row) from current row (equation.at(j))
           for(int w=0;w<equations.at(j).size();w++){
-            equations.at(j).at(w) -= redux.at(0).at(w) * t;
+            equations.at(j).at(w) -= row.at(w) * t;
           }
 
         }
+
       }
+
     }
+
   }
 
+  // Go through  redux to get consecutive variable values
+  // Value of first variable can be read directly from redux
   for(int i=0;i<n;i++){
 
+    // Add known variable values
     float sum = 0;
     for(int j=0;j<i;j++){
-      sum = redux.at(i).at(j) * output.at(j) + sum;
+      sum += redux.at(i).at(j) * output.at(j);
     }
 
+    // Subtract sum of known values from right-hand
+    // side of equation to calculate value of next variable
     output.at(i) = redux.at(i).at(n) - sum;
 
   }
