@@ -10,7 +10,7 @@ int main(){
   assert(countNums("22x+19+13x-3x-6+2+7x")==15);
   assert(countNums("5x+23+21x+7x-3+2")==22);
   
-  assert(groupTerms("22x+19+13x-3x-6+2+7x")=="39x+15");
+  assert(simplify("22x+19+13x-3x-6+2+7x")=="39x+15");
   
   std::cout << "Part 1 - Chapter 3 - Exercise 2\n";
   

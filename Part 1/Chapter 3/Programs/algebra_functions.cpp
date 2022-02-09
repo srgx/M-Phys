@@ -5,23 +5,23 @@
 
 using std::string;
 
-bool isParExp(const std::string & str){
-  bool result;
-  if('('==str.at(0)){
-    return true;
-  }else{
-    for(int i=0;i<str.length();i++){
-      if('('==str.at(i)){
-        result = true; break;
-      }else if(std::isdigit(str.at(i))){
-        continue;
-      }else{
-        result = false; break;
-      }
-    }
-  }
-  return result;
-}
+// bool isParExp(const std::string & str){
+//   bool result;
+//   if('('==str.at(0)){
+//     return true;
+//   }else{
+//     for(int i=0;i<str.length();i++){
+//       if('('==str.at(i)){
+//         result = true; break;
+//       }else if(std::isdigit(str.at(i))){
+//         continue;
+//       }else{
+//         result = false; break;
+//       }
+//     }
+//   }
+//   return result;
+// }
 
 std::string substituteX(const std::string & str,int valX){
 
@@ -81,37 +81,35 @@ int substitute(const string & str,int valX){
   return stoi(substituteNoX(substituteX(str,valX)));
 }
 
-bool allDigits(const string & str){
-  for(auto i=str.begin();i!=str.end();i++){
-    if(!std::isdigit(*i)){
-      return false;
-    }
-  }
-  return true;
-}
+// bool allDigits(const string & str){
+//   for(auto i=str.begin();i!=str.end();i++){
+//     if(!std::isdigit(*i)){
+//       return false;
+//     }
+//   }
+//   return true;
+// }
 
-string getSubexpFrom(const string & str,int from){
-  int i; int counter = 0; int parCount = 0;
-  for(i=from;i<str.length();i++){
-    char s = str.at(i);
-    if(('+'==s||'-'==s)&&(0==parCount)){
-      break;
-    }else if('('==s){
-      parCount++;
-    }else if(')'==s&&0==--parCount){
-      i++; break;
-    }
-  }
+// string getSubexpFrom(const string & str,int from){
+//   int i; int counter = 0; int parCount = 0;
+//   for(i=from;i<str.length();i++){
+//     char s = str.at(i);
+//     if(('+'==s||'-'==s)&&(0==parCount)){
+//       break;
+//     }else if('('==s){
+//       parCount++;
+//     }else if(')'==s&&0==--parCount){
+//       i++; break;
+//     }
+//   }
+//
+//   return str.substr(from,i-from);
+// }
 
-  return str.substr(from,i-from);
-}
-
-bool isExp(const string & str){
-  return (str.length()==1&&str.at(0)=='x')||
-         (str.back()=='x'&&allDigits(str.substr(0,str.length()-1)));
-}
-
-
+// bool isExp(const string & str){
+//   return (str.length()==1&&str.at(0)=='x')||
+//          (str.back()=='x'&&allDigits(str.substr(0,str.length()-1)));
+// }
 
 compare::compare(const float & i) : key(i) {}
 
@@ -518,7 +516,6 @@ int findLastParenIndex(const std::string & str, int index){
 
 }
 
-
 // -----------------------------------------------------------------------
 
 // Count x terms
@@ -621,7 +618,7 @@ int countNums(const std::string & str){
   
 }
 
-std::string groupTerms(const std::string & str){
+std::string simplify(const std::string & str){
   
   auto a = std::to_string(countX(str));
   auto b = std::to_string(countNums(str));
@@ -633,5 +630,38 @@ std::string groupTerms(const std::string & str){
   equation += b;
   
   return equation;
-    
+
 }
+
+eqResult solveQuadratic(const vecflt & equation){
+
+  float a = equation.at(0);
+  float b = equation.at(1);
+  float c = equation.at(2);
+  float d = pow(b,2) - 4 * a * c;
+
+  eqResult result({ true });
+
+  if (0>d) {
+    result.success = false;
+  } else if (0==d) {
+    result.answer = { -b / (2 * a) };
+  } else {
+    float sqd = sqrt(d); float aa = 2 * a;
+    result.answer = { float(-b - sqd) / aa,
+                      float(-b + sqd) / aa };
+  }
+
+  return result;
+
+}
+
+eqResult solve(std::vector<vecflt> & equations){
+  if (1==equations.size()) {
+    return solveQuadratic(equations.at(0));
+  } else {
+    return solveSimultaneous(equations);
+  }
+}
+
+

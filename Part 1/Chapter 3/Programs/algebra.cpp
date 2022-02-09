@@ -84,26 +84,28 @@ int main(){
 
   vecflt answer;
 
+  const float d = 1e-5;
+
   auto simres = solveSimultaneous(sim1);
   assert(simres.success);
   answer = simres.answer;
   assert(answer.size()==2);
-  assert(any_of(answer.begin(),answer.end(),compare(-2)));
-  assert(any_of(answer.begin(),answer.end(),compare(4)));
+  assert(std::abs(answer.at(0) - -2)<d);
+  assert(std::abs(answer.at(1) - 4)<d);
 
   simres = solveSimultaneous(sim2);
   assert(simres.success);
   answer = simres.answer;
   assert(answer.size()==2);
-  assert(any_of(answer.begin(),answer.end(),compare(4)));
-  assert(any_of(answer.begin(),answer.end(),compare(-1)));
+  assert(std::abs(answer.at(0) - 4)<d);
+  assert(std::abs(answer.at(1) - -1)<d);
 
   simres = solveSimultaneous(sim3);
   assert(simres.success);
   answer = simres.answer;
   assert(answer.size()==2);
-  assert(any_of(answer.begin(),answer.end(),compare(1)));
-  assert(any_of(answer.begin(),answer.end(),compare(3)));
+  assert(std::abs(answer.at(0) - 1)<d);
+  assert(std::abs(answer.at(1) - 3)<d);
 
   // Equation with no solution
   simres = solveSimultaneous(sim4);
@@ -114,9 +116,9 @@ int main(){
   assert(simres.success);
   answer = simres.answer;
   assert(answer.size()==3);
-  assert(any_of(answer.begin(),answer.end(),compare(2)));
-  assert(any_of(answer.begin(),answer.end(),compare(-1)));
-  assert(any_of(answer.begin(),answer.end(),compare(1)));
+  assert(std::abs(answer.at(0) - 2)<d);
+  assert(std::abs(answer.at(1) - -1)<d);
+  assert(std::abs(answer.at(2) - 1)<d);
   
   std::cout << "Part 1 - Chapter 3 - Algebra\n";
 

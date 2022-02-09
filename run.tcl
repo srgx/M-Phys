@@ -25,6 +25,8 @@ set data "
   {{{ex1.cpp ../Programs/algebra_functions.cpp
     ../../Chapter\\ 2/Programs/arithmetic_functions.cpp}
     {ex2.cpp ../Programs/algebra_functions.cpp
+     ../../Chapter\\ 2/Programs/arithmetic_functions.cpp}
+    {ex3.cpp ../Programs/algebra_functions.cpp
      ../../Chapter\\ 2/Programs/arithmetic_functions.cpp}}
    {algebra.cpp algebra_functions.cpp
     ../../Chapter\\ 2/Programs/arithmetic_functions.cpp}}

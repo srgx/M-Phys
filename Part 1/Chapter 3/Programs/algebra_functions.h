@@ -18,11 +18,13 @@ struct eqResult{
 
 vecflt solveCubic(float a, float b, float c, float d);
 eqResult solveSimultaneous(std::vector<vecflt> & equations);
+eqResult solveQuadratic(const vecflt & equation);
+eqResult solve(std::vector<vecflt> & equations);
 int substitute(const std::string & str,int valX);
-bool allDigits(const std::string & str);
-std::string getSubexpFrom(const std::string & str,int index);
-bool isExp(const std::string & str);
-bool isParExp(const std::string & str);
+// bool allDigits(const std::string & str);
+// std::string getSubexpFrom(const std::string & str,int index);
+// bool isExp(const std::string & str);
+// bool isParExp(const std::string & str);
 
 int findLastParenIndex(const std::string & str, int index);
 
@@ -37,7 +39,7 @@ std::pair<std::string,int> onlyMulDiv(const std::string & str,int index);
 std::string expo(const std::string & str);
 std::string onlyExpo(const std::string & str);
 
-std::string groupTerms(const std::string & str);
+std::string simplify(const std::string & str);
 
 int countX(const std::string & str);
 int countNums(const std::string & str);
