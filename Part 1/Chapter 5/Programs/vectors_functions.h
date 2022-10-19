@@ -50,7 +50,7 @@ std::pair<std::vector<double>,double>
           double speed,
           double alphaSpeed,
           double timeStep);
-  
+
 
 void drawMadPath(const std::vector<double> & endPoint,
                  const std::vector<double> & currentPoint,

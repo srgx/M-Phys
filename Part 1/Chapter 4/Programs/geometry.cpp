@@ -15,6 +15,6 @@ int main(){
   assert(std::abs(sin(2*X)-(2*sin(X)*cos(X)))<D);
   assert(std::abs(cos(2*X)-(pow(cos(X),2)-pow(sin(X),2)))<D);
   assert(std::abs(tan(2*X)-(2*tan(X)/(1-pow(tan(X),2))))<D);
-  
+
   std::cout << "Part 1 - Chapter 4 - Geometry\n";
 }

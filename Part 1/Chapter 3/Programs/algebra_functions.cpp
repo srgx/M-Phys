@@ -251,7 +251,7 @@ std::string substituteParens(const std::string & str){
   while(index<str.size()){
 
     if(str.at(index)!='('){
-      
+
       newString.push_back(str.at(index)); index++;
 
     }else{
@@ -346,7 +346,7 @@ std::string mulDiv(const std::string & str){
 
     }
   }
-  
+
   return newString;
 }
 
@@ -407,20 +407,20 @@ std::pair<std::string,int> onlyMulDiv(const std::string & str,int index){
   }else{
     totalV /= currentV;
   }
-  
+
   return std::make_pair(std::to_string(totalV),lastGroupIndex);
 
 }
 
 std::string expo(const std::string & str){
-  
+
   int index = 0; std::string newString;
 
   while(index<str.size()){
-    
-  
+
+
     char c = str.at(index);
-    
+
 
     if(c!='^'){
       newString.push_back(c);
@@ -428,75 +428,75 @@ std::string expo(const std::string & str){
 
     // Exponentiation found
     }else{
-      
+
       int lastIndex = index;
-      
+
       while(lastIndex<str.size()&&
            (std::isdigit(str.at(lastIndex))||str.at(lastIndex)=='^')){
         lastIndex++;
       }
-      
+
       lastIndex--;
-      
+
 
       // Drop unnecessary chars
       while(!newString.empty()&&std::isdigit(newString.back())){
         newString.pop_back();
         index--;
       }
-      
+
       auto group = str.substr(index,lastIndex-index+1);
-      
-      
+
+
       // Simplify exponentiation group
       auto subs = onlyExpo(group);
-      
+
 
       newString += subs;
-      
+
       // Set index after exponentiation
       index = lastIndex+1;
-      
+
 
     }
   }
 
   return newString;
-  
+
 }
 
 std::string onlyExpo(const std::string & str){
-  
+
   std::vector<int> numbers;
   std::string currentString;
-  
+
   for(int i=0;i<str.length();i++){
-    
+
     if(str.at(i)!='^'){
       currentString.push_back(str.at(i));
     }else{
       numbers.push_back(stoi(currentString));
       currentString.clear();
     }
-    
+
   }
-  
+
   numbers.push_back(stoi(currentString));
-  
+
   // Penultimate number
   int expoValue = numbers.back();
-  
+
   // Index of current number
   int index = numbers.size()-2;
-  
+
   while(index>=0){
     expoValue = pow(numbers.at(index),expoValue);
     index--;
   }
-  
+
 
   return std::to_string(expoValue);
-  
+
 }
 
 int findLastParenIndex(const std::string & str, int index){
@@ -520,115 +520,115 @@ int findLastParenIndex(const std::string & str, int index){
 
 // Count x terms
 int countX(const std::string & str){
-  
+
   int count = 0; int len = str.length();
-  
+
   for(int i=0;i<len;i++){
-    
+
     char c = str.at(i);
-    
+
     if('x'==c){
-      
+
       // First character is x
       if(0==i){
         count++;
       } else {
-        
+
         std::string coef; int ind = i;
         char z;
-        
+
         while((--ind)>=0 && std::isdigit(z=str.at(ind))){
           coef.push_back(z);
         }
-        
+
         reverse(coef.begin(), coef.end());
-        
+
         int n = stoi(coef);
-  
+
         count += ind>=0&&z=='-' ? -n : n;
-        
+
       }
-      
+
     }
-    
+
   }
-  
+
   return count;
-  
+
 }
 
 int countNums(const std::string & str){
-  
+
   int count = 0; int len = str.length();
-  
+
   string currentNumString; bool plus = true;
   char c;
-  
+
   for(int i=0;i<len;i++){
-    
+
     c = str.at(i);
-    
+
     if(std::isdigit(c)){
-      
+
       currentNumString.push_back(c);
-      
+
     }else if('x'==c){
-      
+
       currentNumString.clear();
-      
+
     }else if('+'==c){
-      
+
       if(!currentNumString.empty()){
-      
+
         int cNum = stoi(currentNumString);
         currentNumString.clear();
-        
+
         count += plus ? cNum : -cNum;
 
       }
-      
+
       plus = true;
-      
+
     }else if('-'==c){
-      
+
       if(!currentNumString.empty()){
-      
+
         int cNum = stoi(currentNumString);
         currentNumString.clear();
-        
+
         count += plus ? cNum : -cNum;
 
       }
-      
+
       plus = false;
-      
+
     }
-    
+
   }
-  
+
   if(!currentNumString.empty()){
-    
+
     int cNum = stoi(currentNumString);
-    
+
     count += plus ? cNum : -cNum;
-    
+
   }
-  
+
   return count;
-  
+
 }
 
 std::string simplify(const std::string & str){
-  
+
   auto a = std::to_string(countX(str));
   auto b = std::to_string(countNums(str));
-  
+
   std::string equation;
-  
+
   equation += a;
   equation += "x+";
   equation += b;
-  
+
   return equation;
 
 }

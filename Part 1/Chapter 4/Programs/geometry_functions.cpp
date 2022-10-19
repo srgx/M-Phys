@@ -148,7 +148,7 @@ triangleInfo solveTriangle(const triangleInfo & data){
     }
 
   }
-  
+
   return result;
 
 }

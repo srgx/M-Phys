@@ -387,5 +387,5 @@ int main(){
 
 
   std::cout << "Part 1 - Chapter 1 - Exercise 2\n";
-  
+
 }

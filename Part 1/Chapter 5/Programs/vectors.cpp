@@ -113,63 +113,63 @@ int main(){
     { 6, -1 }, { 3, -2 }}
   })));
 
-  
+
   // Construct equilateral triangle
   auto trng = constructEquilateralTriangle(vecd({ 2, 2 }), vecd({ 10, 2 }));
-  
+
   assert(std::abs(trng.at(0).at(0)-2)<d);
   assert(std::abs(trng.at(0).at(1)-2)<d);
-  
+
   assert(std::abs(trng.at(1).at(0)-10)<d);
   assert(std::abs(trng.at(1).at(1)-2)<d);
-  
+
   assert(std::abs(trng.at(2).at(0)-6)<d);
   assert(std::abs(trng.at(2).at(1)-8.9282)<d);
-  
-  
+
+
   // Switch basis
   basis bas = switchBasis(vecd({3,3}),vecd({1,1}));
-  
+
   assert(std::abs(bas.b1.at(0)-0.7071)<d);
   assert(std::abs(bas.b1.at(1)-0.7071)<d);
-  
+
   assert(std::abs(bas.b2.at(0)-0.7071)<d);
   assert(std::abs(bas.b2.at(1)-(-0.7071))<d);
-  
+
   assert(std::abs(bas.a-4.24264)<d);
   assert(std::abs(bas.b-0)<d);
-  
+
   // Vector components
   assert(std::abs(component(vecd({3,3}),vecd({1,1}))-4.24264)<d);
-  
+
   auto comV = componentVector(vecd({3,3}),vecd({1,1}));
-  
+
   assert(std::abs(comV.at(0)-3)<d);
   assert(std::abs(comV.at(1)-3)<d);
-  
+
   // Intersection point
   const auto interPoint = intersectionPoint(vecd({2,2}),vecd({14,14}),
                                             vecd({12,4}),vecd({8,16}));
-  
-  
+
+
   assert(std::abs(interPoint.at(0)-10)<d);
   assert(std::abs(interPoint.at(1)-10)<d);
-  
-  
+
+
   const auto interTime = intersectionTime(vecd({2,2}),vecd({12,12}),
                                           vecd({12,4}),vecd({-4,12}));
-  
-  
+
+
   // Intersection at 2/3 of vector v1
   assert(std::abs(interTime-(2.0/3))<d);
-  
-  
+
+
   const auto intrsc = intersection(vecd({2,2}),vecd({14,14}),
                                    vecd({12,4}),vecd({8,16}));
-  
+
   // Intersection at 2/3 of line (a-b)
   assert(std::abs(intrsc-(2.0/3))<d);
-  
+
   std::cout << "Part 1 - Chapter 5 - Vectors\n";
-    
+
 }

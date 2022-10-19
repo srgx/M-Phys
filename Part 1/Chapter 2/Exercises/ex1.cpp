@@ -36,7 +36,7 @@ int main(){
          MAX_MARKER_POSITION);
   assert(calculateTextPosition(MAX_MARKER_POSITION,TEXT_HEIGHT,WINDOW_HEIGHT) ==
          MAX_TEXT_POSITION);
-  
+
   std::cout << "Part 1 - Chapter 2 - Exercise 1\n";
 
 }

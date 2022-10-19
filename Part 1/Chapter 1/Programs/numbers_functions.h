@@ -18,7 +18,7 @@ const iefloat ZERO_F =
 { 0,
   0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-  
+
 const vecin bias = vecin({ 1, 1, 1, 1, 1, 1, 1 }); // 127
 
 const conv CONVERSION_TABLE =

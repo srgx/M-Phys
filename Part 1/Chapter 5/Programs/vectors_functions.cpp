@@ -329,19 +329,19 @@ void createA(double legLength, double angleAtTop, double serifProp,
 
 
   // Render lines
-  
+
     vector<array<Vertex,2>> lines;
-    
+
     lines.push_back(leftLegLine); lines.push_back(rightLegLine);
     lines.push_back(crossbarLine); lines.push_back(leftSerifLine);
     lines.push_back(rightSerifLine);
-    
+
     renderLines(lines);
 
 }
 
 void renderLines(const vector<array<Vertex,2>> & lines){
-  
+
   sf::RenderWindow wnd(sf::VideoMode(1024, 768), "Vectors", sf::Style::Close);
   wnd.setFramerateLimit(30);
 
@@ -384,7 +384,7 @@ void renderLines(const vector<array<Vertex,2>> & lines){
     }
 
     wnd.clear();
-    
+
     for(auto pt = lines.begin(); pt!=lines.end(); pt++){
       Vertex ln [] = {(*pt).at(0),(*pt).at(1)};
       wnd.draw(ln,2,sf::Lines);
@@ -399,56 +399,56 @@ void renderLines(const vector<array<Vertex,2>> & lines){
 vecd curvedPath(const vecd & endPoint,
                               const vecd & currentPoint, double speed,
                               double normalProportion, double timeStep){
-  
+
   auto radius = subVectors(endPoint,currentPoint);
-  
+
   auto mag = magnitude(radius);
-  
+
   if(mag<speed*timeStep){
     return endPoint;
   } else {
-    
+
     auto radialComponent = norm(radius);
     auto tangentialComponent =
       scaleVector(normalVector(radialComponent),normalProportion);
-      
+
     auto velocity =
       scaleVector((addVectors(radialComponent,
                               tangentialComponent)),
                    speed);
-      
+
     auto currentPosition = addVectors(currentPoint,velocity);
-    
+
     return currentPosition;
-    
+
   }
-  
+
 }
 
 void drawCurvedPath(const vecd & endPoint,
                     const vecd & currentPoint, double speed,
                     double normalProportion, double timeStep){
-  
-  
+
+
   vector<array<Vertex,2>> lines;
-  
+
   auto cp = currentPoint; auto lastPoint = cp;
-  
+
   // Loop while cp != target
   while (cp.at(0)!=endPoint.at(0)||cp.at(1)!=endPoint.at(1)) {
-    
+
     cp = curvedPath(endPoint,cp,speed,normalProportion,timeStep);
-    
+
     auto arr = array<Vertex,2>({Vertex(Vector2f(lastPoint.at(0), lastPoint.at(1))),Vertex(Vector2f(cp.at(0), cp.at(1)))});
-    
+
     lastPoint = cp;
-    
+
     lines.push_back(arr);
-    
+
   }
-  
+
   renderLines(lines);
-  
+
 }
 
 std::pair<vecd,double>
@@ -461,28 +461,28 @@ std::pair<vecd,double>
 
   auto radius = subVectors(endPoint,currentPoint);
   auto mag = magnitude(radius);
-  
+
   if(mag<speed*timeStep){
     return std::make_pair(endPoint,currentAlpha);
   } else {
-    
+
     auto radialComponent = norm(radius);
     auto newAlpha = currentAlpha + alphaSpeed*timeStep;
-    
+
     auto tanNewAlpha = tan(newAlpha);
-    
+
     auto tangentialComponent =
       scaleVector(normalVector(radialComponent),
                   tanNewAlpha);
-    
+
     auto vec = addVectors(radialComponent,tangentialComponent);
     auto velocity = scaleVector(norm(vec),speed);
-    
+
     return std::make_pair(addVectors(currentPoint,velocity),
                           newAlpha);
-    
+
   }
-  
+
 }
 
 void drawMadPath(const vecd & endPoint,
@@ -491,27 +491,27 @@ void drawMadPath(const vecd & endPoint,
                  double speed,
                  double alphaSpeed,
                  double timeStep){
-    
+
   vector<array<Vertex,2>> lines;
-  
+
   auto cp = currentPoint; auto lastPoint = cp;
-  
+
   // Loop while cp != target
   while (cp.at(0)!=endPoint.at(0)||cp.at(1)!=endPoint.at(1)) {
-    
+
     auto pointAlpha =
       madPath(endPoint,cp,currentAlpha,speed,alphaSpeed,timeStep);
-    
+
     cp = pointAlpha.first; currentAlpha = pointAlpha.second;
-    
+
     auto arr = array<Vertex,2>({Vertex(Vector2f(lastPoint.at(0), lastPoint.at(1))),Vertex(Vector2f(cp.at(0), cp.at(1)))});
-    
+
     lastPoint = cp; lines.push_back(arr);
-    
+
   }
-  
+
   renderLines(lines);
-            
+
 }
 
 basis switchBasis(const vecd & vec,
@@ -519,81 +519,83 @@ basis switchBasis(const vecd & vec,
 
   // Unit vector
   auto basis1 = norm(directionVec);
-  
+
   // Perpendicular to basis1
   auto basis2 = normalVector(basis1);
-  
+
   // Alpha angle(between basis1 and x axis)
   auto alpha = atan2(basis1.at(1),basis1.at(0));
-  
+
   // Theta angle(between original vec and x axis)
   auto theta = atan2(vec.at(1),vec.at(0));
-  
+
   // Magnitude of original vector
   auto mag = magnitude(vec);
-  
-  // -(alpha - theta)
+
+  // Sum of angles
+  // Angle alpha is on negative side of
+  // axis so opposite number must be added
   auto df = theta - alpha;
-  
+
   // cos(df) = a/mag(v)
   auto a = mag*cos(df);
-  
+
   // sin(df) = b/mag(v)
   auto b = mag*sin(df);
-  
+
   return basis({ basis1, basis2, a, b });
-  
+
 }
 
 double component(const vecd & vec,
                 const vecd & directionVec){
-  
+
   auto alpha = atan2(directionVec.at(1),directionVec.at(0));
   auto theta = atan2(vec.at(1),vec.at(0));
-  
+
   auto mag = magnitude(vec);
-  
+
   return mag*cos(theta-alpha);
-  
+
 }
 
 vecd componentVector(const vecd & vec,
                                    const vecd & directionVec){
-  
+
   auto v = norm(directionVec);
-  
+
   return scaleVector(v,component(vec,directionVec));
-  
+
 }
 
 vecd intersectionPoint(const vecd & a,
                                       const vecd & b,
                                       const vecd & c,
                                       const vecd & d){
-  
+
   auto tc1 = b.at(0)-a.at(0);
   auto tc2 = b.at(1)-a.at(1);
-  
+
   auto sc1 = c.at(0)-d.at(0);
   auto sc2 = c.at(1)-d.at(1);
-  
+
   auto con1 = c.at(0)-a.at(0);
   auto con2 = c.at(1)-a.at(1);
-  
+
   auto det = (tc2*sc1-tc1*sc2);
-  
+
   if(det==0){
     // No unique solution
     return vecd({});
   } else {
     auto con = tc2*con1-tc1*con2;
     auto s = con/det;
-    
+
     auto dc = subVectors(d,c);
     auto sdc = scaleVector(dc,s);
     return addVectors(c,sdc);
   }
-  
+
 }
 
 
@@ -605,15 +607,15 @@ double intersectionTime(vecd p1,
 
   auto tc1 = v1.at(0);
   auto tc2 = v1.at(1);
-  
+
   auto sc1 = v2.at(0);
   auto sc2 = v2.at(1);
-  
+
   auto con1 = p2.at(0)-p1.at(0);
   auto con2 = p2.at(1)-p1.at(1);
-  
+
   auto det = tc2*sc1-tc1*sc2;
-  
+
   if(det==0){
     // No unique solution
     return 0;
@@ -622,7 +624,7 @@ double intersectionTime(vecd p1,
     auto t = con/det;
     return t;
   }
-  
+
 }
 
 double intersection(const vecd & a,
@@ -632,325 +634,325 @@ double intersection(const vecd & a,
 
   auto tc1 = b.at(0)-a.at(0);
   auto tc2 = b.at(1)-a.at(1);
-  
+
   auto sc1 = c.at(0)-d.at(0);
   auto sc2 = c.at(1)-d.at(1);
-  
+
   auto con1 = c.at(0)-a.at(0);
   auto con2 = c.at(1)-a.at(1);
-  
+
   auto det = (tc2*sc1-tc1*sc2);
-  
+
   if(det==0){
     // No unique solution
     return 0;
   } else {
-    
+
     auto con = tc2*con1-tc1*con2;
     auto s = con/det;
-    
+
     if(s<0||s>1){
       return 0; // false
     } else {
-      
+
       double t =
         tc1 != 0 ? (con1-s*sc1)/tc1 :
                    (con2-s*sc2)/tc2;
-                   
+
       if(t<0||t>1){
         return 0; // none
       } else {
         return t;
       }
-      
+
     }
-    
+
   }
-  
+
 }
 
 void drawArrowhead(double lineSegment,double size, double angle){
-  
+
   vecd start { 200, 200 };
 
   double halfAngle = angle/2;
-  
+
   vecd leftPart { cos(halfAngle), sin(halfAngle) };
   leftPart = scaleVector(leftPart,size);
-  
+
   vecd rightPart { cos(halfAngle), -sin(halfAngle) };
   rightPart = scaleVector(rightPart,size);
-  
+
   auto leftPartTarget = addVectors(start,leftPart);
   auto rightPartTarget = addVectors(start,rightPart);
-  
+
   auto halfBack =
     scaleVector(subVectors(leftPartTarget,
                            rightPartTarget),
                 0.5);
-  
+
   auto tail =
     scaleVector(norm(normalVector(halfBack)),
                 lineSegment);
 
   auto midBack = addVectors(rightPartTarget,halfBack);
-  
+
   auto finalTarget = addVectors(midBack,tail);
-  
-  
+
+
   vector<array<Vertex,2>> lines;
-  
+
   array<Vertex,2> leftPartLine = {
     Vertex(Vector2f(start.at(0), start.at(1))),
     Vertex(Vector2f(leftPartTarget.at(0), leftPartTarget.at(1)))
   };
-  
+
   array<Vertex,2> rightPartLine = {
     Vertex(Vector2f(start.at(0), start.at(1))),
     Vertex(Vector2f(rightPartTarget.at(0), rightPartTarget.at(1)))
   };
-  
+
   array<Vertex,2> backLine = {
     Vertex(Vector2f(leftPartTarget.at(0), leftPartTarget.at(1))),
     Vertex(Vector2f(rightPartTarget.at(0), rightPartTarget.at(1)))
   };
-  
+
   array<Vertex,2> tailLine = {
     Vertex(Vector2f(midBack.at(0), midBack.at(1))),
     Vertex(Vector2f(finalTarget.at(0), finalTarget.at(1)))
   };
-  
+
   lines.push_back(leftPartLine);
   lines.push_back(rightPartLine);
   lines.push_back(backLine);
   lines.push_back(tailLine);
-  
-  
+
+
   renderLines(lines);
-  
+
 }
 
 void drawKite(double lineSegment, double height, double width, double angle){
-  
-  
+
+
   // Main part
-  
+
     const vecd start { 200, 300 }; const vecd main { height, 0 };
-    
+
     const auto rightEnd = addVectors(start,main);
-      
+
     const auto toMid = scaleVector(main,1.0/3);
-    
+
     const auto midPoint = addVectors(start,toMid);
 
     const auto vert = scaleVector(norm(normalVector(toMid)),width);
-    
+
     const auto vertStart = addVectors(midPoint,scaleVector(vert,0.5));
-    
+
     const auto vertTarget = addVectors(vertStart,oppositeVector(vert));
-    
+
   // Tail
-        
+
     const auto tailDown =
       scaleVector({ cos(angle), sin(angle) },
                   lineSegment);
-    
+
     const auto tailUp =
       scaleVector({ cos(angle), -sin(angle) },
                   lineSegment);
-    
+
     const auto tailTarget1 = addVectors(rightEnd,tailDown);
     const auto tailTarget2 = addVectors(tailTarget1,tailUp);
     const auto tailTarget3 = addVectors(tailTarget2,tailDown);
-    
-  
+
+
   vector<array<Vertex,2>> lines;
-  
+
   array<Vertex,2> mainLine = {
     Vertex(Vector2f(start.at(0), start.at(1))),
     Vertex(Vector2f(rightEnd.at(0), rightEnd.at(1)))
   };
-  
+
   array<Vertex,2> verticalLine = {
     Vertex(Vector2f(vertStart.at(0), vertStart.at(1))),
     Vertex(Vector2f(vertTarget.at(0), vertTarget.at(1)))
   };
-  
+
   array<Vertex,2> topRight = {
     Vertex(Vector2f(start.at(0), start.at(1))),
     Vertex(Vector2f(vertStart.at(0), vertStart.at(1)))
   };
-  
+
   array<Vertex,2> topLeft = {
     Vertex(Vector2f(start.at(0), start.at(1))),
     Vertex(Vector2f(vertTarget.at(0), vertTarget.at(1)))
   };
-  
+
   array<Vertex,2> botRight = {
     Vertex(Vector2f(vertStart.at(0), vertStart.at(1))),
     Vertex(Vector2f(rightEnd.at(0), rightEnd.at(1)))
   };
-  
+
   array<Vertex,2> botLeft = {
     Vertex(Vector2f(vertTarget.at(0), vertTarget.at(1))),
     Vertex(Vector2f(rightEnd.at(0), rightEnd.at(1)))
   };
-  
-  
+
+
   array<Vertex,2> tailA = {
     Vertex(Vector2f(rightEnd.at(0), rightEnd.at(1))),
     Vertex(Vector2f(tailTarget1.at(0), tailTarget1.at(1)))
   };
-  
+
   array<Vertex,2> tailB = {
     Vertex(Vector2f(tailTarget1.at(0), tailTarget1.at(1))),
     Vertex(Vector2f(tailTarget2.at(0), tailTarget2.at(1)))
   };
-  
+
   array<Vertex,2> tailC = {
     Vertex(Vector2f(tailTarget2.at(0), tailTarget2.at(1))),
     Vertex(Vector2f(tailTarget3.at(0), tailTarget3.at(1)))
   };
-  
-  
+
+
   lines.push_back(mainLine);
   lines.push_back(verticalLine);
-  
+
   lines.push_back(topRight);
   lines.push_back(topLeft);
-  
+
   lines.push_back(botRight);
   lines.push_back(botLeft);
-  
+
   lines.push_back(tailA);
   lines.push_back(tailB);
   lines.push_back(tailC);
-  
+
   renderLines(lines);
-  
+
 }
 
 void drawCube(double side, double angle, double depth){
-  
+
   // A1
   const vecd start { 200, 300 };
-  
+
   // Horizontal vector
   const vecd hori { side, 0 };
-  
+
   // Vertical vector
   const vecd veri = normalVector(hori);
-  
+
   // Diagonal vector
   vecd diagv ({ cos(angle), -sin(angle) });
   diagv = scaleVector(diagv,depth);
-  
+
   const auto b1 = addVectors(start,hori);
-  
+
   const auto c1 = addVectors(b1,veri);
-  
+
   const auto d1 = addVectors(start,veri);
-  
+
   const auto a2 = addVectors(start,diagv);
-  
+
   const auto b2 = addVectors(b1,diagv);
-  
+
   const auto c2 = addVectors(c1,diagv);
-  
+
   const auto d2 = addVectors(d1,diagv);
-  
+
   vector<array<Vertex,2>> lines;
-  
+
   array<Vertex,2> ab = {
     Vertex(Vector2f(start.at(0), start.at(1))),
     Vertex(Vector2f(b1.at(0), b1.at(1)))
   };
-  
+
   array<Vertex,2> bc = {
     Vertex(Vector2f(b1.at(0), b1.at(1))),
     Vertex(Vector2f(c1.at(0), c1.at(1)))
   };
-  
+
   array<Vertex,2> cd = {
     Vertex(Vector2f(c1.at(0), c1.at(1))),
     Vertex(Vector2f(d1.at(0), d1.at(1)))
   };
-  
+
   array<Vertex,2> ad = {
     Vertex(Vector2f(start.at(0), start.at(1))),
     Vertex(Vector2f(d1.at(0), d1.at(1)))
   };
-  
+
   array<Vertex,2> aa2 = {
     Vertex(Vector2f(start.at(0), start.at(1))),
     Vertex(Vector2f(a2.at(0), a2.at(1)))
   };
-  
+
   array<Vertex,2> bb2 = {
     Vertex(Vector2f(b1.at(0), b1.at(1))),
     Vertex(Vector2f(b2.at(0), b2.at(1)))
   };
-  
+
   array<Vertex,2> cc2 = {
     Vertex(Vector2f(c1.at(0), c1.at(1))),
     Vertex(Vector2f(c2.at(0), c2.at(1)))
   };
-  
+
   array<Vertex,2> dd2 = {
     Vertex(Vector2f(d1.at(0), d1.at(1))),
     Vertex(Vector2f(d2.at(0), d2.at(1)))
   };
-  
+
   array<Vertex,2> a2b2 = {
     Vertex(Vector2f(a2.at(0), a2.at(1))),
     Vertex(Vector2f(b2.at(0), b2.at(1)))
   };
-  
+
   array<Vertex,2> b2c2 = {
     Vertex(Vector2f(b2.at(0), b2.at(1))),
     Vertex(Vector2f(c2.at(0), c2.at(1)))
   };
-  
+
   array<Vertex,2> c2d2 = {
     Vertex(Vector2f(c2.at(0), c2.at(1))),
     Vertex(Vector2f(d2.at(0), d2.at(1)))
   };
-  
+
   array<Vertex,2> d2a2 = {
     Vertex(Vector2f(d2.at(0), d2.at(1))),
     Vertex(Vector2f(a2.at(0), a2.at(1)))
   };
-  
-  
+
+
   // Front
   lines.push_back(ab);
   lines.push_back(bc);
   lines.push_back(cd);
   lines.push_back(ad);
-  
+
   // Diagonal
   lines.push_back(aa2);
   lines.push_back(bb2);
   lines.push_back(cc2);
   lines.push_back(dd2);
-  
+
   // Back
   lines.push_back(a2b2);
   lines.push_back(b2c2);
   lines.push_back(c2d2);
   lines.push_back(d2a2);
-  
-  
+
+
   renderLines(lines);
-  
+
 }
 
 void drawShape(int index){
-  
+
   switch(index){
-    
+
     case 1:
-      
+
       createA(200, // leg length
               1.7, // angle at top (radians)
               0.45, // serif proportion (0-1)
@@ -958,62 +960,62 @@ void drawShape(int index){
               0.4, // crossbar position, larger=lower (0-1)
               0.5, // serif align (0-1)
               0.5); // crossbar align, left/right/center (0-1)
-          
+
       break;
-      
+
     case 2:
-      
+
       drawCurvedPath(vecd({200,250}), // end point
                      vecd({200,20}), // current point
                      1, // speed
                      2.2, // normal proportion(larger = more curved)
                      5.5); // time step(larger = earlier and bigger last step)
       break;
-      
+
     case 3:
-      
+
       drawMadPath(vecd({400,250}),
                   vecd({200,20}),
                   2, // current alpha
                   4.5, // speed
                   6.32, // alpha speed
                   4.5); // time step
-      
+
       break;
-      
+
     case 4:
-      
+
       drawArrowhead(200, // line segment
                     150, // size
                     0.5); // angle
-      
+
       break;
-      
+
     case 5:
-      
+
       drawKite(110, // line segment
                225, // height
                135, // width
                0.22); // angle
-      
+
       break;
-      
+
     case 6:
-      
+
       drawCube(100, // side
                0.35, // angle
                60); // depth
-      
+
       break;
-      
+
     default:
-      
+
       std::cout << "Wrong index\n";
-      
+
       break;
-      
+
   }
-  
+
 }
 
 

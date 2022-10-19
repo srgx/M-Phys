@@ -69,9 +69,9 @@ vecin divBinary(const vecin & dividend,const vecin & divisor){
   }
 
   result.push_back(divisorValue<=subNumberValue ? 1 : 0);
-  
+
   removeZeros(result);
-  
+
   return result;
 }
 
@@ -250,25 +250,25 @@ vecin getMantissa(const iefloat & arr){
 }
 
 iefloat divFloats(const iefloat & first, const iefloat & second){
-  
+
   if(first==ZERO_F||second==ZERO_F){ return ZERO_F; }
-  
+
   // Add bias before subtraction to avoid negative values
   vecin biasedFirst = addBinary(getRawExponent(first),bias); // + 127
 
   // Calculate exponent
   vecin exponent = subBinary(biasedFirst,getRawExponent(second));
-  
+
   // Fill exponent with zeros
   exponent.insert(exponent.begin(),8-exponent.size(),0);
-  
-  
+
+
   // Get mantissae
   vecin firstMantissa = getMantissa(first);
   vecin secondMantissa = getMantissa(second);
-  
+
   vecin resultMantissa = divBinary(firstMantissa,secondMantissa);
-  
+
   // Initialize number with zeros
   iefloat result = ZERO_F;
 
@@ -277,7 +277,7 @@ iefloat divFloats(const iefloat & first, const iefloat & second){
 
   // Set mantissa
   std::copy(resultMantissa.begin()+1,resultMantissa.end(),result.begin()+9);
-  
+
   int fSign = first.at(0); int sSign = second.at(0);
 
   // Set sign
@@ -289,21 +289,21 @@ iefloat divFloats(const iefloat & first, const iefloat & second){
 iefloat mulFloats(const iefloat & first, const iefloat & second){
 
   if(first==ZERO_F||second==ZERO_F){ return ZERO_F; }
-  
+
   // Calculate exponent
   vecin exponent = addBinary(getRawExponent(first),
                              getRawExponent(second));
   exponent = subBinary(exponent,bias); // - 127
-    
+
   // Get mantissae
   vecin firstMantissa = getMantissa(first);
   vecin secondMantissa = getMantissa(second);
 
   vecin resultMantissa = mulBinary(firstMantissa,secondMantissa);
-  
+
   // Initialize number with zeros
   iefloat result = ZERO_F;
-  
+
   // Set exponent
   std::copy(exponent.begin(),exponent.end(),result.begin()+1);
 
@@ -314,7 +314,7 @@ iefloat mulFloats(const iefloat & first, const iefloat & second){
 
   // Set sign
   result.at(0) = fSign==1&&sSign==1 || fSign==0&&sSign==0 ? 0 : 1;
-  
+
 
   return result;
 }
@@ -344,13 +344,13 @@ iefloat subFloats(const iefloat & first, const iefloat & second){
 
   // Difference between exponents(shift)
   int diff = std::abs(firstExponent-secondExponent);
-  
+
   int firstMantissaLength = firstMantissa.size();
   int secondMantissaLength = secondMantissa.size();
-  
-  
+
+
   vecin exponent;
-  
+
   // "Add" zeros at the beginning of mantissa to make exponents equal(shift mantissae)
   // Larger exponent is result exponent
   if(firstExponent>secondExponent){
@@ -360,9 +360,9 @@ iefloat subFloats(const iefloat & first, const iefloat & second){
     firstMantissaLength += diff;
     exponent = getRawExponent(second);
   }
-  
+
   diff = std::abs(firstMantissaLength-secondMantissaLength);
-  
+
   // Add zeros at the end
   if(firstMantissaLength>secondMantissaLength){
     secondMantissa.insert(secondMantissa.end(),diff,0);
@@ -430,7 +430,7 @@ iefloat addFloats(const iefloat & first, const iefloat & second){
 
   // Difference between exponents(shift)
   int diff = std::abs(firstExponent-secondExponent);
-  
+
   int firstMantissaLength = firstMantissa.size();
   int secondMantissaLength = secondMantissa.size();
 
@@ -443,16 +443,16 @@ iefloat addFloats(const iefloat & first, const iefloat & second){
     firstMantissaLength += diff;
     exponent = getRawExponent(second);
   }
-  
+
   diff = std::abs(firstMantissaLength-secondMantissaLength);
-  
+
   // Add zeros at the end
   if(firstMantissaLength>secondMantissaLength){
     secondMantissa.insert(secondMantissa.end(),diff,0);
   }else if(firstMantissaLength<secondMantissaLength){
     firstMantissa.insert(firstMantissa.end(),diff,0);
   }
-  
+
   int fSign = first.at(0); int sSign = second.at(0);
 
   vecin resultMantissa =
@@ -500,10 +500,10 @@ iefloat negateFloat(iefloat n){
 vecin normalizeExponent(const vecin & exponent, const vecin & firstMantissa, const vecin & secondMantissa, const vecin & resultMantissa){
 
   const int fms = firstMantissa.size(); const int sms = secondMantissa.size();
-  
+
   // Find size of larger factor
   const int resultSize = fms > sms ? fms : sms;
-  
+
   // Calculate how many zeros are at the beginning
   const int sizeDiff = resultSize - resultMantissa.size();
 

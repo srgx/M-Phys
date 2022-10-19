@@ -119,7 +119,7 @@ int main(){
   assert(std::abs(answer.at(0) - 2)<d);
   assert(std::abs(answer.at(1) - -1)<d);
   assert(std::abs(answer.at(2) - 1)<d);
-  
+
   std::cout << "Part 1 - Chapter 3 - Algebra\n";
 
 }

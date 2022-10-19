@@ -10,7 +10,7 @@ int main(){
   // 5 - Kite
   // 6 - Cuboid
   drawShape(6);
-  
+
   std::cout << "Part 1 - Chapter 5 - Exercise 1\n";
-  
+
 }
