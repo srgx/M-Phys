@@ -10,6 +10,13 @@ char checkPattern(const std::vector<char> & vec);
 
 int main(){
 
+  std::cout << "Execute interactive program directly\n";
+  std::cout << "Comment out line with 'return'\n";
+  std::cout << "Part 5 - Chapter 25 - Exercise 1\n";
+
+  // Comment out this line
+  return 0;
+
   srand(time(0));
 
   const int numGames = 30;

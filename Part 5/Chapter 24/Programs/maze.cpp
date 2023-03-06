@@ -6,13 +6,12 @@ using std::cout;
 
 // g++ -c maze.cpp maze_functions.cpp && g++ maze.o maze_functions.o -o a.out -lsfml-graphics -lsfml-window -lsfml-system && ./a.out
 
-
 int main(){
 
   KruskalMaze km(5,5);
   kruskal(km);
 
-  return 0;
+  // return 0;
 
   // ---------------------
 

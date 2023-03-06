@@ -3,5 +3,5 @@
 using std::cout;
 
 int main(){
-  cout << "Eight Queens\n";
+  std::cout << "Part 5 - Chapter 26 - Exercise 1\n";
 }

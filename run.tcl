@@ -39,29 +39,86 @@ set data "
      ex1.o vectors_functions.o $lbs}
     {ex2.cpp}}
    {-c vectors.cpp vectors_functions.cpp &&
-   vectors.o vectors_functions.o $lbs}}
+    vectors.o vectors_functions.o $lbs}}
 
   {{{ex1.cpp}
     {ex2.cpp}}
    {calculus.cpp calculus_functions.cpp}}
 
-  {{{ex1.cpp}
+  {{{ex1.cpp ../Programs/energy_functions.cpp}
     {ex2.cpp}
-    {ex3.cpp}}
-   {energy.cpp}}
+    {ex3.cpp ../Programs/energy_functions.cpp}}
+   {energy.cpp ../Programs/energy_functions.cpp}}
    
   {{{ex1.cpp}
     {ex2.cpp}}
-   {collisions.cpp}}
+   {collisions.cpp ../Programs/collisions_functions.cpp}}
    
   {{{ex1.cpp}
     {ex2.cpp}}
-   {resolution.cpp}}
+   {resolution.cpp ../Programs/resolution_functions.cpp}}
    
   {{{ex1.cpp}
     {ex2.cpp}}
    {shapes.cpp}}
-   
+
+  {{{ex1.cpp}
+    {ex2.cpp}}
+   {game.cpp}}
+
+  {{{-c ex1.cpp ../Programs/force_functions.cpp &&
+     ex1.o force_functions.o $lbs}}
+   {force.cpp ../Programs/force_functions.cpp}}
+
+  {{{ex1.cpp}
+    {ex2.cpp}}
+   {angular.cpp}}
+
+  {{{ex1.cpp}}
+   {friction.cpp ../Programs/friction_functions.cpp}}
+
+  {{{ex1.cpp}}
+   {pulley.cpp ../Programs/pulley_functions.cpp}}
+
+  {{{ex1.cpp}}
+   {oscillation.cpp ../Programs/oscillation_functions.cpp}}
+
+  {{{-c ex1.cpp ../Programs/geometry3d_functions.cpp &&
+     ex1.o geometry3d_functions.o $lbs}}
+   {geometry3d.cpp ../Programs/geometry3d_functions.cpp}}
+
+  {{{ex1.cpp}}
+   {transforms.cpp}}
+
+  {{{ex1.cpp}}
+   {collision3d.cpp}}
+
+  {{{ex1.cpp}}
+   {lighting.cpp}}
+
+  {{{ex1.cpp}
+    {ex2.cpp}}
+   {modeling.cpp}}
+
+  {{{ex1.cpp}
+    {ex2.cpp}}
+   {speed.cpp ../Programs/speed_functions.cpp}}
+
+  {{{ex1.cpp}}
+   {tiles.cpp}}
+
+  {{{ex1.cpp}}
+   {-c maze.cpp maze_functions.cpp &&
+    maze.o maze_functions.o $lbs}}
+
+  {{{ex1.cpp}
+    {-c ex2.cpp &&
+     ex2.o $lbs}}
+   {ai.cpp ai_functions.cpp}}
+
+  {{{ex1.cpp}}
+   {search.cpp}}
+
 "
 
 set prefix g++

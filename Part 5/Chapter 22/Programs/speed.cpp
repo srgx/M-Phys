@@ -10,7 +10,7 @@ int main(){
 
   ps2d pts = drawBresenham({0,2},{3,1});
 
-  for(const ps2d & p : pts){
+  for(const i2 & p : pts){
     cout << p[0] << ", " << p[1] << '\n';
   }
 

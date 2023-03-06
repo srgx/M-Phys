@@ -166,5 +166,5 @@ int main(){
 
   }
 
-  std::cout << "Grafika trójwymiarowa\n";
+  std::cout << "Part 4 - Chapter 17 - Exercise 1\n";
 }
